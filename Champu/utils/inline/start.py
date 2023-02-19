@@ -18,7 +18,7 @@ def start_pannel(_):
             ),
                InlineKeyboardButton(
                 text=_["S_B_9"],
-                 url=f"https://t.me/+HV1MWrssifhkOTk1"
+                 url=f"https://t.me/Champu_Links"
             ),
         ],
     ]
