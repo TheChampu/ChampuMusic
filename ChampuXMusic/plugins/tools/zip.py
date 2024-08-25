@@ -26,7 +26,7 @@ def zip_command(client, message):
        
         os.remove(zip_file_path)
     else:
-        message.reply_text("Reply to a file with /zip to convert it to a zip file.")
+        message.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ ғɪʟᴇ ᴡɪᴛʜ /zip ᴛᴏ ᴄᴏɴᴠᴇʀᴛ ɪᴛ ᴛᴏ ᴀ ᴢɪᴘ ғɪʟᴇ.")
 
 
 @app.on_message(filters.command("unzip"))
@@ -49,5 +49,5 @@ def unzip_command(client, message):
         
         os.rmdir(output_folder)
     else:
-        message.reply_text("Reply to a zip file with /unzip to extract its contents.")
+        message.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴢɪᴘ ғɪʟᴇ ᴡɪᴛʜ /unzip ᴛᴏ ᴇxᴛʀᴀᴄᴛ ɪᴛs ᴄᴏɴᴛᴇɴᴛs.")
         

@@ -21,7 +21,7 @@ def generate_sticker(client, message):
         except Exception as e:
             message.reply_text(f"Error: {e}")
     else:
-        message.reply_text("Please provide a sticker ID after /st command.")
+        message.reply_text("ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ sᴛɪᴄᴋᴇʀ ɪᴅ ᴀғᴛᴇʀ /st ᴄᴏᴍᴍᴀɴᴅ.")
 
 
 #---------
@@ -88,9 +88,9 @@ async def _packkang(app :app,message):
 @app.on_message(filters.command(["stickerid","stid"]))
 async def sticker_id(app: app, msg):
     if not msg.reply_to_message:
-        await msg.reply_text("Reply to a sticker")        
+        await msg.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ")        
     elif not msg.reply_to_message.sticker:
-        await msg.reply_text("Reply to a sticker")        
+        await msg.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ")        
     st_in = msg.reply_to_message.sticker
     await msg.reply_text(f"""
 ⊹ <u>**sᴛɪᴄᴋᴇʀ ɪɴғᴏ**</u> ⊹

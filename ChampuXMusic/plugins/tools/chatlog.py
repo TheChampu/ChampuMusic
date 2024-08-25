@@ -40,7 +40,7 @@ async def join_watcher(_, message):
                 [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ👀", url=f"{link}")]
             ]))
     except ChatAdminInviteRequired:
-        await app.send_message(chat.id, "Give Me Invite Permission")
+        await app.send_message(chat.id, "ɢɪᴠᴇ ᴍᴇ ɪɴᴠɪᴛᴇ ᴘᴇʀᴍɪssɪᴏɴ")
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):

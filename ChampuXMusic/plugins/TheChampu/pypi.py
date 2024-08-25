@@ -18,7 +18,7 @@ def get_pypi_info(package_name):
         return pypi_info
     
     except Exception as e:
-        print(f"Error fetching PyPI information: {e}")
+        print(f"ᴇʀʀᴏʀ ғᴇᴛᴄʜɪɴɢ ᴘʏᴘɪ ɪɴғᴏʀᴍᴀᴛɪᴏɴ: {e}")
         return None
 
 @app.on_message(filters.command("pypi", prefixes="/"))
@@ -33,17 +33,17 @@ def pypi_info_command(client, message):
         if pypi_info:
             # Creating a message with PyPI information
             info_message = f"ᴘᴀᴄᴋᴀɢᴇ ɴᴀᴍᴇ ➪ {pypi_info['info']['name']}\n\n" \
-                           f"Lᴀᴛᴇsᴛ ᴠɪʀsɪᴏɴ➪ {pypi_info['info']['version']}\n\n" \
-                           f"Dᴇsᴄʀɪᴘᴛɪᴏɴ➪ {pypi_info['info']['summary']}\n\n" \
-                           f"ᴘʀᴏJᴇᴄᴛ ᴜʀʟ➪ {pypi_info['info']['project_urls']['Homepage']}"
+                           f"ʟᴀᴛᴇsᴛ ᴠɪʀsɪᴏɴ➪ {pypi_info['info']['version']}\n\n" \
+                           f"ᴅᴇsᴄʀɪᴘᴛɪᴏɴ➪ {pypi_info['info']['summary']}\n\n" \
+                           f"ᴘʀᴏᴊᴇᴄᴛ ᴜʀʟ➪ {pypi_info['info']['project_urls']['Homepage']}"
             
             # Sending the PyPI information back to the user
             client.send_message(message.chat.id, info_message)
         
         else:
             # Handling the case where information retrieval failed
-            client.send_message(message.chat.id, "Failed to fetch information from PyPI.")
+            client.send_message(message.chat.id, "ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ғʀᴏᴍ ᴘʏᴘɪ.")
     
     except IndexError:
 
-        client.send_message(message.chat.id, "Please provide a package name after the /pypi command.")
+        client.send_message(message.chat.id, "ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴘᴀᴄᴋᴀɢᴇ ɴᴀᴍᴇ ᴀғᴛᴇʀ ᴛʜᴇ /pypi ᴄᴏᴍᴍᴀɴᴅ.")
