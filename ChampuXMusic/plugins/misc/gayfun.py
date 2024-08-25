@@ -15,11 +15,11 @@ def calculate_gay_percentage():
 def generate_gay_response(gay_percentage):
     # Define random texts and emojis for different gay percentage ranges
     if gay_percentage < 30:
-        return "You're straight as an arrow. 🏳️‍🌈"
+        return "ʏᴏᴜ'ʀᴇ sᴛʀᴀɪɢʜᴛ ᴀs ᴀɴ ᴀʀʀᴏᴡ. 🏳️‍🌈"
     elif 30 <= gay_percentage < 70:
-        return "You might have a bit of a rainbow in you. 🌈"
+        return "ʏᴏᴜ ᴍɪɢʜᴛ ʜᴀᴠᴇ ᴀ ʙɪᴛ ᴏғ ᴀ ʀᴀɪɴʙᴏᴡ ɪɴ ʏᴏᴜ. 🌈"
     else:
-        return "You're shining with rainbow colors! 🌟🏳️‍🌈"
+        return "ʏᴏᴜ'ʀᴇ sʜɪɴɪɴɢ ᴡɪᴛʜ ʀᴀɪɴʙᴏᴡ ᴄᴏʟᴏʀs! 🌟🏳️‍🌈"
 
 @app.on_message(filters.command("gay") & filters.regex(r'^/gay$'))
 def gay_calculator_command(client, message: Message):
@@ -30,7 +30,7 @@ def gay_calculator_command(client, message: Message):
     gay_response = generate_gay_response(gay_percentage)
 
     # Send the gay response as a message
-    message.reply_text(f"Gay Percentage: {gay_percentage}%\n{gay_response}")
+    message.reply_text(f"ɢᴀʏ ᴘᴇʀᴄᴇɴᴛᴀɢᴇ: {gay_percentage}%\n{gay_response}")
 
 
 
@@ -38,7 +38,7 @@ def gay_calculator_command(client, message: Message):
 @app.on_message(filters.command("logo"))
 async def logo(app, msg: Message):
     if len(msg.command) == 1:
-       return await msg.reply_text("Usage:\n\n /logo Champu")
+       return await msg.reply_text("ᴜsᴀɢᴇ:\n\n /logo Champu")
     logo_name = msg.text.split(" ", 1)[1]
     API = f"https://api.sdbots.tech/logohq?text={logo_name}"
     req = requests.get(API).url
@@ -48,7 +48,7 @@ async def logo(app, msg: Message):
 @app.on_message(filters.command("animelogo"))
 async def logo(app, msg: Message):
     if len(msg.command) == 1:
-       return await msg.reply_text("Usage:\n\n /animelogo Champu")
+       return await msg.reply_text("ᴜsᴀɢᴇ:\n\n /animelogo Champu")
     logo_name = msg.text.split(" ", 1)[1]
     API = f"https://api.sdbots.tech/anime-logo?name={logo_name}"
     req = requests.get(API).url

@@ -67,7 +67,7 @@ async def get_userinfo_img(
 # --------------------------------------------------------------------------------- #
 
 bg_path = "ChampuXMusic/assets/userinfo.png"
-font_path = "ChampuXMusic/assets/hiroko.ttf"
+font_path = "ChampuXMusic/assets/champu.ttf"
 
 # --------------------------------------------------------------------------------- #
 

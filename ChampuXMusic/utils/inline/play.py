@@ -66,12 +66,8 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(
-                text="Music-🎧", url=f"https://t.me/IshQMusicBot"
-            ),
-            InlineKeyboardButton(
-                text="Music-²🎧", url=f"https://t.me/NayaraMusicBot"
-          ),
+            InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text=_["S_B_9"], url=config.SUPPORT_CHAT),
         ],
         
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
@@ -88,12 +84,8 @@ def stream_markup(_, chat_id):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton(
-                text="Music-🎧", url=f"https://t.me/IshQMusicBot"
-            ),
-            InlineKeyboardButton(
-                text="Music-²🎧", url=f"https://t.me/NayaraMusicBot"
-            ),
+            InlineKeyboardButton(text=_["S_B_6"], url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text=_["S_B_9"], url=config.SUPPORT_CHAT),
         ],    
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
