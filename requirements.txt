@@ -1,7 +1,7 @@
 aiofiles
 bard
 SpeechRecognition
-pornhub-api==0.2.0
+pornhub-api==0.3.0
 aiohttp 
 asyncio 
 beautifulsoup4
