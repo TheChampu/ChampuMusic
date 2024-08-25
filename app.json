@@ -65,12 +65,12 @@
       "SUPPORT_CHAT": {
         "description": "ᴘᴜᴛ ʏᴏᴜʀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ʟɪɴᴋ ʜᴇʀᴇ.",
         "value": "",
-        "required": false
+        "required": true
       },
       "SUPPORT_CHANNEL": {
         "description": "ᴘᴜᴛ ʏᴏᴜʀ sᴜᴘᴘᴏʀᴛ ᴄʜᴀɴɴᴇʟ ʟɪɴᴋ ʜᴇʀᴇ.",
         "value": "",
-        "required": false
+        "required": true
       },
       "UPSTREAM_REPO": {
         "description": "ᴘᴜᴛ ʏᴏᴜʀ ʀᴇᴘᴏ ʟɪɴᴋ ʜᴇʀᴇ.",
