@@ -1,4 +1,4 @@
-from CutieMusicRobot import app
+from ChampuXMusic import app
 from config import BOT_USERNAME
 from pyrogram import filters
 from pyrogram.types import (
@@ -110,8 +110,8 @@ async def in_help():
     answers = [
         InlineQueryResultArticle(
             title="💒ᴡʜɪsᴘᴇʀ",
-            description=f"@CutieMusicRobot [USERNAME | ID] [TEXT]",
-            input_message_content=InputTextMessageContent(f"**📍ᴜsᴀɢᴇ:**\n\n@CutieMusicRobot (ᴛᴀʀɢᴇᴛ ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ɪᴅ) (ʏᴏᴜʀ ᴍᴇssᴀɢᴇ).\n\n**ᴇxᴀᴍᴘʟᴇ:**\n@CutieMusicRobot @username I LOVE YOU"),
+            description=f"@TheChampuBot [USERNAME | ID] [TEXT]",
+            input_message_content=InputTextMessageContent(f"**📍ᴜsᴀɢᴇ:**\n\n@TheChampuBot (ᴛᴀʀɢᴇᴛ ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ɪᴅ) (ʏᴏᴜʀ ᴍᴇssᴀɢᴇ).\n\n**ᴇxᴀᴍᴘʟᴇ:**\n@TheChampuBot @username I LOVE YOU"),
             thumb_url="https://telegra.ph/file/b7f98f3ce3d330f44ccc5.jpg",
             reply_markup=switch_btn
         )
