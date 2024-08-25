@@ -1,5 +1,5 @@
 import random
-from pyrogram import Client, filters
+from pyrogram import Client, filters, errors
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from config import LOGGER_ID as LOG_GROUP_ID
 from ChampuXMusic import app 
@@ -9,7 +9,8 @@ from PIL import Image, ImageDraw, ImageFont
 import asyncio, os, aiohttp
 from pathlib import Path
 from pyrogram.enums import ParseMode
-from errors.exceptions import ChatAdminInviteRequired
+
+
 photo = [
     "https://telegra.ph/file/1949480f01355b4e87d26.jpg",
     "https://telegra.ph/file/3ef2cc0ad2bc548bafb30.jpg",
@@ -39,8 +40,13 @@ async def join_watcher(_, message):
                 await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ👀", url=f"{link}")]
             ]))
+<<<<<<< HEAD
     except ChatAdminInviteRequired:
         await app.send_message(chat.id, "ɢɪᴠᴇ ᴍᴇ ɪɴᴠɪᴛᴇ ᴘᴇʀᴍɪssɪᴏɴ")
+=======
+    except errors.exceptions.ChatAdminInviteRequired:
+        await app.send_message(chat.id, "Give Me Invite Permission")
+>>>>>>> ad2dfb7a98cf60356764a56fd6ab0138af86ed98
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
