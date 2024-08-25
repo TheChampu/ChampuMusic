@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 import asyncio, os, aiohttp
 from pathlib import Path
 from pyrogram.enums import ParseMode
-
+from errors.exceptions import ChatAdminInviteRequired
 photo = [
     "https://telegra.ph/file/1949480f01355b4e87d26.jpg",
     "https://telegra.ph/file/3ef2cc0ad2bc548bafb30.jpg",
@@ -21,11 +21,12 @@ photo = [
 @app.on_message(filters.new_chat_members, group=2)
 async def join_watcher(_, message):    
     chat = message.chat
-    link = await app.export_chat_invite_link(chat.id)
-    for member in message.new_chat_members:
-        if member.id == app.id:
-            count = await app.get_chat_members_count(chat.id)
-            msg = (
+    try:
+        link = await app.export_chat_invite_link(chat.id)
+        for member in message.new_chat_members:
+            if member.id == app.id:
+                count = await app.get_chat_members_count(chat.id)
+                msg = (
                 f"📝 ᴍᴜsɪᴄ ʙᴏᴛ ᴀᴅᴅᴇᴅ ɪɴ ᴀ ɴᴇᴡ ɢʀᴏᴜᴘ\n\n"
                 f"____________________________________\n\n"
                 f"📌 ᴄʜᴀᴛ ɴᴀᴍᴇ: {chat.title}\n"
@@ -35,9 +36,11 @@ async def join_watcher(_, message):
                 f"📈 ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs: {count}\n"
                 f"🤔 ᴀᴅᴅᴇᴅ ʙʏ: {message.from_user.mention}"
             )
-            await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=InlineKeyboardMarkup([
+                await app.send_photo(LOG_GROUP_ID, photo=random.choice(photo), caption=msg, reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton(f"sᴇᴇ ɢʀᴏᴜᴘ👀", url=f"{link}")]
             ]))
+    except ChatAdminInviteRequired:
+        await app.send_message(chat.id, "Give Me Invite Permission")
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(_, message: Message):
