@@ -18,7 +18,23 @@ import os
 import glob
 import random
 import logging
+import requests
 
+def load_cookies(cookie_file):
+    cookies = {}
+    with open(cookie_file, 'r') as f:
+        for line in f:
+            if line.startswith('#'):
+                continue
+            domain, include_subdomains, path, secure, expiration_date, name, value = line.strip().split('\t')
+            cookies[name] = value
+    return cookies
+
+cookie_file = 'cookies/cookies.txt'
+cookies = load_cookies(cookie_file)
+
+# Use the cookies with the requests library
+response = requests.get('https://www.youtube.com', cookies=cookies)
 def cookie_txt_file():
     folder_path = f"{os.getcwd()}/cookies"
     filename = f"{os.getcwd()}/cookies/logs.csv"
