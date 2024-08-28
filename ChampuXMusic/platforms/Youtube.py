@@ -28,8 +28,11 @@ def cookie_txt_file():
     cookie_txt_file = random.choice(txt_files)
     with open(filename, 'a') as file:
         file.write(f'Choosen File : {cookie_txt_file}\n')
-    return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
-
+    with open(cookie_txt_file, 'r') as f:
+        cookies = f.read()
+    cookiejar = http.cookiejar.MozillaCookieJar()
+    cookiejar.load(cookie_txt_file, ignore_discard=True, ignore_expires=True)
+    return cookiejar
 
 
 async def check_file_size(link):
@@ -233,7 +236,7 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        ytdl_opts = {"quiet": True, "cookiefile" : cookie_txt_file()}
+        ytdl_opts = {"quiet": True, "cookiejar": cookie_txt_file()}
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
         with ydl:
             formats_available = []
