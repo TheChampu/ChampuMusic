@@ -30,3 +30,16 @@ async def stop_callback(_, query):
     await query.message.delete()
 
 ###
+__MODULE__ = "Unbanall"
+__HELP__ = """
+**Unban All**
+
+This module allows administrators to unban all users in a group at once.
+
+Commands:
+- /unbanall: Start unbanning all users in the group.
+
+Note:
+- Only administrators can use this command.
+- The bot must have the necessary permissions to unban users.
+"""

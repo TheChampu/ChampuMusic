@@ -14,3 +14,11 @@ def ul(_, message):
             url = "https://telegra.ph" + x
 
         i.edit(f'ʜᴇʀᴇ ʏᴏᴜʀ ʟɪɴᴋ ʙᴀʙᴇ... {url}')
+
+
+__MODULE__ = "Telegraph"
+__HELP__ = """
+This module provides commands to upload media to Telegraph.
+
+- `/tgm`: Upload media to Telegraph.
+"""        

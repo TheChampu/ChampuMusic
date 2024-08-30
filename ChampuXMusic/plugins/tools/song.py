@@ -361,3 +361,21 @@ async def instagram_reel(client, message):
             await message.reply("ʀᴇǫᴜᴇsᴛ ᴡᴀs ɴᴏᴛ sᴜᴄᴄᴇssғᴜʟ.")
     else:
         await message.reply("ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴠᴀʟɪᴅ ɪɴsᴛᴀɢʀᴀᴍ ᴜʀʟ ᴜsɪɴɢ ᴛʜᴇ /reels ᴄᴏᴍᴍᴀɴᴅ.")
+
+
+__MODULE__ = "Song"
+__HELP__ = """
+## Song Commands
+
+This module contains commands related to downloading songs and Instagram reels.
+
+**Available Commands:**
+
+- `/song`: Downloads a song based on the provided query.
+- `/ig`: Downloads an Instagram reel based on the provided link.
+- `/reel`: Downloads an Instagram reel based on the provided link.
+
+**Note:**
+- To download an Instagram reel, provide a valid Instagram reel URL using the `/ig` or `/reel` command.
+- The bot will handle spamming by limiting the number of commands per user within a specific time window.
+"""

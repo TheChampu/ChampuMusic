@@ -109,3 +109,15 @@ async def del_all_sudo(client, message: Message, _):
                 SUDOERS.remove(user_id)
                 count -= 1
     await message.reply_text(f"Removed {count} users from the sudo list.")
+
+
+
+__MODULE__ = "Add-Sudo"
+__HELP__ = """
+- `/addsudo`: Add a user as sudoer.
+- `/delsudo`: Remove a user from sudoers.
+- `/delallsudo`: Remove all user from sudoers.
+- `/sudolist`: View the list of sudoers.
+
+# Commands for SUDOERS:
+"""

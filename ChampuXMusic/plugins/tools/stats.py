@@ -133,3 +133,19 @@ async def bot_stats(client, CallbackQuery, _):
         await CallbackQuery.message.reply_photo(
             photo=config.STATS_IMG_URL, caption=text, reply_markup=upl
         )
+
+
+__MODULE__ = "Stats"
+__HELP__ = """
+## Statistics Commands
+
+This module contains commands to view various statistics about the bot and the system.
+
+**Available Commands:**
+
+- `/stats` or `/gstats`: View global statistics including bot uptime, number of served chats, and more.
+- `/gstats`: View bot statistics including CPU usage, RAM usage, and more.
+
+**Note:**
+- Some commands are only available to SUDOERS.
+"""

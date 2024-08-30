@@ -210,3 +210,10 @@ async def shellrunner(_, message: Message):
     else:
         await edit_or_reply(message, text="<b>OUTPUT :</b>\n<code>None</code>")
     await message.stop_propagation()
+
+
+
+__MODULE__ = "Dev"
+__HELP__ = """1. /eval <code>: Python code evaluation command. You can execute Python code snippets using this command.
+2. /sh <code>: Shell command execution command. You can run shell commands using this command.
+"""

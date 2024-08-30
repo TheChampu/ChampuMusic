@@ -72,3 +72,26 @@ async def language_markup(client, CallbackQuery, _):
     await set_lang(CallbackQuery.message.chat.id, langauge)
     keyboard = lanuages_keyboard(_)
     return await CallbackQuery.edit_message_reply_markup(reply_markup=keyboard)
+
+
+
+__MODULE__ = "Lang"
+__HELP__ = """
+## Language Commands Help
+
+### 1. /lang or /setlang or /language
+**Description:**
+Set the language for the bot interface.
+
+**Usage:**
+/lang
+
+**Details:**
+- Opens a menu to select the preferred language for the bot interface.
+- Displays a list of available languages to choose from.
+- Accessible to all users.
+
+**Examples:**
+- `/lang`
+
+"""

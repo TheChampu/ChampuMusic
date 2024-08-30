@@ -27,3 +27,12 @@ async def logger(client, message, _):
 async def logger(client, message, _):
     await message.reply_document("cookies/logs.csv")
     await message.reply_text("Please check given file to cookies file choosing logs...")
+
+__MODULE__ = "Logger"
+__HELP__ = """
+- `/logger enable`: Enable logging.
+- `/logger disable`: Disable logging.
+- `/cookies`: To check cookies file.
+
+# Command for SUDOERS: /logger
+"""

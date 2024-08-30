@@ -27,3 +27,25 @@ async def ping_com(client, message: Message, _):
         _["ping_2"].format(resp, app.mention, UP, RAM, CPU, DISK, pytgping),
         reply_markup=supp_markup(_),
     )
+
+
+__MODULE__ = "Ping"
+__HELP__ = """
+## Ping Command Help
+
+**Description:**
+This command measures the ping of the bot and displays system information.
+
+**Usage:**
+/ping
+
+**Details:**
+- Measures the ping of the bot.
+- Displays system information such as uptime, CPU usage, RAM usage, disk usage, and ping to the Telegram servers.
+- Shows the ping in a graphical format.
+- Provides buttons for navigation to the bot group, more information, and help.
+
+**Examples:**
+- `/ping`
+
+"""

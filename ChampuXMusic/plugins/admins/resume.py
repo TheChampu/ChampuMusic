@@ -19,3 +19,18 @@ async def resume_com(cli, message: Message, _, chat_id):
     await message.reply_text(
         _["admin_4"].format(message.from_user.mention), reply_markup=close_markup(_)
     )
+
+
+__MODULE__ = "Resume"
+__HELP__ = """
+**Resume**
+
+This module allows administrators to resume playback of the currently paused track.
+
+Commands:
+- /resume: Resumes playback of the currently paused track for group.
+- /cresume: Resumes playback of the currently paused track for channel.
+
+Note:
+- Only administrators can use these commands.
+"""

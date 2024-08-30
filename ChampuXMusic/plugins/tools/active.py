@@ -120,3 +120,30 @@ async def start(client: Client, message: Message):
             [[InlineKeyboardButton("✯ ᴄʟᴏsᴇ ✯", callback_data=f"close")]]
         ),
     )
+
+__MODULE__ = "Active"
+__HELP__ = """
+## Active Voice/Video Chats Commands
+
+### Command: /activevc or /activevoice
+**Description:**
+Lists active voice chats in all served groups.
+**Usage:**
+/activevc
+
+### Command: /activev or /activevideo
+**Description:**
+Lists active video chats in all served groups.
+**Usage:**
+/activev
+
+### Command: /ac
+**Description:**
+Displays the count of active voice and video chats.
+**Usage:**
+/ac
+
+**Notes:**
+- Only SUDOERS can use these commands.
+- Automatically generates join links for active chats.
+"""
