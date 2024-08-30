@@ -766,7 +766,12 @@ from ChampuXMusic.core.call import Champu
 from ChampuXMusic.misc import db
 from ChampuXMusic.utils.database import add_active_video_chat, is_active_chat
 from ChampuXMusic.utils.exceptions import AssistantErr
-from ChampuXMusic.utils.inline import aq_markup, close_markup, stream_markup, stream_markup2
+from ChampuXMusic.utils.inline import (
+    aq_markup,
+    close_markup,
+    stream_markup,
+    stream_markup2,
+)
 from ChampuXMusic.utils.pastebin import ChampuBin
 from ChampuXMusic.utils.stream.queue import put_queue, put_queue_index
 
