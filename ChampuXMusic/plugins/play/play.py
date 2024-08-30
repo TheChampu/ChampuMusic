@@ -23,7 +23,8 @@ from ChampuXMusic.utils.inline import (
 from ChampuXMusic.utils.logger import play_logs
 from ChampuXMusic.utils.stream.stream import stream
 from config import BANNED_USERS, lyrical
-
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="http.cookiejar")
 
 @app.on_message(
    filters.command(["play", "vplay", "cplay", "cvplay", "playforce", "vplayforce", "cplayforce", "cvplayforce"] ,prefixes=["/", "!", "%", ",", "", ".", "@", "#"])
