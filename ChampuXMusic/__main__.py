@@ -5,7 +5,7 @@ from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from ChampuXMusic import LOGGER, app, userbot
+from ChampuXMusic import LOGGER, app, userbot, HELPABLE
 from ChampuXMusic.core.call import Champu
 from ChampuXMusic.misc import sudo
 from ChampuXMusic.plugins import ALL_MODULES
@@ -35,7 +35,12 @@ async def init():
         pass
     await app.start()
     for all_module in ALL_MODULES:
-        importlib.import_module("ChampuXMusic.plugins" + all_module)
+        imported_module = importlib.import_module(all_module)
+
+        if hasattr(imported_module, "__MODULE__") and imported_module.__MODULE__:
+            if hasattr(imported_module, "__HELP__") and imported_module.__HELP__:
+                HELPABLE[imported_module.__MODULE__.lower()] = imported_module
+
     LOGGER("ChampuXMusic.plugins").info("sᴜᴄᴄᴇssғᴜʟʟʏ ɪᴍᴘᴏʀᴛᴇᴅ ᴍᴏᴅᴜʟᴇs...")
     await userbot.start()
     await Champu.start()

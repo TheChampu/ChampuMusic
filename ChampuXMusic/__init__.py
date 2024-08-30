@@ -58,6 +58,7 @@ heroku()
 app = Champu()
 api = SafoneAPI()
 userbot = Userbot()
+HELPABLE = {}
 
 
 from .platforms import *
