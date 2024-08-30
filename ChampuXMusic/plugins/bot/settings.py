@@ -8,6 +8,7 @@ from pyrogram.types import (
     Message,
 )
 
+from config import BANNED_USERS, OWNER_ID
 from ChampuXMusic import app
 from ChampuXMusic.utils.database import (
     add_nonadmin_chat,
@@ -34,7 +35,6 @@ from ChampuXMusic.utils.inline.settings import (
     vote_mode_markup,
 )
 from ChampuXMusic.utils.inline.start import private_panel
-from config import BANNED_USERS, OWNER_ID
 
 
 @app.on_message(
@@ -65,7 +65,8 @@ async def settings_cb(client, CallbackQuery, _):
         ),
         reply_markup=InlineKeyboardMarkup(buttons),
     )
-    
+
+
 @app.on_callback_query(filters.regex("settingsback_helper") & ~BANNED_USERS)
 @languageCB
 async def settings_back_markup(client, CallbackQuery: CallbackQuery, _):

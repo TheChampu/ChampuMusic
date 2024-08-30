@@ -7,13 +7,12 @@ from inspect import getfullargspec
 from io import StringIO
 from time import time
 
-
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from ChampuXMusic import app
-from config import OWNER_ID
-###########
+from ChampuXMusic.misc import SUDOERS
+
 
 async def aexec(code, client, message):
     exec(
@@ -30,16 +29,10 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 
 @app.on_edited_message(
-    filters.command("eval")
-    & filters.user(OWNER_ID)
-    & ~filters.forwarded
-    & ~filters.via_bot
+    filters.command("eval") & SUDOERS & ~filters.forwarded & ~filters.via_bot
 )
 @app.on_message(
-    filters.command("eval")
-    & filters.user(OWNER_ID)
-    & ~filters.forwarded
-    & ~filters.via_bot
+    filters.command("eval") & SUDOERS & ~filters.forwarded & ~filters.via_bot
 )
 async def executor(client: app, message: Message):
     if len(message.command) < 2:
@@ -140,17 +133,9 @@ async def forceclose_command(_, CallbackQuery):
 
 
 @app.on_edited_message(
-    filters.command("sh")
-    & filters.user(OWNER_ID)
-    & ~filters.forwarded
-    & ~filters.via_bot
+    filters.command("sh") & SUDOERS & ~filters.forwarded & ~filters.via_bot
 )
-@app.on_message(
-    filters.command("sh")
-    & filters.user(OWNER_ID)
-    & ~filters.forwarded
-    & ~filters.via_bot
-)
+@app.on_message(filters.command("sh") & SUDOERS & ~filters.forwarded & ~filters.via_bot)
 async def shellrunner(_, message: Message):
     if len(message.command) < 2:
         return await edit_or_reply(message, text="<b>ᴇxᴀᴍᴩʟᴇ :</b>\n/sh git pull")
@@ -210,7 +195,6 @@ async def shellrunner(_, message: Message):
     else:
         await edit_or_reply(message, text="<b>OUTPUT :</b>\n<code>None</code>")
     await message.stop_propagation()
-
 
 
 __MODULE__ = "Dev"

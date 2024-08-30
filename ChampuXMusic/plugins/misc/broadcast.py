@@ -4,6 +4,7 @@ from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 
+from config import adminlist
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS
 from ChampuXMusic.utils.database import (
@@ -15,12 +16,11 @@ from ChampuXMusic.utils.database import (
 )
 from ChampuXMusic.utils.decorators.language import language
 from ChampuXMusic.utils.formatters import alpha_to_int
-from config import adminlist
 
 IS_BROADCASTING = False
 
 
-@app.on_message(filters.command("broadcast") & SUDOERS)
+@app.on_message(filters.command(["broadcast", "gcast"]) & SUDOERS)
 @language
 async def braodcast_message(client, message, _):
     global IS_BROADCASTING
@@ -124,10 +124,10 @@ async def braodcast_message(client, message, _):
             client = await get_client(num)
             async for dialog in client.get_dialogs():
                 try:
-                    await client.forward_messages(
-                        dialog.chat.id, y, x
-                    ) if message.reply_to_message else await client.send_message(
-                        dialog.chat.id, text=query
+                    (
+                        await client.forward_messages(dialog.chat.id, y, x)
+                        if message.reply_to_message
+                        else await client.send_message(dialog.chat.id, text=query)
                     )
                     sent += 1
                     await asyncio.sleep(3)
@@ -143,6 +143,46 @@ async def braodcast_message(client, message, _):
             await aw.edit_text(text)
         except:
             pass
+    IS_BROADCASTING = False
+
+
+@app.on_message(filters.command(["buser"]) & SUDOERS)
+@language
+async def braodcast_message_user(client, message, _):
+    global IS_BROADCASTING
+    if message.reply_to_message:
+        x = message.reply_to_message.id
+        y = message.chat.id
+    else:
+        if len(message.command) < 2:
+            return await message.reply_text(_["broad_2"])
+        query = message.text.split(None, 1)[1]
+    IS_BROADCASTING = True
+    susr = 0
+    served_users = []
+    susers = await get_served_users()
+    for user in susers:
+        served_users.append(int(user["user_id"]))
+    for i in served_users:
+        try:
+            m = (
+                await app.forward_messages(i, y, x)
+                if message.reply_to_message
+                else await app.send_message(i, text=query)
+            )
+            susr += 1
+            await asyncio.sleep(0.2)
+        except FloodWait as fw:
+            flood_time = int(fw.value)
+            if flood_time > 200:
+                continue
+            await asyncio.sleep(flood_time)
+        except:
+            pass
+    try:
+        await message.reply_text(_["broad_4"].format(susr))
+    except:
+        pass
     IS_BROADCASTING = False
 
 
@@ -167,6 +207,7 @@ async def auto_clean():
 
 
 asyncio.create_task(auto_clean())
+
 
 __MODULE__ = "Broadcast"
 __HELP__ = """

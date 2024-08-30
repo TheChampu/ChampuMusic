@@ -1,12 +1,12 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import YouTube, app
 from ChampuXMusic.core.call import Champu
 from ChampuXMusic.misc import db
 from ChampuXMusic.utils import AdminRightsCheck, seconds_to_min
 from ChampuXMusic.utils.inline import close_markup
-from config import BANNED_USERS
 
 
 @app.on_message(
@@ -73,6 +73,7 @@ async def seek_comm(cli, message: Message, _, chat_id):
         text=_["admin_25"].format(seconds_to_min(to_seek), message.from_user.mention),
         reply_markup=close_markup(_),
     )
+
 
 __MODULE__ = "Seek"
 __HELP__ = """

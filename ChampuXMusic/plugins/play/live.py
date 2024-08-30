@@ -1,10 +1,10 @@
 from pyrogram import filters
 import random
-from ChampuXMusic import YouTube, app
+from config import BANNED_USERS
+from ChampuXMusic import YouTube, app, EMOJIS
 from ChampuXMusic.utils.channelplay import get_channeplayCB
 from ChampuXMusic.utils.decorators.language import languageCB
 from ChampuXMusic.utils.stream.stream import stream
-from config import BANNED_USERS
 
 
 @app.on_callback_query(filters.regex("LiveStream") & ~BANNED_USERS)
@@ -29,13 +29,15 @@ async def play_live_stream(client, CallbackQuery, _):
         await CallbackQuery.answer()
     except:
         pass
+    Emoji = random.choice(EMOJIS)
     mystic = await CallbackQuery.message.reply_text(
-        _["play_2"].format(channel) if channel else _["play_1"]
+        _["play_2"].format(channel) if channel else _[Emoji]
     )
     try:
         details, track_id = await YouTube.track(vidid, True)
     except:
-        return await mystic.edit_text(_["play_3"])
+
+        return
     ffplay = True if fplay == "f" else None
     if not details["duration_min"]:
         try:

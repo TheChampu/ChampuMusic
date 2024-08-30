@@ -1,11 +1,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS
 from ChampuXMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
 from ChampuXMusic.utils.decorators.language import language
-from config import BANNED_USERS
 
 
 @app.on_message(filters.command(["blchat", "blacklistchat"]) & SUDOERS)
@@ -59,6 +59,7 @@ async def all_chats(client, message: Message, _):
         await message.reply_text(_["black_8"].format(app.mention))
     else:
         await message.reply_text(text)
+
 
 __MODULE__ = "Chat-Block"
 __HELP__ = """

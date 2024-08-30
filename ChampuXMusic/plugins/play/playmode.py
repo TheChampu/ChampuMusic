@@ -1,14 +1,20 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.utils.database import get_playmode, get_playtype, is_nonadmin_chat
 from ChampuXMusic.utils.decorators import language
 from ChampuXMusic.utils.inline.settings import playmode_users_markup
-from config import BANNED_USERS
 
 
-@app.on_message(filters.command(["playmode" , "mode" ] ,prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(
+        ["playmode", "mode"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]
+    )
+    & filters.group
+    & ~BANNED_USERS
+)
 @language
 async def playmode_(client, message: Message, _):
     playmode = await get_playmode(message.chat.id)

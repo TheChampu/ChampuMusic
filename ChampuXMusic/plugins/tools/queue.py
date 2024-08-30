@@ -1,26 +1,26 @@
 import asyncio
-import os
 
 from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 
 import config
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import db
 from ChampuXMusic.utils import ChampuBin, get_channeplayCB, seconds_to_min
 from ChampuXMusic.utils.database import get_cmode, is_active_chat, is_music_playing
 from ChampuXMusic.utils.decorators.language import language, languageCB
 from ChampuXMusic.utils.inline import queue_back_markup, queue_markup
-from config import BANNED_USERS
 
 basic = {}
 
 
 def get_image(videoid):
-    if os.path.isfile(f"cache/{videoid}.png"):
-        return f"cache/{videoid}.png"
-    else:
+    try:
+        url = f"https://img.youtube.com/vi/{videoid}/maxresdefault.jpg"
+        return url
+    except Exception:
         return config.YOUTUBE_IMG_URL
 
 
@@ -267,6 +267,7 @@ async def queue_back(client, CallbackQuery: CallbackQuery, _):
                     break
         except:
             return
+
 
 __MODULE__ = "Queue"
 __HELP__ = """

@@ -9,6 +9,7 @@ from pyrogram.types import InputMediaPhoto, Message
 from pytgcalls.__version__ import __version__ as pytgver
 
 import config
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.core.userbot import assistants
 from ChampuXMusic.misc import SUDOERS, mongodb
@@ -16,10 +17,9 @@ from ChampuXMusic.plugins import ALL_MODULES
 from ChampuXMusic.utils.database import get_served_chats, get_served_users, get_sudoers
 from ChampuXMusic.utils.decorators.language import language, languageCB
 from ChampuXMusic.utils.inline.stats import back_stats_buttons, stats_buttons
-from config import BANNED_USERS
 
 
-@app.on_message(filters.command(["stats", "gstats"]) & filters.group & ~BANNED_USERS)
+@app.on_message(filters.command(["stats", "gstats"]) & ~BANNED_USERS)
 @language
 async def stats_global(client, message: Message, _):
     upl = stats_buttons(_, True if message.from_user.id in SUDOERS else False)

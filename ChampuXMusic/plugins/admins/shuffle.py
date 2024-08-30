@@ -3,11 +3,11 @@ import random
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import db
 from ChampuXMusic.utils.decorators import AdminRightsCheck
 from ChampuXMusic.utils.inline import close_markup
-from config import BANNED_USERS
 
 
 @app.on_message(
@@ -31,6 +31,7 @@ async def admins(Client, message: Message, _, chat_id):
     await message.reply_text(
         _["admin_16"].format(message.from_user.mention), reply_markup=close_markup(_)
     )
+
 
 __MODULE__ = "Shuffle"
 __HELP__ = """

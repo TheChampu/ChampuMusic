@@ -1,11 +1,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.utils.database import get_loop, set_loop
 from ChampuXMusic.utils.decorators import AdminRightsCheck
 from ChampuXMusic.utils.inline import close_markup
-from config import BANNED_USERS
 
 
 @app.on_message(filters.command(["loop", "cloop"]) & filters.group & ~BANNED_USERS)
@@ -44,6 +44,7 @@ async def admins(cli, message: Message, _, chat_id):
         )
     else:
         return await message.reply_text(usage)
+
 
 __MODULE__ = "Repeat Song"
 __HELP__ = """

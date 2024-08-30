@@ -4,6 +4,7 @@ from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS
 from ChampuXMusic.utils import get_readable_time
@@ -17,7 +18,6 @@ from ChampuXMusic.utils.database import (
 )
 from ChampuXMusic.utils.decorators.language import language
 from ChampuXMusic.utils.extraction import extract_user
-from config import BANNED_USERS
 
 
 @app.on_message(filters.command(["gban", "globalban"]) & SUDOERS)
@@ -123,6 +123,7 @@ async def gbanned_list(client, message: Message, _):
         return await mystic.edit_text(_["gban_10"])
     else:
         return await mystic.edit_text(msg)
+
 
 __MODULE__ = "G-Ban"
 __HELP__ = """

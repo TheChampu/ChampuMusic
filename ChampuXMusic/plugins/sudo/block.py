@@ -1,12 +1,12 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS
 from ChampuXMusic.utils.database import add_gban_user, remove_gban_user
 from ChampuXMusic.utils.decorators.language import language
 from ChampuXMusic.utils.extraction import extract_user
-from config import BANNED_USERS
 
 
 @app.on_message(filters.command(["block"]) & SUDOERS)
@@ -57,6 +57,8 @@ async def sudoers_list(client, message: Message, _):
         return await mystic.edit_text(_["block_5"])
     else:
         return await mystic.edit_text(msg)
+
+
 __MODULE__ = "Block"
 __HELP__ = """
 - `/block`: Reply to a user's message and use this command to block the replied user.

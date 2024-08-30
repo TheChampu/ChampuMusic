@@ -1,42 +1,78 @@
-import time
+import asyncio
 import random
+import time
+from time import time
+
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
 
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 import config
+from config import BANNED_USERS
+from strings import get_string
 from ChampuXMusic import app
-from ChampuXMusic.misc import _boot_
 from ChampuXMusic.plugins.sudo.sudoers import sudoers_list
-from ChampuXMusic.utils.database import get_served_chats, get_served_users, get_sudoers
-from ChampuXMusic.utils import bot_sys_stats
+from ChampuXMusic.utils import bot_up_time
 from ChampuXMusic.utils.database import (
     add_served_chat,
     add_served_user,
     blacklisted_chats,
+    get_assistant,
     get_lang,
     is_banned_user,
     is_on_off,
 )
 from ChampuXMusic.utils.decorators.language import LanguageStart
-from ChampuXMusic.utils.formatters import get_readable_time
-from ChampuXMusic.utils.inline import help_pannel, private_panel, start_panel
-from config import BANNED_USERS
-from strings import get_string
+from ChampuXMusic.utils.inline import first_page, private_panel, start_panel
+
+# Define a dictionary to track the last message timestamp for each user
+user_last_message_time = {}
+user_command_count = {}
+# Define the threshold for command spamming (e.g., 20 commands within 60 seconds)
+SPAM_THRESHOLD = 2
+SPAM_WINDOW_SECONDS = 5
+
+
+YUMI_PICS = [
+    "https://telegra.ph/file/3134ed3b57eb051b8c363.jpg",
+    "https://telegra.ph/file/5a2cbb9deb62ba4b122e4.jpg",
+    "https://telegra.ph/file/cb09d52a9555883eb0f61.jpg",
+]
 
 
 @app.on_message(filters.command(["start"]) & filters.private & ~BANNED_USERS)
 @LanguageStart
 async def start_pm(client, message: Message, _):
+    user_id = message.from_user.id
+    current_time = time()
+    # Update the last message timestamp for the user
+    last_message_time = user_last_message_time.get(user_id, 0)
+
+    if current_time - last_message_time < SPAM_WINDOW_SECONDS:
+        # If less than the spam window time has passed since the last message
+        user_last_message_time[user_id] = current_time
+        user_command_count[user_id] = user_command_count.get(user_id, 0) + 1
+        if user_command_count[user_id] > SPAM_THRESHOLD:
+            # Block the user if they exceed the threshold
+            hu = await message.reply_text(
+                f"**{message.from_user.mention} ᴘʟᴇᴀsᴇ ᴅᴏɴᴛ ᴅᴏ sᴘᴀᴍ, ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴀғᴛᴇʀ 5 sᴇᴄ**"
+            )
+            await asyncio.sleep(3)
+            await hu.delete()
+            return
+    else:
+        # If more than the spam window time has passed, reset the command count and update the message timestamp
+        user_command_count[user_id] = 1
+        user_last_message_time[user_id] = current_time
+
     await add_served_user(message.from_user.id)
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
         if name[0:4] == "help":
-            keyboard = help_pannel(_)
+            keyboard = first_page(_)
             return await message.reply_photo(
-                 photo=config.START_IMG_URL,
+                photo=config.START_IMG_URL,
                 caption=_["help_1"].format(config.SUPPORT_CHAT),
                 reply_markup=keyboard,
             )
@@ -68,8 +104,15 @@ async def start_pm(client, message: Message, _):
             key = InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton(text=_["S_B_8"], url=link),
-                        InlineKeyboardButton(text=_["S_B_9"], url=config.SUPPORT_CHAT),
+                        InlineKeyboardButton(
+                            text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {query}"
+                        ),
+                        InlineKeyboardButton(
+                            text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {query}"
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(text="🎧 sᴇᴇ ᴏɴ ʏᴏᴜᴛᴜʙᴇ 🎧", url=link),
                     ],
                 ]
             )
@@ -102,17 +145,68 @@ async def start_pm(client, message: Message, _):
 @app.on_message(filters.command(["start"]) & filters.group & ~BANNED_USERS)
 @LanguageStart
 async def start_gp(client, message: Message, _):
+    user_id = message.from_user.id
+    current_time = time()
+
+    # Update the last message timestamp for the user
+    last_message_time = user_last_message_time.get(user_id, 0)
+
+    if current_time - last_message_time < SPAM_WINDOW_SECONDS:
+        # If less than the spam window time has passed since the last message
+        user_last_message_time[user_id] = current_time
+        user_command_count[user_id] = user_command_count.get(user_id, 0) + 1
+        if user_command_count[user_id] > SPAM_THRESHOLD:
+            # Block the user if they exceed the threshold
+            hu = await message.reply_text(
+                f"**{message.from_user.mention} ᴘʟᴇᴀsᴇ ᴅᴏɴᴛ ᴅᴏ sᴘᴀᴍ, ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴀғᴛᴇʀ 5 sᴇᴄ**"
+            )
+            await asyncio.sleep(3)
+            await hu.delete()
+            return
+    else:
+        # If more than the spam window time has passed, reset the command count and update the message timestamp
+        user_command_count[user_id] = 1
+        user_last_message_time[user_id] = current_time
+
     out = start_panel(_)
-    uptime = int(time.time() - _boot_)
+    BOT_UP = await bot_up_time()
     await message.reply_photo(
         photo=config.START_IMG_URL,
-        caption=_["start_1"].format(app.mention, get_readable_time(uptime)),
+        caption=_["start_1"].format(app.mention, BOT_UP),
         reply_markup=InlineKeyboardMarkup(out),
     )
-    return await add_served_chat(message.chat.id)
+    await add_served_chat(message.chat.id)
+
+    # Check if Userbot is already in the group
+    try:
+        userbot = await get_assistant(message.chat.id)
+        message = await message.reply_text(
+            f"**ᴄʜᴇᴄᴋɪɴɢ [ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}) ᴀᴠᴀɪʟᴀʙɪʟɪᴛʏ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ...**"
+        )
+        is_userbot = await app.get_chat_member(message.chat.id, userbot.id)
+        if is_userbot:
+            await message.edit_text(
+                f"**[ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}) ᴀʟsᴏ ᴀᴄᴛɪᴠᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ, ʏᴏᴜ ᴄᴀɴ ᴘʟᴀʏ sᴏɴɢs.**"
+            )
+    except Exception as e:
+        # Userbot is not in the group, invite it
+        try:
+            await message.edit_text(
+                f"**[ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}) ɪs ɴᴏᴛ ᴀᴠᴀɪʟᴀʙʟᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ, ɪɴᴠɪᴛɪɴɢ...**"
+            )
+            invitelink = await app.export_chat_invite_link(message.chat.id)
+            await asyncio.sleep(1)
+            await userbot.join_chat(invitelink)
+            await message.edit_text(
+                f"**[ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}) ɪs ɴᴏᴡ ᴀᴄᴛɪᴠᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ, ʏᴏᴜ ᴄᴀɴ ᴘʟᴀʏ sᴏɴɢs.**"
+            )
+        except Exception as e:
+            await message.edit_text(
+                f"**ᴜɴᴀʙʟᴇ ᴛᴏ ɪɴᴠɪᴛᴇ ᴍʏ [ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}). ᴘʟᴇᴀsᴇ ᴍᴀᴋᴇ ᴍᴇ ᴀᴅᴍɪɴ ᴡɪᴛʜ ɪɴᴠɪᴛᴇ ᴜsᴇʀ ᴀᴅᴍɪɴ ᴘᴏᴡᴇʀ ᴛᴏ ɪɴᴠɪᴛᴇ ᴍʏ [ᴀssɪsᴛᴀɴᴛ](tg://openmessage?user_id={userbot.id}) ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ.**"
+            )
 
 
-@app.on_message(filters.new_chat_members, group=-1)
+@app.on_message(filters.new_chat_members, group=-6)
 async def welcome(client, message: Message):
     for member in message.new_chat_members:
         try:
@@ -121,12 +215,13 @@ async def welcome(client, message: Message):
             if await is_banned_user(member.id):
                 try:
                     await message.chat.ban_member(member.id)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
             if member.id == app.id:
                 if message.chat.type != ChatType.SUPERGROUP:
                     await message.reply_text(_["start_4"])
-                    return await app.leave_chat(message.chat.id)
+                    await app.leave_chat(message.chat.id)
+                    return
                 if message.chat.id in await blacklisted_chats():
                     await message.reply_text(
                         _["start_5"].format(
@@ -136,13 +231,42 @@ async def welcome(client, message: Message):
                         ),
                         disable_web_page_preview=True,
                     )
-                    return await app.leave_chat(message.chat.id)
+                    await app.leave_chat(message.chat.id)
+                    return
 
                 out = start_panel(_)
+                chid = message.chat.id
+
+                try:
+                    userbot = await get_assistant(message.chat.id)
+
+                    chid = message.chat.id
+
+                    if message.chat.username:
+                        await userbot.join_chat(f"{message.chat.username}")
+                        await message.reply_text(
+                            f"**My [Assistant](tg://openmessage?user_id={userbot.id}) also entered the chat using the group's username.**"
+                        )
+                    else:
+                        invitelink = await app.export_chat_invite_link(chid)
+                        await asyncio.sleep(1)
+                        messages = await message.reply_text(
+                            f"**Joining my [Assistant](tg://openmessage?user_id={userbot.id}) using the invite link...**"
+                        )
+                        await userbot.join_chat(invitelink)
+                        await messages.delete()
+                        await message.reply_text(
+                            f"**My [Assistant](tg://openmessage?user_id={userbot.id}) also entered the chat using the invite link.**"
+                        )
+                except Exception as e:
+                    await message.edit_text(
+                        f"**Please make me admin to invite my [Assistant](tg://openmessage?user_id={userbot.id}) in this chat.**"
+                    )
+
                 await message.reply_photo(
-                    photo=config.START_IMG_URL,
+                    random.choice(YUMI_PICS),
                     caption=_["start_3"].format(
-                        message.from_user.mention,
+                        message.from_user.first_name,
                         app.mention,
                         message.chat.title,
                         app.mention,
@@ -153,6 +277,7 @@ async def welcome(client, message: Message):
                 await message.stop_propagation()
         except Exception as ex:
             print(ex)
+
 
 __MODULE__ = "Start"
 __HELP__ = """
