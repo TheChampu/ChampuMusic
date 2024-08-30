@@ -41,17 +41,6 @@ from config import BANNED_USERS, lyrical
     & filters.group
     & ~BANNED_USERS
 )
-async def play_command(client, message):
-    chat_id = message.chat.id
-    user_id = message.from_user.id
-    userbot = await app.get_me()
-
-    # Start a conversation with the user to resolve the peer ID
-    await app.start()
-    await app.send_message(user_id, "Hello!")
-
-    # Now you can get the chat member status
-    get = await app.get_chat_member(chat_id, userbot.id)
 @PlayWrapper
 async def play_commnd(
     client,
