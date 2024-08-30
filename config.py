@@ -16,10 +16,10 @@ BOT_NAME = getenv("BOT_NAME" , "TheChampuBot")
 # ---------------------------------------------------------
 ASSUSERNAME = getenv("ASSUSERNAME" , "itsmeshivanshu")
 
-EXTRA_PLUGINS = bool(getenv(
+EXTRA_PLUGINS = getenv(
     "EXTRA_PLUGINS",
-    False,
-))
+    "False",
+)
 
 # Fill True if you want to load extra plugins
 EXTRA_PLUGINS_REPO = getenv(
@@ -55,7 +55,7 @@ GIT_TOKEN = getenv(
 SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/akaChampu")
 SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/TheChampuClub")
 LOGGERS = "\x54\x68\x65\x43\x68\x61\x6D\x70\x75\x42\x6F\x74"
-AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", True))
+AUTO_LEAVING_ASSISTANT = getenv("AUTO_LEAVING_ASSISTANT", "True")
 AUTO_LEAVE_ASSISTANT_TIME = int(getenv("ASSISTANT_LEAVE_TIME", 9000))
 SONG_DOWNLOAD_DURATION = int(getenv("SONG_DOWNLOAD_DURATION", 9999999))
 SONG_DOWNLOAD_DURATION_LIMIT = int(getenv("SONG_DOWNLOAD_DURATION_LIMIT", 9999999))
