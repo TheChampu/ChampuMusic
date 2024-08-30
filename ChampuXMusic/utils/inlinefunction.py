@@ -59,7 +59,7 @@ def paginate_modules(page_n, module_dict, prefix, chat=None):
                     ),
                 ),
                 EqInlineKeyboardButton(
-                    "ʙᴀᴄᴋ",
+                    "Bᴀᴄᴋ",
                     callback_data="settingsback_helper",
                 ),
                 EqInlineKeyboardButton(
@@ -72,7 +72,7 @@ def paginate_modules(page_n, module_dict, prefix, chat=None):
         pairs.append(
             [
                 EqInlineKeyboardButton(
-                    "ʙᴀᴄᴋ",
+                    "Bᴀᴄᴋ",
                     callback_data="settingsback_helper",
                 ),
                 EqInlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close"),

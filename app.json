@@ -52,11 +52,6 @@
         "value": "",
         "required": false
       },
-      "START_IMG_URL": {
-        "description": "ғɪʟʟ ʜᴇʀᴇ ʏᴏᴜʀ sᴛᴀʀᴛ ɪᴍᴀɢᴇ ᴜʀʟ, ɢᴇᴛ ɪᴛ ғʀᴏᴍ @TheChampuBot ᴜsɪɴɢ /tgm ᴄᴏᴍᴍᴀɴᴅ",
-        "value": "",
-        "required": true
-      },
       "LOGGER_ID": {
         "description": "ʏᴏᴜʀ ʟᴏɢ ɢʀᴏᴜᴘ ɪᴅ, ᴀᴅᴅ ʏᴏᴜʀ ʙᴏᴛ ᴀɴᴅ ᴘʀᴏᴍᴏᴛᴇ ᴀs ᴀɴ ᴀᴅᴍɪɴ ᴡɪᴛʜ ғᴜʟʟ ʀɪɢʜᴛs!.",
         "value": "",
@@ -65,15 +60,15 @@
       "SUPPORT_CHAT": {
         "description": "ᴘᴜᴛ ʏᴏᴜʀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ʟɪɴᴋ ʜᴇʀᴇ.",
         "value": "",
-        "required": true
+        "required": false
       },
       "SUPPORT_CHANNEL": {
         "description": "ᴘᴜᴛ ʏᴏᴜʀ sᴜᴘᴘᴏʀᴛ ᴄʜᴀɴɴᴇʟ ʟɪɴᴋ ʜᴇʀᴇ.",
         "value": "",
-        "required": true
+        "required": false
       },
       "UPSTREAM_REPO": {
-        "description": "ᴘᴜᴛ ʏᴏᴜʀ ʀᴇᴘᴏ ʟɪɴᴋ ʜᴇʀᴇ.",
+        "description": " ᴘᴜᴛ ʏᴏᴜʀ ʀᴇᴘᴏ ʟɪɴᴋ ʜᴇʀᴇ .",
         "value": "",
         "required": true
       }

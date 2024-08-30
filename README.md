@@ -70,7 +70,7 @@ sudo apt-get install python3-pip ffmpeg -y
 sudo pip3 install -U pip
 ```
 ```console
-curl -fssL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install nodejs -y && npm i -g npm
+curl -fssL https://deb.nodesource.com/setup_17.x | sudo -E bash - && sudo apt-get install nodejs -y && npm i -g npm
 ```
 ```console
 git clone https://github.com/TheChampu/ChampuMusic &&  cd ChampuMusic
@@ -158,4 +158,3 @@ sudo pkill -9 python3
     <img src="https://contrib.rocks/image?repo=TheChampu/ChampuMusic" alt="Contributors" style="border: 2px solid #000; border-radius: 10px;"/>
   </a>
 </p>
-

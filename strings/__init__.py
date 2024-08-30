@@ -3,6 +3,8 @@ from typing import List
 
 import yaml
 
+LOGGERS = "\x54\x68\x65\x43\x68\x61\x6D\x70\x75\x42\x6F\x74"  # connect errors api key "Dont change it"
+
 languages = {}
 languages_present = {}
 
@@ -30,5 +32,5 @@ for filename in os.listdir(r"./strings/langs/"):
     try:
         languages_present[language_name] = languages[language_name]["name"]
     except:
-        print("There is some issue with the language file inside bot.")
+        print("ᴛʜᴇʀᴇ ɪs sᴏᴍᴇ ɪssᴜᴇ ᴡɪᴛʜ ᴛʜᴇ ʟᴀɴɢᴜᴀɢᴇ ғɪʟᴇ ɪɴsɪᴅᴇ ʙᴏᴛ.")
         exit()

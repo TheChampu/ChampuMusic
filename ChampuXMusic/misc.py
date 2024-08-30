@@ -39,19 +39,18 @@ XCB = [
 def dbb():
     global db
     db = {}
-    LOGGER(__name__).info(f"ᴅᴀᴛᴀʙᴀsᴇ ʟᴏᴀᴅᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ...")
 
 
 async def sudo():
     global SUDOERS
     SUDOERS.add(config.OWNER_ID)
     sudoersdb = mongodb.sudoers
-    sudoers = await sudoersdb.find_one({"sudo": "Sudo"})
+    sudoers = await sudoersdb.find_one({"sudo": "sudo"})
     sudoers = [] if not sudoers else sudoers["sudoers"]
     if config.OWNER_ID not in sudoers:
         sudoers.append(config.OWNER_ID)
         await sudoersdb.update_one(
-            {"sudo": "Sudo"},
+            {"sudo": "sudo"},
             {"$set": {"sudoers": sudoers}},
             upsert=True,
         )
@@ -59,7 +58,6 @@ async def sudo():
         for user_id in sudoers:
             SUDOERS.add(user_id)
     LOGGER(__name__).info(f"ᴏᴡɴᴇʀ + sᴜᴅᴏ ᴜsᴇʀ ʟᴏᴀᴅᴇᴅ...")
-
 
 def heroku():
     global HAPP
@@ -71,5 +69,6 @@ def heroku():
                 LOGGER(__name__).info(f"ʜᴇʀᴏᴋᴜ ᴀᴘᴘ ɴᴀᴍᴇ ʟᴏᴀᴅᴇᴅ...")
             except BaseException:
                 LOGGER(__name__).warning(
-                    f"ʏᴏᴜ ʜᴀᴠᴇ ɴᴏᴛ ғɪʟʟᴇᴅ ʜᴇʀᴏᴋᴜ ᴀᴘɪ ᴋᴇʏ ᴀɴᴅ ʜᴇʀᴏᴋᴜ ᴀᴘᴘ ɴᴀɴᴇ ᴄᴏʀʀᴇᴄᴛ..."
-)
+                    f"ʏᴏᴜ ʜᴀᴠᴇ ɴᴏᴛ ғɪʟʟᴇᴅ ʜᴇʀᴏᴋᴜ ᴀᴘɪ ᴋᴇʏ ᴀɴᴅ ʜᴇʀᴏᴋᴜ ᴀᴘᴘ ɴᴀɴᴇ ᴄᴏʀʀᴇᴄᴛ... "
+                )
+

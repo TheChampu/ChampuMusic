@@ -1,6 +1,10 @@
+from dotenv import load_dotenv
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+load_dotenv()
+from config import SUPPORT_CHAT, adminlist, confirmer
+from strings import get_string
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS, db
 from ChampuXMusic.utils.database import (
@@ -13,10 +17,10 @@ from ChampuXMusic.utils.database import (
     is_nonadmin_chat,
     is_skipmode,
 )
-from config import SUPPORT_CHAT, adminlist, confirmer
-from strings import get_string
 
 from ..formatters import int_to_alpha
+
+TEST_ID = int("-1002146005311")
 
 
 def AdminRightsCheck(mystic):
@@ -44,7 +48,7 @@ def AdminRightsCheck(mystic):
                     [
                         InlineKeyboardButton(
                             text="ʜᴏᴡ ᴛᴏ ғɪx ?",
-                            callback_data="ChampuAdmin",
+                            callback_data="ChampumousAdmin",
                         ),
                     ]
                 ]
@@ -140,7 +144,7 @@ def AdminActual(mystic):
                     [
                         InlineKeyboardButton(
                             text="ʜᴏᴡ ᴛᴏ ғɪx ?",
-                            callback_data="ChampuAdmin",
+                            callback_data="ChampumousAdmin",
                         ),
                     ]
                 ]
