@@ -4,10 +4,8 @@ import time
 from time import time
 from urllib.parse import urlparse
 
-import wget
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from youtubesearchpython import SearchVideos
 from yt_dlp import YoutubeDL
 
 # Define a dictionary to track the last message timestamp for each user

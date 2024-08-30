@@ -1,7 +1,6 @@
 import asyncio
 
 from pyrogram import Client, filters
-from pyrogram.enums import ChatMemberStatus
 
 from ChampuXMusic.misc import SUDOERS
 from ChampuXMusic.utils.database import get_assistant

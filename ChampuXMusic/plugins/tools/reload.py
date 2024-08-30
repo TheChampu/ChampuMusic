@@ -3,7 +3,7 @@ import time
 from os import getenv
 
 from dotenv import load_dotenv
-from pyrogram import Client, filters
+from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.types import CallbackQuery, Message
 
@@ -13,7 +13,6 @@ from config import BANNED_USERS, adminlist, lyrical
 from ChampuXMusic import app
 from ChampuXMusic.core.call import Champu
 from ChampuXMusic.misc import db
-from ChampuXMusic.mongo.afkdb import LOGGERS
 from ChampuXMusic.utils.database import get_assistant, get_authuser_names, get_cmode
 from ChampuXMusic.utils.decorators import ActualAdminCB, AdminActual, language
 from ChampuXMusic.utils.formatters import alpha_to_int, get_readable_time
@@ -100,6 +99,7 @@ async def restartbot(client, message: Message, _):
         except:
             pass
     return await mystic.edit_text(_["reload_5"].format(app.mention))
+
 
 @app.on_callback_query(filters.regex("close") & ~BANNED_USERS)
 async def close_menu(_, query: CallbackQuery):
