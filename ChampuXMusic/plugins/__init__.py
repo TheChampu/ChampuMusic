@@ -4,7 +4,6 @@ import importlib
 import logging
 from os.path import dirname, isfile, join, abspath
 import subprocess
-from ChampuXMusic import HELPABLE
 from config import EXTRA_PLUGINS, EXTRA_PLUGINS_REPO, EXTRA_PLUGINS_FOLDER
 
 ROOT_DIR = abspath(join(dirname(__file__), "..", ".."))
@@ -53,12 +52,12 @@ def __list_all_modules():
             (
                 (
                     (f.replace(main_repo_plugins_dir, "ChampuXMusic.plugins")).replace(
-                    EXTERNAL_REPO_PATH, EXTRA_PLUGINS_FOLDER
+                        EXTERNAL_REPO_PATH, EXTRA_PLUGINS_FOLDER
                     )
                 ).replace(os.sep, ".")
             )[:-3]
             for f in mod_paths
-            if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py") and f in HELPABLE
+            if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
         ]
         all_modules.extend(modules)
 
