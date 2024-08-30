@@ -59,6 +59,7 @@ async def sudo():
             SUDOERS.add(user_id)
     LOGGER(__name__).info(f"ᴏᴡɴᴇʀ + sᴜᴅᴏ ᴜsᴇʀ ʟᴏᴀᴅᴇᴅ...")
 
+
 def heroku():
     global HAPP
     if is_heroku:
@@ -71,4 +72,3 @@ def heroku():
                 LOGGER(__name__).warning(
                     f"ʏᴏᴜ ʜᴀᴠᴇ ɴᴏᴛ ғɪʟʟᴇᴅ ʜᴇʀᴏᴋᴜ ᴀᴘɪ ᴋᴇʏ ᴀɴᴅ ʜᴇʀᴏᴋᴜ ᴀᴘᴘ ɴᴀɴᴇ ᴄᴏʀʀᴇᴄᴛ... "
                 )
-

@@ -4,7 +4,11 @@ from pyrogram.types import Message
 from config import BANNED_USERS
 from ChampuXMusic import app
 from ChampuXMusic.misc import SUDOERS
-from ChampuXMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
+from ChampuXMusic.utils.database import (
+    blacklist_chat,
+    blacklisted_chats,
+    whitelist_chat,
+)
 from ChampuXMusic.utils.decorators.language import language
 
 

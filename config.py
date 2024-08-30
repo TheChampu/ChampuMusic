@@ -2,6 +2,7 @@ import re
 from os import getenv
 from dotenv import load_dotenv
 from pyrogram import filters
+
 load_dotenv()
 
 API_ID = int(getenv("API_ID"))
@@ -9,12 +10,12 @@ API_HASH = getenv("API_HASH")
 
 BOT_TOKEN = getenv("BOT_TOKEN")
 
-OWNER_USERNAME = getenv("OWNER_USERNAME","itsmeshivanshu")
-BOT_USERNAME = getenv("BOT_USERNAME" , "@TheChampuBot")
+OWNER_USERNAME = getenv("OWNER_USERNAME", "itsmeshivanshu")
+BOT_USERNAME = getenv("BOT_USERNAME", "@TheChampuBot")
 # ---------------@TheChampu-----------------------------------------
-BOT_NAME = getenv("BOT_NAME" , "TheChampuBot")
+BOT_NAME = getenv("BOT_NAME", "TheChampuBot")
 # ---------------------------------------------------------
-ASSUSERNAME = getenv("ASSUSERNAME" , "itsmeshivanshu")
+ASSUSERNAME = getenv("ASSUSERNAME", "itsmeshivanshu")
 
 EXTRA_PLUGINS = getenv(
     "EXTRA_PLUGINS",
@@ -31,7 +32,7 @@ EXTRA_PLUGINS_REPO = getenv(
 EXTRA_PLUGINS_FOLDER = getenv("EXTRA_PLUGINS_FOLDER", "plugins")
 
 MONGO_DB_URI = getenv("MONGO_DB_URI", None)
-#---------------------@TheChampu------------------------------------------
+# ---------------------@TheChampu------------------------------------------
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000))
 # ------------------------@TheChampu----------------------------------------
 LOGGER_ID = int(getenv("LOGGER_ID", None))
@@ -49,9 +50,7 @@ UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
 PLAYLIST_FETCH_LIMIT = int(getenv("PLAYLIST_FETCH_LIMIT", 2500))
 # Maximum Limit Allowed for users to save playlists on bot's server
 SERVER_PLAYLIST_LIMIT = int(getenv("SERVER_PLAYLIST_LIMIT", 100))
-GIT_TOKEN = getenv(
-    "GIT_TOKEN", None
-) 
+GIT_TOKEN = getenv("GIT_TOKEN", None)
 SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/akaChampu")
 SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/TheChampuClub")
 LOGGERS = "\x54\x68\x65\x43\x68\x61\x6D\x70\x75\x42\x6F\x74"
@@ -60,7 +59,9 @@ AUTO_LEAVE_ASSISTANT_TIME = int(getenv("ASSISTANT_LEAVE_TIME", 9000))
 SONG_DOWNLOAD_DURATION = int(getenv("SONG_DOWNLOAD_DURATION", 9999999))
 SONG_DOWNLOAD_DURATION_LIMIT = int(getenv("SONG_DOWNLOAD_DURATION_LIMIT", 9999999))
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", "1c21247d714244ddbb09925dac565aed")
-SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", "709e1a2969664491b58200860623ef19")
+SPOTIFY_CLIENT_SECRET = getenv(
+    "SPOTIFY_CLIENT_SECRET", "709e1a2969664491b58200860623ef19"
+)
 
 
 #   ░█████╗░██╗░░██╗░█████╗░███╗░░░███╗██████╗░██╗░░░██╗
@@ -68,8 +69,7 @@ SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", "709e1a2969664491b582008
 #   ██║░░╚═╝███████║███████║██╔████╔██║██████╔╝██║░░░██║
 #   ██║░░██╗██╔══██║██╔══██║██║╚██╔╝██║██╔═══╝░██║░░░██║
 #   ╚█████╔╝██║░░██║██║░░██║██║░╚═╝░██║██║░░░░░╚██████╔╝
-#   ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝░░░░░░╚═════╝░     
-
+#   ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝░░░░░░╚═════╝░
 
 
 PLAYLIST_FETCH_LIMIT = int(getenv("PLAYLIST_FETCH_LIMIT", 25))
@@ -104,6 +104,8 @@ YOUTUBE_IMG_URL = "https://telegra.ph/file/2433c1b98d2621623ead3.jpg"
 SPOTIFY_ARTIST_IMG_URL = "https://telegra.ph/file/38ae0f7b919a8995c7f29.jpg"
 SPOTIFY_ALBUM_IMG_URL = "https://telegra.ph/file/e17740f22da1fe4162e43.jpg"
 SPOTIFY_PLAYLIST_IMG_URL = "https://telegra.ph/file/010c936d41e9da782780f.jpg"
+
+
 def time_to_seconds(time):
     stringt = str(time)
     return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))

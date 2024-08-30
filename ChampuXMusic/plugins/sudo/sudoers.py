@@ -80,7 +80,8 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
     keyboard = []
     if callback_query.from_user.id not in SUDOERS:
         return await callback_query.answer(
-            "sᴏʀʀʏ ᴏɴʟʏ ᴏᴡɴᴇʀ ᴀɴᴅ sᴜᴅᴏᴜsᴇʀs ᴄᴀɴ sʜᴏᴡ sᴜᴅᴏʟɪsᴛ ᴀsᴋ ʜɪᴍ ғᴏʀ sᴜᴅᴏʟɪsᴛ...", show_alert=True
+            "sᴏʀʀʏ ᴏɴʟʏ ᴏᴡɴᴇʀ ᴀɴᴅ sᴜᴅᴏᴜsᴇʀs ᴄᴀɴ sʜᴏᴡ sᴜᴅᴏʟɪsᴛ ᴀsᴋ ʜɪᴍ ғᴏʀ sᴜᴅᴏʟɪsᴛ...",
+            show_alert=True,
         )
     else:
         user = await app.get_users(OWNER_ID)
@@ -140,7 +141,11 @@ async def back_to_main_menu(client, callback_query: CallbackQuery):
         reply_markup=reply_markupes,
     )
 
-@app.on_message(filters.command(["delallsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
+
+@app.on_message(
+    filters.command(["delallsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"])
+    & filters.user(OWNER_ID)
+)
 @language
 async def del_all_sudo(client, message: Message, _):
     count = len(SUDOERS) - 1  # Exclude the admin from the count

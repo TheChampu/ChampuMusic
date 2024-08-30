@@ -27,8 +27,8 @@ cleandb = mongodb.cleanmode
 queriesdb = mongodb.queries
 userdb = mongodb.userstats
 videodb = mongodb.Champuvideocalls
-chatsdbc = mongodb.chatsc  
-usersdbc = mongodb.tgusersdbc 
+chatsdbc = mongodb.chatsc
+usersdbc = mongodb.tgusersdbc
 
 # Shifting to memory [mongo sucks often]
 active = []
