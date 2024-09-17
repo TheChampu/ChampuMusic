@@ -2,11 +2,13 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, Message
 
+from config import BANNED_USERS
+from strings import get_command, get_string, languages_present
 from ChampuMusic import app
 from ChampuMusic.utils.database import get_lang, set_lang
 from ChampuMusic.utils.decorators import ActualAdminCB, language, languageCB
-from config import BANNED_USERS
-from strings import get_string, languages_present
+
+# Languages Available
 
 
 def lanuages_keyboard(_):
@@ -32,12 +34,15 @@ def lanuages_keyboard(_):
     return keyboard
 
 
-@app.on_message(filters.command(["lang", "setlang", "language"]) & ~BANNED_USERS)
+LANGUAGE_COMMAND = get_command("LANGUAGE_COMMAND")
+
+
+@app.on_message(filters.command(LANGUAGE_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def langs_command(client, message: Message, _):
     keyboard = lanuages_keyboard(_)
     await message.reply_text(
-        _["lang_1"],
+        _["setting_1"].format(message.chat.title, message.chat.id),
         reply_markup=keyboard,
     )
 
@@ -59,14 +64,17 @@ async def language_markup(client, CallbackQuery, _):
     langauge = (CallbackQuery.data).split(":")[1]
     old = await get_lang(CallbackQuery.message.chat.id)
     if str(old) == str(langauge):
-        return await CallbackQuery.answer(_["lang_4"], show_alert=True)
+        return await CallbackQuery.answer(
+            "ʏᴏᴜ ᴀʀᴇ ᴀʟʀᴇᴀᴅʏ ᴜsɪɴɢ sᴀᴍᴇ ʟᴀɴɢᴜᴀɢᴇ", show_alert=True
+        )
     try:
         _ = get_string(langauge)
-        await CallbackQuery.answer(_["lang_2"], show_alert=True)
+        await CallbackQuery.answer(
+            "ʏᴏᴜʀ ʟᴀɴɢᴜᴀɢᴇ ᴄʜᴀɴɢᴇᴅ sᴜᴄᴇssғᴜʟʟʏ..", show_alert=True
+        )
     except:
-        _ = get_string(old)
         return await CallbackQuery.answer(
-            _["lang_3"],
+            "ғᴀɪʟᴇᴅ ᴛᴏ ᴄʜᴀɴɢᴇ ʟᴀɴɢᴜᴀɢᴇ ᴏʀ ʟᴀɴɢᴜᴀɢᴇ ɪs ɪɴ ᴜɴᴅᴇʀ ᴜᴘᴅᴀᴛᴇ",
             show_alert=True,
         )
     await set_lang(CallbackQuery.message.chat.id, langauge)

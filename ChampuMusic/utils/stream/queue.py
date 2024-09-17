@@ -1,9 +1,8 @@
-import asyncio
 from typing import Union
 
+from config import autoclean, chatstats, userstats
+from config.config import time_to_seconds
 from ChampuMusic.misc import db
-from ChampuMusic.utils.formatters import check_duration, seconds_to_min
-from config import autoclean, time_to_seconds
 
 
 async def put_queue(
@@ -28,7 +27,6 @@ async def put_queue(
         "dur": duration,
         "streamtype": stream,
         "by": user,
-        "user_id": user_id,
         "chat_id": original_chat_id,
         "file": file,
         "vidid": vidid,
@@ -36,8 +34,7 @@ async def put_queue(
         "played": 0,
     }
     if forceplay:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             check.insert(0, put)
         else:
             db[chat_id] = []
@@ -45,6 +42,15 @@ async def put_queue(
     else:
         db[chat_id].append(put)
     autoclean.append(file)
+    vidid = "telegram" if vidid == "soundcloud" else vidid
+    to_append = {"vidid": vidid, "title": title}
+    if chat_id not in chatstats:
+        chatstats[chat_id] = []
+    chatstats[chat_id].append(to_append)
+    if user_id not in userstats:
+        userstats[user_id] = []
+    userstats[user_id].append(to_append)
+    return
 
 
 async def put_queue_index(
@@ -58,17 +64,6 @@ async def put_queue_index(
     stream,
     forceplay: Union[bool, str] = None,
 ):
-    if "20.212.146.162" in vidid:
-        try:
-            dur = await asyncio.get_event_loop().run_in_executor(
-                None, check_duration, vidid
-            )
-            duration = seconds_to_min(dur)
-        except:
-            duration = "ᴜʀʟ sᴛʀᴇᴀᴍ"
-            dur = 0
-    else:
-        dur = 0
     put = {
         "title": title,
         "dur": duration,
@@ -77,12 +72,11 @@ async def put_queue_index(
         "chat_id": original_chat_id,
         "file": file,
         "vidid": vidid,
-        "seconds": dur,
+        "seconds": 0,
         "played": 0,
     }
     if forceplay:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             check.insert(0, put)
         else:
             db[chat_id] = []

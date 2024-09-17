@@ -1,14 +1,21 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from ChampuMusic import app
 from ChampuMusic.misc import SUDOERS
 from ChampuMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
 from ChampuMusic.utils.decorators.language import language
-from config import BANNED_USERS
+
+# Commands
+
+BLACKLISTCHAT_COMMAND = get_command("BLACKLISTCHAT_COMMAND")
+WHITELISTCHAT_COMMAND = get_command("WHITELISTCHAT_COMMAND")
+BLACKLISTEDCHAT_COMMAND = get_command("BLACKLISTEDCHAT_COMMAND")
 
 
-@app.on_message(filters.command(["blchat", "blacklistchat"]) & SUDOERS)
+@app.on_message(filters.command(BLACKLISTCHAT_COMMAND) & SUDOERS)
 @language
 async def blacklist_chat_func(client, message: Message, _):
     if len(message.command) != 2:
@@ -20,16 +27,14 @@ async def blacklist_chat_func(client, message: Message, _):
     if blacklisted:
         await message.reply_text(_["black_3"])
     else:
-        await message.reply_text(_["black_9"])
+        await message.reply_text("sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ʜᴀᴘᴘᴇɴᴇᴅ.")
     try:
         await app.leave_chat(chat_id)
     except:
         pass
 
 
-@app.on_message(
-    filters.command(["whitelistchat", "unblacklistchat", "unblchat"]) & SUDOERS
-)
+@app.on_message(filters.command(WHITELISTCHAT_COMMAND) & SUDOERS)
 @language
 async def white_funciton(client, message: Message, _):
     if len(message.command) != 2:
@@ -40,10 +45,10 @@ async def white_funciton(client, message: Message, _):
     whitelisted = await whitelist_chat(chat_id)
     if whitelisted:
         return await message.reply_text(_["black_6"])
-    await message.reply_text(_["black_9"])
+    await message.reply_text("sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ʜᴀᴘᴘᴇɴᴇᴅ.")
 
 
-@app.on_message(filters.command(["blchats", "blacklistedchats"]) & ~BANNED_USERS)
+@app.on_message(filters.command(BLACKLISTEDCHAT_COMMAND) & ~BANNED_USERS)
 @language
 async def all_chats(client, message: Message, _):
     text = _["black_7"]
@@ -51,11 +56,11 @@ async def all_chats(client, message: Message, _):
     for count, chat_id in enumerate(await blacklisted_chats(), 1):
         try:
             title = (await app.get_chat(chat_id)).title
-        except:
-            title = "ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ"
+        except Exception:
+            title = "ᴘʀɪᴠᴀᴛᴇ"
         j = 1
-        text += f"{count}. {title}[<code>{chat_id}</code>]\n"
+        text += f"**{count}. {title}** [`{chat_id}`]\n"
     if j == 0:
-        await message.reply_text(_["black_8"].format(app.mention))
+        await message.reply_text(_["black_8"])
     else:
         await message.reply_text(text)

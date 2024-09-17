@@ -11,6 +11,8 @@
   "telegram-bot",
   "pyrogram"
   ],
+    
+    "stack": "container",
     "env": {
       "API_ID": {
         "description": "ɢᴇᴛ ᴀᴘɪ ɪᴅ ғʀᴏᴍ https://my.telegram.org",
@@ -26,6 +28,11 @@
         "description": "ɢᴇᴛ ʙᴏᴛ's ᴛᴏᴋᴇɴ ғʀᴏᴍ ʙᴏᴛғᴀᴛʜᴇʀ",
         "value": "",
         "required": true
+      },
+      "EXTRA_PLUGINS": {
+        "description": "ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ʟᴏᴀᴅ ᴇxᴛʀᴀ ᴘʟᴜɢɪɴs ᴡɪᴛʜ ᴍᴜsɪᴄ ᴘʟᴜɢɪɴs sᴏ ғɪʟʟ ᴛʀᴜᴇ  ɪғ ʏᴏᴜ ᴅᴏɴ'ᴛ ᴡᴀɴᴛ ᴛᴏ ʟᴏᴀᴅ ᴇxᴛʀᴀ ᴘʟᴜɢɪɴs sᴏ ғɪʟʟ ғᴀʟsᴇ",
+        "value": "False",
+        "required": false
       },
       "MONGO_DB_URI": {
         "description": "ɢᴇᴛ ᴀ ᴍᴏɴɢᴏᴅʙ ᴜʀʟ ғʀᴏᴍ https://cloud.mongodb.com.",
@@ -52,18 +59,25 @@
         "value": "",
         "required": false
       },
-      "LOG_GROUP_ID": {
+      "LOGGER_ID": {
         "description": "ʏᴏᴜʀ ʟᴏɢ ɢʀᴏᴜᴘ ɪᴅ, ᴀᴅᴅ ʏᴏᴜʀ ʙᴏᴛ ᴀɴᴅ ᴘʀᴏᴍᴏᴛᴇ ᴀs ᴀɴ ᴀᴅᴍɪɴ ᴡɪᴛʜ ғᴜʟʟ ʀɪɢʜᴛs!.",
         "value": "",
+        "required": true
+      },
+      "UPSTREAM_REPO": {
+        "description": " ᴘᴜᴛ ʏᴏᴜʀ ʀᴇᴘᴏ ʟɪɴᴋ ʜᴇʀᴇ .",
+        "value": "https://github.com/TheChampu/ChampuMusic",
+        "required": true
+      },
+      "UPSTREAM_BRANCH": {
+        "description": "ᴡʀɪᴛᴇ ʏᴏᴜʀ ᴜᴘsᴛʀᴇᴀᴍ ʀᴇᴘᴏ ʙʀᴀɴᴄʜ ɴᴀᴍᴇ",
+        "value": "main",
         "required": true
       }
     },
     "buildpacks": [
           {
               "url": "heroku/python"
-          },
-          {
-              "url": "heroku/nodejs"
           },
           {
               "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
@@ -74,6 +88,5 @@
               "quantity": 1,
               "size": "basic"
           }
-      },
-      "stack": "container"
+      }
   }

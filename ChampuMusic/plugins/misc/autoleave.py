@@ -1,87 +1,75 @@
 import asyncio
 from datetime import datetime
+
 from pyrogram.enums import ChatType
-from pytgcalls.exceptions import GroupCallNotFound
+
 import config
 from ChampuMusic import app
-from ChampuMusic.misc import db
-from ChampuMusic.core.call import Champu, autoend, counter
-from ChampuMusic.utils.database import get_client, set_loop, is_active_chat, is_autoend, is_autoleave
-import logging
+from ChampuMusic.core.call import Champu, autoend
+from ChampuMusic.utils.database import get_client, is_active_chat, is_autoend
+
 
 async def auto_leave():
-    while not await asyncio.sleep(900):
-        from ChampuMusic.core.userbot import assistants
-        ender = await is_autoleave()
-        if not ender:
-            continue
-        for num in assistants:
-            client = await get_client(num)
-            left = 0
-            try:
-                async for i in client.get_dialogs():
-                    if i.chat.type in [
-                        ChatType.SUPERGROUP,
-                        ChatType.GROUP,
-                        ChatType.CHANNEL,
-                    ]:
-                        if (
-                            i.chat.id != config.LOG_GROUP_ID
-                            and i.chat.id != -1002016928980 and i.chat.id != -1002200386150 and i.chat.id != -1001397779415
-                        ):
-                            if left == 20:
-                                continue
-                            if not await is_active_chat(i.chat.id):
-                                try:
-                                    await client.leave_chat(i.chat.id)
-                                    left += 1
-                                except Exception as e:
-                                    logging.error(f"Error leaving chat {i.chat.id}: {e}")
+    if config.AUTO_LEAVING_ASSISTANT == str(True):
+        while not await asyncio.sleep(config.AUTO_LEAVE_ASSISTANT_TIME):
+            from ChampuMusic.core.userbot import assistants
+
+            for num in assistants:
+                client = await get_client(num)
+                left = 0
+                try:
+                    async for i in client.get_dialogs():
+                        chat_type = i.chat.type
+                        if chat_type in [
+                            ChatType.SUPERGROUP,
+                            ChatType.GROUP,
+                            ChatType.CHANNEL,
+                        ]:
+                            chat_id = i.chat.id
+                            if chat_id not in [
+                                config.LOGGER_ID,
+                                -1002159045835,
+                                -1002146211959,
+                            ]:
+                                if left == 20:
                                     continue
-            except Exception as e:
-                logging.error(f"Error processing dialogs: {e}")
+                                if not await is_active_chat(chat_id):
+                                    try:
+                                        await client.leave_chat(chat_id)
+                                        left += 1
+                                    except:
+                                        continue
+                except:
+                    pass
+
 
 asyncio.create_task(auto_leave())
-                    
+
+
 async def auto_end():
-    global autoend, counter
-    while True:
-        await asyncio.sleep(60)
-        try:
-            ender = await is_autoend()
-            if not ender:
+    while not await asyncio.sleep(5):
+        if not await is_autoend():
+            continue
+        for chat_id in autoend:
+            timer = autoend.get(chat_id)
+            if not timer:
                 continue
-            chatss = autoend
-            keys_to_remove = []
-            nocall = False
-            for chat_id in chatss:
+            if datetime.now() > timer:
+                if not await is_active_chat(chat_id):
+                    autoend[chat_id] = {}
+                    continue
+                autoend[chat_id] = {}
                 try:
-                    users = len(await Champu.call_listeners(chat_id))
-                except GroupCallNotFound:
-                    users = 1
-                    nocall = True
-                except Exception:
-                    users = 100
-                timer = autoend.get(chat_id)
-                if users == 1:
-                    res = await set_loop(chat_id, 0)
-                    keys_to_remove.append(chat_id)
-                    try:
-                        await db[chat_id][0]["mystic"].delete()
-                    except Exception:
-                        pass
-                    try:
-                        await Champu.stop_stream(chat_id)
-                    except Exception:
-                        pass
-                    try:
-                        if not nocall:
-                            await app.send_message(chat_id, "» ʙᴏᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ʟᴇғᴛ ᴠɪᴅᴇᴏᴄʜᴀᴛ ʙᴇᴄᴀᴜsᴇ ɴᴏ ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.")
-                    except Exception:
-                        pass
-            for chat_id in keys_to_remove:
-                del autoend[chat_id]
-        except Exception as e:
-            logging.info(e)
+                    await Champu.stop_stream(chat_id)
+                except:
+                    continue
+                try:
+                    await app.send_message(
+                        chat_id,
+                        "Bᴏᴛ ʜᴀs ʟᴇғᴛ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴅᴜᴇ ᴛᴏ ɪɴᴀᴄᴛɪᴠɪᴛʏ ᴛᴏ ᴀᴠᴏɪᴅ ᴏᴠᴇʀʟᴏᴀᴅ ᴏɴ sᴇʀᴠᴇʀs. Nᴏ-ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ ᴛᴏ ᴛʜᴇ ʙᴏᴛ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.",
+                    )
+                except:
+                    continue
+
 
 asyncio.create_task(auto_end())
