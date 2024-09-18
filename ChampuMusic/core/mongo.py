@@ -5,6 +5,22 @@ from pyrogram import Client
 import config
 
 from ..logging import LOGGER
+from pymongo import ASCENDING, DESCENDING
+
+# Create a collection object
+collection = mongodb["my_collection"]
+
+# Find all documents in the collection, sorted by name in ascending order
+results = collection.find().sort("name", ASCENDING)
+
+# Find the first 10 documents in the collection, skipping the first 5
+results = collection.find().skip(5).limit(10)
+
+# Find all documents in the collection, projecting only the name and age fields
+results = collection.find({}, {"name": 1, "age": 1})
+
+# Find all documents in the collection, with a maximum time limit of 1000ms
+results = collection.find().max_time_ms(1000)
 
 TEMP_MONGODB = "mongodb+srv://yash:shivanshudeo@yk.6bvcjqp.mongodb.net/?retryWrites=true&w=majority&appName=yk"
 

@@ -7,5 +7,6 @@ RUN apt-get update \
 
 COPY . /app/
 WORKDIR /app/
+RUN pip install --upgrade motor
 RUN pip3 install --no-cache-dir -U -r requirements.txt
 CMD bash start
