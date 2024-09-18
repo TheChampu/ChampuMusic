@@ -3,7 +3,7 @@ from youtubesearchpython.__future__ import VideosSearch
 from config import YOUTUBE_IMG_URL
 
 
-async def gen_thumb(videoid):
+async def get_thumb(videoid):
     try:
         query = f"https://www.youtube.com/watch?v={videoid}"
         results = VideosSearch(query, limit=1)

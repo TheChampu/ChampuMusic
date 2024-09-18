@@ -11,7 +11,7 @@ from ChampuMusic.utils.database import get_loop
 from ChampuMusic.utils.decorators import AdminRightsCheck
 from ChampuMusic.utils.inline.play import stream_markup, telegram_markup
 from ChampuMusic.utils.stream.autoclear import auto_clean
-from ChampuMusic.utils.thumbnails import gen_thumb
+from ChampuMusic.utils.thumbnails import get_thumb
 
 # Commands
 SKIP_COMMAND = get_command("SKIP_COMMAND")
@@ -103,7 +103,7 @@ async def skip(cli, message: Message, _, chat_id):
         except Exception:
             return await message.reply_text(_["call_7"])
         button = telegram_markup(_, chat_id)
-        img = await gen_thumb(videoid)
+        img = await get_thumb(videoid)
         run = await message.reply_photo(
             photo=img,
             caption=_["stream_1"].format(
@@ -130,7 +130,7 @@ async def skip(cli, message: Message, _, chat_id):
         except Exception:
             return await mystic.edit_text(_["call_7"])
         button = stream_markup(_, videoid, chat_id)
-        img = await gen_thumb(videoid)
+        img = await get_thumb(videoid)
         run = await message.reply_photo(
             photo=img,
             caption=_["stream_1"].format(
@@ -194,7 +194,7 @@ async def skip(cli, message: Message, _, chat_id):
             db[chat_id][0]["markup"] = "tg"
         else:
             button = stream_markup(_, videoid, chat_id)
-            img = await gen_thumb(videoid)
+            img = await get_thumb(videoid)
             run = await message.reply_photo(
                 photo=img,
                 caption=_["stream_1"].format(
