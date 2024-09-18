@@ -10,7 +10,8 @@ hachoir
 heroku3
 httpx[http2]
 lyricsgenius
-motor
+motor==2.5.1
+pymongo==4.1.1
 wget
 pillow==9.5.0
 psutil
@@ -24,7 +25,6 @@ pyyaml
 requests
 speedtest-cli
 spotipy
-pymongo
 tgcrypto
 urllib3
 uvloop
