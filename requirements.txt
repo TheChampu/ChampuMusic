@@ -10,8 +10,7 @@ hachoir
 heroku3
 httpx[http2]
 lyricsgenius
-motor==2.5.1
-pymongo==4.1.1
+motor
 wget
 pillow==9.5.0
 psutil
