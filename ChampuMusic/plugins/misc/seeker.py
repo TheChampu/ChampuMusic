@@ -20,30 +20,32 @@ def stream_markup_timer(_, videoid, chat_id, played, dur):
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
     umm = math.floor(percentage)
-    if 0 < umm <= 40:
-        bar = "◉——————————"
-    elif 10 < umm < 20:
-        bar = "—◉—————————"
-    elif 20 < umm < 30:
-        bar = "——◉————————"
-    elif 30 <= umm < 40:
-        bar = "———◉———————"
-    elif 40 <= umm < 50:
-        bar = "————◉——————"
-    elif 50 <= umm < 60:
-        bar = "——————◉————"
-    elif 60 <= umm < 70:
-        bar = "———————◉———"
-    elif 70 <= umm < 90:
-        bar = "—————————◉—"
+    if 0 < umm <= 60:
+        bar = "——◉——————————"
+    elif 60 <= umm < 65:
+        bar = "—————◉———————"
+    elif 65 <= umm < 70:
+        bar = "——————◉——————"
+    elif 70 <= umm < 75:
+        bar = "———————◉—————"
+    elif 75 <= umm < 80:
+        bar = "————————◉————"
+    elif 80 <= umm < 85:
+        bar = "—————————◉———"
+    elif 85 <= umm < 90:
+        bar = "——————————◉——"
+    elif 90 <= umm < 95:
+        bar = "———————————◉—"
+    elif 95 <= umm < 100:
+        bar = "————————————◉"
     else:
-        bar = "——————————◉"
+        bar = "——◉——————————————"
 
     buttons = [
         [
             InlineKeyboardButton(
                 text=f"{played} •{bar}• {dur}",
-                callback_data="GetTimer",
+                url=f"https://t.me/{app.username}?startgroup=true",
             )
         ],
         [
@@ -80,29 +82,32 @@ def telegram_markup_timer(_, chat_id, played, dur):
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
     umm = math.floor(percentage)
-    if 0 < umm <= 40:
-        bar = "◉——————————"
-    elif 10 < umm < 20:
-        bar = "—◉—————————"
-    elif 20 < umm < 30:
-        bar = "——◉————————"
-    elif 30 <= umm < 40:
-        bar = "———◉———————"
-    elif 40 <= umm < 50:
-        bar = "————◉——————"
-    elif 50 <= umm < 60:
-        bar = "——————◉————"
-    elif 60 <= umm < 70:
-        bar = "———————◉———"
-    elif 70 <= umm < 90:
-        bar = "—————————◉—"
+    if 0 < umm <= 60:
+        bar = "——◉——————————"
+    elif 60 <= umm < 65:
+        bar = "—————◉———————"
+    elif 65 <= umm < 70:
+        bar = "——————◉——————"
+    elif 70 <= umm < 75:
+        bar = "———————◉—————"
+    elif 75 <= umm < 80:
+        bar = "————————◉————"
+    elif 80 <= umm < 85:
+        bar = "—————————◉———"
+    elif 85 <= umm < 90:
+        bar = "——————————◉——"
+    elif 90 <= umm < 95:
+        bar = "———————————◉—"
+    elif 95 <= umm < 100:
+        bar = "————————————◉"
     else:
-        bar = "——————————◉"
+        bar = "——◉——————————————"
+
     buttons = [
         [
             InlineKeyboardButton(
                 text=f"{played} •{bar}• {dur}",
-                callback_data="GetTimer",
+                url=f"https://t.me/{app.username}?startgroup=true",
             )
         ],
         [
@@ -143,7 +148,7 @@ asyncio.create_task(timer())
 
 
 async def markup_timer():
-    while not await asyncio.sleep(90):
+    while not await asyncio.sleep(120):
         active_chats = await get_active_chats()
         for chat_id in active_chats:
             try:

@@ -1,5 +1,12 @@
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.errors import UserNotParticipant
+from pyrogram.types import (
+    ChatMemberUpdated,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+)
 
 from config import BANNED_USERS, adminlist
 from strings import get_string
@@ -86,3 +93,75 @@ async def stop_music(cli, message: Message):
     await Champu.st_stream(chat_id)
     await set_loop(chat_id, 0)
     await message.reply_text(_["admin_9"].format(message.from_user.mention))
+
+
+import random
+
+from pyrogram import filters
+from pyrogram.types import Message
+
+from ChampuMusic import app
+from ChampuMusic.utils.database import get_assistant
+
+photo = [
+    "https://envs.sh/qeq.jpg",
+    "https://envs.sh/qe0.jpg",
+    "https://envs.sh/qeS.jpg",
+    "https://envs.sh/qeW.jpg",
+]
+
+
+@app.on_chat_member_updated(filters.group, group=6)
+async def assistant_banned(client: app, member: ChatMemberUpdated):
+    chat_id = member.chat.id
+    userbot = await get_assistant(chat_id)
+    try:
+        userbot = await get_assistant(member.chat.id)
+        get = await app.get_chat_member(chat_id, userbot.id)
+        if get.status in [ChatMemberStatus.BANNED]:
+
+            # Assistant bot has been banned
+            remove_by = member.from_user.mention if member.from_user else "𝐔ɴᴋɴᴏᴡɴ 𝐔sᴇʀ"
+            chat_id = member.chat.id
+            title = member.chat.title
+            username = (
+                f"@{member.chat.username}" if member.chat.username else "𝐏ʀɪᴠᴀᴛᴇ 𝐂ʜᴀᴛ"
+            )
+
+            # Construct message
+            left_message = (
+                f"╔══❰#𝗔𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁_𝗕𝗮𝗻𝗻𝗲𝗱❱══❍⊱❁۪۪\n║\n"
+                f"║┣⪼ **𝐂ʜᴀᴛ »** {title}\n║\n"
+                f"║┣⪼ **𝐀ssɪsᴛᴀɴᴛ 𝐈ᴅ »** {userbot.id}\n║\n"
+                f"║┣⪼ **𝐔sᴇʀɴᴀᴍᴇ »** @{userbot.username}\n║\n"
+                f"║┣⪼ **𝐁ᴀɴ 𝐁ʏ »** {remove_by}\n"
+                f"╚══════════════════❍⊱❁"
+            )
+
+            # Create keyboard for unban button
+            keyboard = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "✨𝐔𝐧𝐛𝐚𝐧 𝐀𝐬𝐬𝐢𝐬𝐭𝐚𝐧𝐭✨",
+                            callback_data="unban_userbot",
+                        )
+                    ]
+                ]
+            )
+
+            # Send photo with the left message and keyboard
+            await app.send_photo(
+                chat_id,
+                photo=random.choice(photo),
+                caption=left_message,
+                reply_markup=keyboard,
+            )
+            # Perform actions like stopping streams or loops
+            await Champu.st_stream(chat_id)
+            await set_loop(chat_id, 0)
+    except UserNotParticipant:
+        return
+    except Exception as e:
+        await app.send_message(chat_id, f"Error: {e}")
+        return
