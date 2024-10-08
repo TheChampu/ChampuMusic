@@ -3,7 +3,6 @@ import random
 import string
 from time import time
 
-import httpx
 from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
@@ -15,7 +14,7 @@ from ChampuMusic import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, ap
 from ChampuMusic.core.call import Champu
 from ChampuMusic.utils import seconds_to_min, time_to_seconds
 from ChampuMusic.utils.channelplay import get_channeplayCB
-from ChampuMusic.utils.database import add_served_chat, is_video_allowed
+from ChampuMusic.utils.database import add_served_chat, get_assistant, is_video_allowed
 from ChampuMusic.utils.decorators.language import languageCB
 from ChampuMusic.utils.decorators.play import PlayWrapper
 from ChampuMusic.utils.formatters import formats
@@ -31,27 +30,8 @@ from ChampuMusic.utils.stream.stream import stream
 
 user_last_message_time = {}
 user_command_count = {}
-# Define the threshold for command spamming (e.g., 20 commands within 60 seconds)
+SPAM_WINDOW_SECONDS = 5  # Set the time window for spam checks (5 seconds for example)
 SPAM_THRESHOLD = 2
-SPAM_WINDOW_SECONDS = 5
-
-
-async def is_streamable_url(url: str) -> bool:
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, timeout=5)
-            if response.status_code == 200:
-                content_type = response.headers.get("Content-Type", "")
-                if (
-                    "application/vnd.apple.mpegurl" in content_type
-                    or "application/x-mpegURL" in content_type
-                ):
-                    return True
-                if url.endswith(".m3u8") or url.endswith(".index"):
-                    return True
-    except httpx.RequestError:
-        pass
-    return False
 
 
 @app.on_message(
@@ -60,7 +40,6 @@ async def is_streamable_url(url: str) -> bool:
             "play",
             "vplay",
             "cplay",
-            "cute",
             "cvplay",
             "playforce",
             "vplayforce",
@@ -74,41 +53,35 @@ async def is_streamable_url(url: str) -> bool:
 )
 @PlayWrapper
 async def play_commnd(
-    client,
-    message: Message,
-    _,
-    chat_id,
-    video,
-    channel,
-    playmode,
-    url,
-    fplay,
+    client, message: Message, _, chat_id, video, channel, playmode, url, fplay
 ):
+    userbot = await get_assistant(message.chat.id)
+    userbot_id = userbot.id
     user_id = message.from_user.id
     current_time = time()
-    # Update the last message timestamp for the user
     last_message_time = user_last_message_time.get(user_id, 0)
 
+    # Spam check logic
     if current_time - last_message_time < SPAM_WINDOW_SECONDS:
-        # If less than the spam window time has passed since the last message
         user_last_message_time[user_id] = current_time
         user_command_count[user_id] = user_command_count.get(user_id, 0) + 1
         if user_command_count[user_id] > SPAM_THRESHOLD:
-            # Block the user if they exceed the threshold
             hu = await message.reply_text(
-                f"**{message.from_user.mention} ᴘʟᴇᴀsᴇ ᴅᴏɴᴛ ᴅᴏ sᴘᴀᴍ, ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴀғᴛᴇʀ 5 sᴇᴄ**"
+                f"**{message.from_user.mention} ᴘʟᴇᴀsᴇ ᴅᴏɴ'ᴛ sᴘᴀᴍ, ᴛʀʏ ᴀɢᴀɪɴ ᴀғᴛᴇʀ 5 sᴇᴄᴏɴᴅs.**"
             )
             await asyncio.sleep(3)
             await hu.delete()
             return
     else:
-        # If more than the spam window time has passed, reset the command count and update the message timestamp
         user_command_count[user_id] = 1
         user_last_message_time[user_id] = current_time
+
+    # Proceed with adding the chat and sending response
     await add_served_chat(message.chat.id)
     mystic = await message.reply_text(
         _["play_2"].format(channel) if channel else _["play_1"]
     )
+
     plist_id = None
     slider = None
     plist_type = None
@@ -315,7 +288,10 @@ async def play_commnd(
                 cap = _["play_13"].format(message.from_user.first_name)
                 img = url
             else:
-                return await mystic.edit_text(_["play_16"])
+                await mystic.delete()
+                return await play_commnd(
+                    client, message, _, chat_id, video, channel, playmode, url, fplay
+                )
         elif await Resso.valid(url):
             try:
                 details, track_id = await Resso.track(url)
