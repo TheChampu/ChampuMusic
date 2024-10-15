@@ -1,12 +1,18 @@
 import asyncio
-from datetime import datetime
 
 from pyrogram.enums import ChatType
 
 import config
 from ChampuMusic import app
-from ChampuMusic.core.call import Champu, autoend
-from ChampuMusic.utils.database import get_client, is_active_chat, is_autoend
+from ChampuMusic.core.call import Champu
+from ChampuMusic.core.call import _st_ as clean
+from ChampuMusic.utils.database import (
+    get_active_chats,
+    get_assistant,
+    get_client,
+    is_active_chat,
+    is_autoend,
+)
 
 
 async def auto_leave():
@@ -28,8 +34,8 @@ async def auto_leave():
                             chat_id = i.chat.id
                             if chat_id not in [
                                 config.LOGGER_ID,
-                                -1002159045835,
-                                -1002146211959,
+                                -1001961655253,
+                                -1001423108989,
                             ]:
                                 if left == 20:
                                     continue
@@ -47,29 +53,47 @@ asyncio.create_task(auto_leave())
 
 
 async def auto_end():
-    while not await asyncio.sleep(5):
+    while not await asyncio.sleep(30):
         if not await is_autoend():
             continue
-        for chat_id in autoend:
-            timer = autoend.get(chat_id)
-            if not timer:
-                continue
-            if datetime.now() > timer:
+
+        served_chats = await get_active_chats()
+
+        for chat_id in served_chats:
+            try:
                 if not await is_active_chat(chat_id):
-                    autoend[chat_id] = {}
+                    await clean(chat_id)
                     continue
-                autoend[chat_id] = {}
-                try:
-                    await Champu.stop_stream(chat_id)
-                except:
-                    continue
-                try:
-                    await app.send_message(
+
+                userbot = await get_assistant(chat_id)
+                call_participants_id = [
+                    member.chat.id async for member in userbot.get_call_members(chat_id)
+                ]
+
+                if len(call_participants_id) <= 1:
+                    ok = await app.send_message(
                         chat_id,
-                        "Bᴏᴛ ʜᴀs ʟᴇғᴛ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴅᴜᴇ ᴛᴏ ɪɴᴀᴄᴛɪᴠɪᴛʏ ᴛᴏ ᴀᴠᴏɪᴅ ᴏᴠᴇʀʟᴏᴀᴅ ᴏɴ sᴇʀᴠᴇʀs. Nᴏ-ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ ᴛᴏ ᴛʜᴇ ʙᴏᴛ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.",
+                        "» Nᴏ ᴏɴᴇ ɪs ʟɪsᴛᴇɴɪɴɢ ᴛᴏ sᴏɴɢ ɪɴ ᴛʜᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.\n"
+                        "ᴘʟᴇᴀsᴇ ᴊᴏɪɴ ᴛʜᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴏᴛʜᴇʀᴡɪsᴇ ʙᴏᴛ ᴡɪʟʟ ᴇɴᴅ sᴏɴɢ ɪɴ 15 sᴇᴄᴏɴᴅs.",
                     )
-                except:
-                    continue
+                    await asyncio.sleep(15)
+
+                    call_participants_id = [
+                        member.chat.id
+                        async for member in userbot.get_call_members(chat_id)
+                    ]
+
+                    if len(call_participants_id) <= 1:
+                        await ok.delete()
+                        await Champu.stop_stream(chat_id)
+                        await app.send_message(
+                            chat_id,
+                            "» Nᴏ ᴏɴᴇ ᴊᴏɪɴᴇᴅ ᴛʜᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ, sᴏ ᴛʜᴇ sᴏɴɢ ɪs ᴇɴᴅɪɴɢ ᴅᴜᴇ ᴛᴏ ɪɴᴀᴄᴛɪᴠɪᴛʏ.",
+                        )
+                        await clean(chat_id)
+            except:
+                continue
 
 
+# Start the auto_end task
 asyncio.create_task(auto_end())

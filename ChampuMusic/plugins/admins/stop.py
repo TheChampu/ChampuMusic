@@ -1,3 +1,6 @@
+import asyncio
+import random
+
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import UserNotParticipant
@@ -16,6 +19,7 @@ from ChampuMusic.misc import SUDOERS
 from ChampuMusic.plugins import extra_plugins_enabled
 from ChampuMusic.utils.database import (
     delete_filter,
+    get_assistant,
     get_cmode,
     get_lang,
     is_active_chat,
@@ -95,13 +99,10 @@ async def stop_music(cli, message: Message):
     await message.reply_text(_["admin_9"].format(message.from_user.mention))
 
 
-import random
-
 from pyrogram import filters
 from pyrogram.types import Message
 
 from ChampuMusic import app
-from ChampuMusic.utils.database import get_assistant
 
 photo = [
     "https://envs.sh/qeq.jpg",
@@ -133,7 +134,7 @@ async def assistant_banned(client: app, member: ChatMemberUpdated):
                 f"╔══❰#𝗔𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁_𝗕𝗮𝗻𝗻𝗲𝗱❱══❍⊱❁۪۪\n║\n"
                 f"║┣⪼ **𝐂ʜᴀᴛ »** {title}\n║\n"
                 f"║┣⪼ **𝐀ssɪsᴛᴀɴᴛ 𝐈ᴅ »** {userbot.id}\n║\n"
-                f"║┣⪼ **𝐔sᴇʀɴᴀᴍᴇ »** @{userbot.username}\n║\n"
+                f"║┣⪼ **𝐍ᴀᴍᴇ »** @{userbot.username}\n║\n"
                 f"║┣⪼ **𝐁ᴀɴ 𝐁ʏ »** {remove_by}\n"
                 f"╚══════════════════❍⊱❁"
             )
@@ -160,8 +161,86 @@ async def assistant_banned(client: app, member: ChatMemberUpdated):
             # Perform actions like stopping streams or loops
             await Champu.st_stream(chat_id)
             await set_loop(chat_id, 0)
+            await app.unban_chat_member(chat_id, userbot.id)
+            await asyncio.sleep(10)
     except UserNotParticipant:
+        await Champu.st_stream(chat_id)
+        await set_loop(chat_id, 0)
+        await app.unban_chat_member(chat_id, userbot.id)
+        await asyncio.sleep(10)
         return
     except Exception as e:
-        await app.send_message(chat_id, f"Error: {e}")
         return
+
+
+@app.on_chat_member_updated(filters.group, group=-8)
+async def assistant_left(client: app, member: ChatMemberUpdated):
+    chat_id = member.chat.id
+    try:
+        userbot = await get_assistant(chat_id)
+        userbot_id = userbot.id
+
+        # Check if the leaving member is the userbot
+        if (
+            not member.new_chat_member
+            and member.old_chat_member.user.id == userbot_id
+            and member.old_chat_member.status not in {"banned", "left", "restricted"}
+            and member.old_chat_member
+        ):
+            left_message = (
+                f"**Assistant Has Left This Chat**\n\n"
+                f"**Id:** `{userbot.id}`\n"
+                f"**Name:** @{userbot.username}\n\n"
+                f"**Invite Assistant By: /userbotjoin**"
+            )
+            await app.send_photo(
+                chat_id,
+                photo=random.choice(photo),
+                caption=left_message,
+                reply_markup=keyboard,
+            )
+
+            await Champu.st_stream(chat_id)
+            await set_loop(chat_id, 0)
+            await asyncio.sleep(10)
+    except UserNotParticipant:
+        left_message = (
+            f"**Assistant Has Left This Chat**\n\n"
+            f"**Id:** `{userbot.id}`\n"
+            f"**Name:** @{userbot.username}\n\n"
+            f"**Invite Assistant By: /userbotjoin**"
+        )
+        await app.send_photo(
+            chat_id,
+            photo=random.choice(photo),
+            caption=left_message,
+            reply_markup=keyboard,
+        )
+        await Champu.st_stream(chat_id)
+        await set_loop(chat_id, 0)
+        await asyncio.sleep(10)
+    except Exception as e:
+        return
+
+
+@app.on_message(filters.video_chat_started & filters.group)
+async def brah(_, msg):
+    chat_id = msg.chat.id
+    try:
+        await msg.reply("**😍ᴠɪᴅᴇᴏ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ🥳**")
+        await Champu.st_stream(chat_id)
+        await set_loop(chat_id, 0)
+    except Exception as e:
+        return await msg.reply(f"**Error {e}**")
+
+
+# vc off
+@app.on_message(filters.video_chat_ended & filters.group)
+async def brah2(_, msg):
+    chat_id = msg.chat.id
+    try:
+        await msg.reply("**😕ᴠɪᴅᴇᴏ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ💔**")
+        await Champu.st_stream(chat_id)
+        await set_loop(chat_id, 0)
+    except Exception as e:
+        return await msg.reply(f"**Error {e}**")
