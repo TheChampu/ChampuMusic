@@ -325,14 +325,11 @@ async def music_helper_cb(client, CallbackQuery, _):
 async def about_callback(client: Client, callback_query: CallbackQuery):
     buttons = [
         [
-            InlineKeyboardButton(text="🔰ᴏᴡɴᴇʀ🔰", user_id=config.OWNER_ID[0]),
-            InlineKeyboardButton(
-                text="📍sᴜᴅᴏᴇʀs📍", url=f"https://t.me/{app.username}?start=sudo"
-            ),
+            InlineKeyboardButton(text=" ᴏᴡɴᴇʀ ", user_id=config.OWNER_ID[0])
         ],
         [
-            InlineKeyboardButton(text="🎁ɪɴsᴛᴀ🎁", url=f"https://www.instagram.com/shivanshu_deo/"),
-            InlineKeyboardButton(text="💲ʏᴏᴜᴛᴜʙᴇ💲", url=f"https://www.youtube.com/@itsMeChampu"),
+            InlineKeyboardButton(text=" ɪɴsᴛᴀ ", url=f"https://www.instagram.com/shivanshu_deo/"),
+            InlineKeyboardButton(text=" ʏᴏᴜᴛᴜʙᴇ ", url=f"https://www.youtube.com/@itsMeChampu"),
         ],
         [
             InlineKeyboardButton(text="🔙 Back", callback_data="about")
@@ -458,7 +455,7 @@ async def about_callback(client: Client, callback_query: CallbackQuery):
         ],
         [
             InlineKeyboardButton(text="📓ʙᴀsɪᴄ ɢᴜɪᴅᴇ📓", callback_data="basic_guide"),
-            InlineKeyboardButton(text="⚜️ᴅᴏɴᴀᴛᴇ⚜️", url=f"https://t.me/TheChampu/12"),
+            InlineKeyboardButton(text="⚜️ᴅᴏɴᴀᴛᴇ⚜️", callback_data="donate"),
         ],
         [InlineKeyboardButton(text="🔙 Back", callback_data="go_to_start")],
     ]
