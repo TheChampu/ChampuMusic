@@ -116,16 +116,24 @@ async def del_back_playlist(client, CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
     chat_id = CallbackQuery.message.chat.id
     playing = db.get(chat_id)
+    
     if not playing:
         return await CallbackQuery.answer(_["queue_2"], show_alert=True)
 
-    # Now you can safely access playing[0]
+    # Initialize pages
+    pages = 0  # or any default value you see fit
+
+    callback_request = callback_data.split(None, 1)[1]
+    state, pages_str, videoid, chat = callback_request.split("|")
+    pages = int(pages_str)  # Assign the parsed value to pages
+    chat_id = int(chat)
+
     if pages == 3:
         buttons = panel_markup_4(
-            _,
-            playing[0]["vidid"],
-            chat_id,
-            seconds_to_min(playing[0]["played"]),
+            _, 
+            playing[0]["vidid"], 
+            chat_id, 
+            seconds_to_min(playing[0]["played"]), 
             playing[0]["dur"],
         )
     callback_request = callback_data.split(None, 1)[1]
