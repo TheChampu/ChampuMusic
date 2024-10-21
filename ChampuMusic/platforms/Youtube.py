@@ -130,6 +130,14 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
+    
+        # Initialize variables
+        title = None
+        duration_min = None
+        duration_sec = 0
+        thumbnail = None
+        vidid = None
+
         results = VideosSearch(link, limit=1)
         for result in (await results.next())["result"]:
             title = result["title"]
@@ -140,8 +148,12 @@ class YouTubeAPI:
                 duration_sec = 0
             else:
                 duration_sec = int(time_to_seconds(duration_min))
-        return title, duration_min, duration_sec, thumbnail, vidid
+    
+    # Check if title was assigned
+        if title is None:
+            raise ValueError("No details found for the provided link.")
 
+        return title, duration_min, duration_sec, thumbnail, vidid
     async def title(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
