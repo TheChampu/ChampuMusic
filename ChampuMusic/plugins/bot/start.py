@@ -236,7 +236,6 @@ async def start_comm(client, message: Message, _):
 
         except AttributeError:
             chat_photo = "assets/nodp.png"
-        await champus.delete()
         await message.reply_photo(
             photo=chat_photo,
             caption=_["start_2"].format(message.from_user.mention, app.mention),
