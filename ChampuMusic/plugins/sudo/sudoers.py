@@ -61,7 +61,12 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
     else:
         user = await app.get_users(OWNER_ID)
 
-        user_mention = (user.first_name if not user.mention else user.mention)
+        # Ensure user is a single object and handle it accordingly
+        if isinstance(user, list):
+            user_mention = ", ".join([u.mention for u in user if hasattr(u, 'mention')]) or "Unknown User"
+        else:
+            user_mention = user.mention if hasattr(user, 'mention') else user.first_name
+
         caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n**🌹Oᴡɴᴇʀ** ➥ {user_mention}\n\n"
 
         keyboard.append([InlineKeyboardButton("๏ ᴠɪᴇᴡ ᴏᴡɴᴇʀ ๏", url=f"tg://openmessage?user_id={OWNER_ID}")])
@@ -74,10 +79,10 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
                     user_mention = user.mention if user else f"**🎁 Sᴜᴅᴏ {count} ɪᴅ:** {user_id}"
                     caption += f"**🎁 Sᴜᴅᴏ** {count} **»** {user_mention}\n"
                     button_text = f"๏ ᴠɪᴇᴡ sᴜᴅᴏ {count} ๏ "
-                    keyboard.append([InlineKeyboardButton(button_text, url=f"tg://openmessage?user_id={user_id}")]
-                    )
+                    keyboard.append([InlineKeyboardButton(button_text, url=f"tg://openmessage?user_id={user_id}")])
                     count += 1
-                except:
+                except Exception as e:
+                    logging.error(f"Error fetching user {user_id}: {e}")
                     continue
 
         # Add a "Back" button at the end
