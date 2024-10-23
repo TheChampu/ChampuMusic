@@ -61,16 +61,19 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
     if callback_query.from_user.id not in SUDOERS:
         return await callback_query.answer("sᴏʀʀʏ ʏᴀᴀʀ sɪʀғ ᴏᴡɴᴇʀ ᴏʀ sᴜᴅᴏ ᴡᴀʟᴇ ʜɪ sᴜᴅᴏʟɪsᴛ ᴅᴇᴋʜ sᴀᴋᴛᴇ ʜᴀɪ", show_alert=True)
     else:
-        user = await app.get_users(OWNER_ID)
+        if isinstance(OWNER_ID, list):
+            owner = await app.get_users(OWNER_ID[0])
+        else:
+            owner = await app.get_users(OWNER_ID)
 
-        user_mention = (user.first_name if not user.mention else user.mention)
-        caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n**🌹Oᴡɴᴇʀ** ➥ {user_mention}\n\n"
+        owner_mention = (owner.first_name if not owner.mention else owner.mention)
+        caption = f"**˹ʟɪsᴛ ᴏғ ʙᴏᴛ ᴍᴏᴅᴇʀᴀᴛᴏʀs˼**\n\n**🌹Oᴡɴᴇʀ** ➥ {owner_mention}\n\n"
 
-        keyboard.append([InlineKeyboardButton("๏ ᴠɪᴇᴡ ᴏᴡɴᴇʀ ๏", url=f"tg://openmessage?user_id={OWNER_ID}")])
+        keyboard.append([InlineKeyboardButton("๏ ᴠɪᴇᴡ ᴏᴡɴᴇʀ ๏", url=f"tg://openmessage?user_id={OWNER_ID if not isinstance(OWNER_ID, list) else OWNER_ID[0]")])
         
         count = 1
         for user_id in SUDOERS:
-            if user_id != OWNER_ID:
+            if user_id != OWNER_ID and (not isinstance(OWNER_ID, list) or user_id != OWNER_ID[0]):
                 try:
                     user = await app.get_users(user_id)
                     user_mention = user.mention if user else f"**🎁 Sᴜᴅᴏ {count} ɪᴅ:** {user_id}"
@@ -87,9 +90,7 @@ async def check_sudo_list(client, callback_query: CallbackQuery):
 
         if keyboard:
             reply_markup = InlineKeyboardMarkup(keyboard)
-            await callback_query.message.edit_caption(caption=caption, reply_markup=reply_markup)
-
-@app.on_callback_query(filters.regex("^back_to_main_menu$"))
+            await callback_query.message.edit_caption(caption=caption, reply_markup=reply_markup)@app.on_callback_query(filters.regex("^back_to_main_menu$"))
 async def back_to_main_menu(client, callback_query: CallbackQuery):
     keyboard = [[InlineKeyboardButton("๏ ᴠɪᴇᴡ sᴜᴅᴏʟɪsᴛ ๏", callback_data="check_sudo_list")]]
     reply_markupes = InlineKeyboardMarkup(keyboard)
