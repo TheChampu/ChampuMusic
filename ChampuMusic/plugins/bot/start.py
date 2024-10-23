@@ -1,6 +1,6 @@
 import asyncio
 import time
-
+import logging
 from pyrogram import filters
 from pyrogram.enums import ParseMode
 from pyrogram.types import (
@@ -59,6 +59,7 @@ async def ban_new(client, message):
 async def start_comm(client, message: Message, _):
     chat_id = message.chat.id
     await add_served_user(message.from_user.id)
+    logging.info(f"Attempting to react to message ID: {message.id}")
     await message.react("😈")
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
@@ -222,37 +223,6 @@ async def start_comm(client, message: Message, _):
 
         try:
             out = music_start_panel(_)
-            champu = await message.reply_text(f"**ᴅιиg ᴅσиg ꨄ︎❣️.....**")
-            await champu.edit_text(f"**ᴅιиg ᴅσиg ꨄ︎.❣️....**")
-            await champu.edit_text(f"**ᴅιиg ᴅσиg ꨄ︎..❣️...**")
-            await champu.edit_text(f"**ᴅιиg ᴅσиg ꨄ︎...❣️..**")
-            await champu.edit_text(f"**ᴅιиg ᴅσиg ꨄ︎....❣️.**")
-            await champu.edit_text(f"**ᴅιиg ᴅσиg ꨄ︎.....❣️**")
-
-            await champu.delete()
-            champus = await message.reply_text("**⚡ѕ**")
-            await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕт**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтα**")
-            #  await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαя**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαят**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятι**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιи**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιиg**")
-            # await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιиg.**")
-            await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιиg....**")
-            await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιиg.**")
-            await asyncio.sleep(0.1)
-            await champus.edit_text("**⚡ѕтαятιиg....**")
             if message.chat.photo:
 
                 userss_photo = await app.download_media(
