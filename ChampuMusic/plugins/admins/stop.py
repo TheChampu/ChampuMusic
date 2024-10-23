@@ -222,7 +222,6 @@ async def assistant_left(client: app, member: ChatMemberUpdated):
     except Exception as e:
         return
 
-
 @app.on_message(filters.video_chat_started & filters.group)
 async def brah(_, msg):
     chat_id = msg.chat.id
@@ -231,8 +230,10 @@ async def brah(_, msg):
         await Champu.st_stream(chat_id)
         await set_loop(chat_id, 0)
     except Exception as e:
-        return await msg.reply(f"**Error {e}**")
-
+        if isinstance(e, ChatWriteForbidden):
+            print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
+        else:
+            return await msg.reply(f"**Error {e}**")
 
 # vc off
 @app.on_message(filters.video_chat_ended & filters.group)
@@ -243,4 +244,7 @@ async def brah2(_, msg):
         await Champu.st_stream(chat_id)
         await set_loop(chat_id, 0)
     except Exception as e:
-        return await msg.reply(f"**Error {e}**")
+        if isinstance(e, ChatWriteForbidden):
+            print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
+        else:
+            return await msg.reply(f"**Error {e}**")
