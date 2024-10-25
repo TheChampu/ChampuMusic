@@ -10,17 +10,22 @@ from time import time
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
+from config import OWNER_ID
 from ChampuMusic import app
 from ChampuMusic.misc import SUDOERS
 from ChampuMusic.utils.cleanmode import protect_message
 
 
 async def aexec(code, client, message):
+    local_vars = {}
     exec(
         "async def __aexec(client, message): "
-        + "".join(f"\n {a}" for a in code.split("\n"))
+        + "".join(f"\n {a}" for a in code.split("\n")),
+        globals(),
+        local_vars,
     )
-    return await locals()["__aexec"](client, message)
+    __aexec_func = local_vars["__aexec"]
+    return await __aexec_func(client, message)
 
 
 async def edit_or_reply(msg: Message, **kwargs):
@@ -31,7 +36,10 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 
 @app.on_edited_message(
-    filters.command(["ev", "eval"]) & SUDOERS & ~filters.forwarded & ~filters.via_bot
+    filters.command(["ev", "eval"])
+    & filters.user(OWNER_ID)
+    & ~filters.forwarded
+    & ~filters.via_bot
 )
 @app.on_message(
     filters.command(["ev", "eval"]) & SUDOERS & ~filters.forwarded & ~filters.via_bot
@@ -96,10 +104,6 @@ async def executor(client: app, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        text="⏳",
-                        callback_data=f"runtime {round(t2-t1, 3)} Seconds",
-                    ),
-                    InlineKeyboardButton(
                         text="🗑",
                         callback_data=f"forceclose abc|{message.from_user.id}",
                     ),
@@ -135,7 +139,10 @@ async def forceclose_command(_, CallbackQuery):
 
 
 @app.on_edited_message(
-    filters.command("sh") & SUDOERS & ~filters.forwarded & ~filters.via_bot
+    filters.command("sh")
+    & filters.user(OWNER_ID)
+    & ~filters.forwarded
+    & ~filters.via_bot
 )
 @app.on_message(filters.command("sh") & SUDOERS & ~filters.forwarded & ~filters.via_bot)
 async def shellrunner(_, message: Message):
