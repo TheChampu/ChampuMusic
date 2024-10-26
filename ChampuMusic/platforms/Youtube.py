@@ -15,7 +15,7 @@ from ChampuMusic.utils.database import is_on_off
 from ChampuMusic.utils.formatters import time_to_seconds
 
 
-def cookie_txt_file():
+def cookie_text_file():
     folder_path = f"{os.getcwd()}/cookies"
     txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
     if not txt_files:
@@ -130,14 +130,6 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-    
-        # Initialize variables
-        title = None
-        duration_min = None
-        duration_sec = 0
-        thumbnail = None
-        vidid = None
-
         results = VideosSearch(link, limit=1)
         for result in (await results.next())["result"]:
             title = result["title"]
@@ -148,12 +140,8 @@ class YouTubeAPI:
                 duration_sec = 0
             else:
                 duration_sec = int(time_to_seconds(duration_min))
-    
-    # Check if title was assigned
-        if title is None:
-            raise ValueError("No details found for the provided link.")
-
         return title, duration_min, duration_sec, thumbnail, vidid
+
     async def title(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link

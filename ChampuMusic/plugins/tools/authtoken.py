@@ -29,7 +29,7 @@ async def check_auth_token():
         try:
             with YoutubeDL(opts) as ytdl:
                 ytdl.extract_info(
-                    "https://www.youtube.com/watch?v=LLF3GMfNEYU", download=False
+                    "https://www.youtube.com/watch?v=Zrvg82amofs", download=False
                 )
             return True
         except Exception as e:
@@ -69,7 +69,7 @@ async def check_cookies(video_url):
 async def list_formats(client, message):
     ok = await message.reply_text("**Checking Cookies & auth token...**")
 
-    video_url = "https://www.youtube.com/watch?v=LLF3GMfNEYU"
+    video_url = "https://www.youtube.com/watch?v=Zrvg82amofs"
 
     auth_token_status = await check_auth_token()
     cookie_status = await check_cookies(video_url)
