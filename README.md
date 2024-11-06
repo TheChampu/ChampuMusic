@@ -159,6 +159,3 @@ sudo pkill -9 python3
   </a>
 </p>
 
-
-<h3 align="center">ᴛʜᴀɴᴋs ᴛᴏ ᴛʜᴇ ᴠɪᴘ ʙᴏʏ<h3 align="center">
-<a href="https://github.com/THE-VIP-BOY-OP"> <img src="https://img.shields.io/badge/THE-VIP-BOY-OP-black?style=for-the-badge&logo=github" alt="DaxxTeam" /> </a> </h3>
