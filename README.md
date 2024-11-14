@@ -11,7 +11,6 @@
 
 [˹мꝛ ᴄʜᴧᴍᴘᴜ˼](https://t.me/TheChampu)
 
-
 <h3 align="center">
 <a href="https://github.com/TheChampu"><img alt="Website" src="https://img.shields.io/badge/𝕮𝖍𝖆𝖒𝖕𝖚-red"></a>
 
