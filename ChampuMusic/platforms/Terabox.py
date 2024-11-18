@@ -1,7 +1,6 @@
 import re
 import aiohttp
 from typing import Union
-from youtubesearchpython.__future__ import VideosSearch
 
 
 class TeraboxAPI:
@@ -25,14 +24,14 @@ class TeraboxAPI:
 
         # Assuming you have extracted title, duration, etc.
         title = "Extracted Title"  # Replace with actual extraction logic
-        ytlink = "YouTube Link"  # Replace with actual link if needed
+        tblink = "TerBox Link"  # Replace with actual link if needed
         vidid = "Video ID"  # Replace with actual video ID
         duration_min = "Duration"  # Replace with actual duration
         thumbnail = "Thumbnail URL"  # Replace with actual thumbnail URL
 
         track_details = {
             "title": title,
-            "link": ytlink,
+            "link": tblink,
             "vidid": vidid,
             "duration_min": duration_min,
             "thumb": thumbnail,
