@@ -26,6 +26,7 @@ async def play_terabox(client, message: Message):
         await message.reply_text("Failed to fetch video details.")
         return
 
+
     title = track_details['title']
     duration_min = track_details['duration_min']
     user_id = message.from_user.id

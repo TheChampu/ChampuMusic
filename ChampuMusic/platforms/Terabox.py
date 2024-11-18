@@ -3,13 +3,16 @@ import aiohttp
 from typing import Union
 from youtubesearchpython.__future__ import VideosSearch
 
+
 class TeraboxAPI:
     def __init__(self):
+        # Adjust the regex pattern to match Terabox links correctly
         self.regex = r"^(https:\/\/bj-terabox-video-player\.vercel\.app\/)(.*)$"
         self.base = "https://bj-terabox-video-player.vercel.app/"
 
     async def valid(self, link: str):
-        return bool(re.search(self.regex, link))
+        # Check if the link matches the regex pattern
+        return bool(re.match(self.regex, link))
 
     async def track(self, url: str):
         async with aiohttp.ClientSession() as session:
