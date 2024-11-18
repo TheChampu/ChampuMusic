@@ -7,12 +7,14 @@
 </p>
  <h3></h3>
  <h3 align="center">
+
+    
 ᴀᴠᴀɪʟᴀʙʟᴇ ᴏɴ ᴛᴇʟᴇɢʀᴀᴍ ᴀs 
 
 [˹мꝛ ᴄʜᴧᴍᴘᴜ˼](https://t.me/TheChampu)
+
 <h3 align="center">
 <a href="https://github.com/TheChampu"><img alt="Website" src="https://img.shields.io/badge/𝕮𝖍𝖆𝖒𝖕𝖚-red"></a>
-
 
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://telegram.me/TheShivanshu)
 [![Instagram](https://img.shields.io/badge/-Instagram-E1306C?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/Shivanshu_deo)
