@@ -15,15 +15,6 @@ from ChampuMusic.utils.database import is_on_off
 from ChampuMusic.utils.formatters import time_to_seconds
 
 
-def cookie_text_file():
-    folder_path = f"{os.getcwd()}/cookies"
-    txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
-    if not txt_files:
-        raise FileNotFoundError("No .txt files found in the specified folder.")
-    cookie_txt_file = random.choice(txt_files)
-    return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
-
-
 def cookies():
     folder_path = f"{os.getcwd()}/cookies"
     txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
@@ -36,33 +27,33 @@ def cookies():
 def get_ytdl_options(ytdl_opts, commamdline=True) -> Union[str, dict, list]:
     if commamdline:
         if isinstance(ytdl_opts, list):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts += ["--username", "oauth2", "--password", "''"]
             else:
                 ytdl_opts += ["--cookies", cookies()]
         elif isinstance(ytdl_opts, str):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts += "--username oauth2 --password '' "
             else:
                 ytdl_opts += f"--cookies {cookies()}"
         elif isinstance(ytdl_opts, dict):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts.update({"username": "oauth2", "password": ""})
             else:
                 ytdl_opts["cookiefile"] = cookies()
     else:
         if isinstance(ytdl_opts, list):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts += ["username", "oauth2", "password", "''"]
             else:
                 ytdl_opts += ["cookiefile", cookies()]
         elif isinstance(ytdl_opts, str):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts += "username oauth2 password '' "
             else:
                 ytdl_opts += f"cookiefile {cookies()}"
         elif isinstance(ytdl_opts, dict):
-            if os.getenv("TOKEN_DATA"):
+            if os.getenv("TOKEN_ALLOW") == True:
                 ytdl_opts.update({"username": "oauth2", "password": ""})
             else:
                 ytdl_opts["cookiefile"] = cookies()
@@ -202,15 +193,16 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
 
-        cmd = get_ytdl_options(
-            f"yt-dlp -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
+        cmd = (
+            f"yt-dlp -i --compat-options no-youtube-unavailable-videos "
+            f'--get-id --flat-playlist --playlist-end {limit} --skip-download "{link}" '
+            f"2>/dev/null"
         )
+
         playlist = await shell_cmd(cmd)
+
         try:
-            result = playlist.split("\n")
-            for key in result:
-                if key == "":
-                    result.remove(key)
+            result = [key for key in playlist.split("\n") if key]
         except:
             result = []
         return result
