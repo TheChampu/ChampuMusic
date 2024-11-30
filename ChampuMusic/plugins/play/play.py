@@ -33,6 +33,8 @@ user_command_count = {}
 SPAM_WINDOW_SECONDS = 5  # Set the time window for spam checks (5 seconds for example)
 SPAM_THRESHOLD = 2
 
+# audio = "CQACAgUAAx0CdRUi1wABAUYuZx3rQCprbybe1cDBm-2qK28Pro0AAqcRAAIdP_BUu66Uhq1OkKseBA"
+
 
 @app.on_message(
     filters.command(
@@ -52,14 +54,16 @@ SPAM_THRESHOLD = 2
     & ~BANNED_USERS
 )
 @PlayWrapper
-async def play_commnd(
+async def play_command(
     client, message: Message, _, chat_id, video, channel, playmode, url, fplay
 ):
+
     userbot = await get_assistant(message.chat.id)
     userbot_id = userbot.id
     user_id = message.from_user.id
     current_time = time()
     last_message_time = user_last_message_time.get(user_id, 0)
+    user_last_message_time[user_id] = current_time
 
     # Spam check logic
     if current_time - last_message_time < SPAM_WINDOW_SECONDS:
