@@ -20,7 +20,7 @@ psutil
 pytube
 pykeyboard
 unidecode
-py-tgcalls==1.2.9
+py-tgcalls==0.9.7
 ntgcalls==1.1.2
 python-dotenv
 pyyaml
@@ -28,10 +28,10 @@ requests
 speedtest-cli
 spotipy
 tgcrypto
+yt-dlp
 urllib3
 uvloop
 git+https://github.com/KurimuzonAkuma/pyrogram@dev
-git+https://github.com/yt-dlp/yt-dlp
 git+https://github.com/alexmercerind/youtube-search-python@main
 git+https://github.com/joetats/youtube_search@master
 git+https://github.com/TheChampu/yt-dlp-youtube-oauth2
