@@ -1,20 +1,17 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from config import BANNED_USERS
-from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.utils.database.memorydatabase import get_loop, set_loop
+from ChampuMusic.utils.database import get_loop, set_loop
 from ChampuMusic.utils.decorators import AdminRightsCheck
+from ChampuMusic.utils.inline import close_markup
+from config import BANNED_USERS
 
-# Commands
-LOOP_COMMAND = get_command("LOOP_COMMAND")
 
-
-@app.on_message(filters.command(LOOP_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(filters.command(["loop", "cloop"]) & filters.group & ~BANNED_USERS)
 @AdminRightsCheck
 async def admins(cli, message: Message, _, chat_id):
-    usage = _["admin_24"]
+    usage = _["admin_17"]
     if len(message.command) != 2:
         return await message.reply_text(usage)
     state = message.text.split(None, 1)[1].strip()
@@ -28,17 +25,22 @@ async def admins(cli, message: Message, _, chat_id):
                 state = 10
             await set_loop(chat_id, state)
             return await message.reply_text(
-                _["admin_25"].format(message.from_user.first_name, state)
+                text=_["admin_18"].format(state, message.from_user.mention),
+                reply_markup=close_markup(_),
             )
         else:
-            return await message.reply_text(_["admin_26"])
+            return await message.reply_text(_["admin_17"])
     elif state.lower() == "enable":
         await set_loop(chat_id, 10)
         return await message.reply_text(
-            _["admin_25"].format(message.from_user.first_name, 10)
+            text=_["admin_18"].format(state, message.from_user.mention),
+            reply_markup=close_markup(_),
         )
     elif state.lower() == "disable":
         await set_loop(chat_id, 0)
-        return await message.reply_text(_["admin_27"])
+        return await message.reply_text(
+            _["admin_19"].format(message.from_user.mention),
+            reply_markup=close_markup(_),
+        )
     else:
         return await message.reply_text(usage)

