@@ -163,7 +163,8 @@ lyrical = {}
 chatstats = {}
 userstats = {}
 clean = {}
-
+votemode = {}
+confirmer = {}
 autoclean = []
 
 
