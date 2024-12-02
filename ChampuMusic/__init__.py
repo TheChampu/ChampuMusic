@@ -1,4 +1,4 @@
-from ChampuMusic.core.bot import ChampuBot
+from ChampuMusic.core.bot import Champu
 from ChampuMusic.core.dir import dirr
 from ChampuMusic.core.git import git
 from ChampuMusic.core.userbot import Userbot
@@ -16,7 +16,7 @@ heroku()
 
 sudo()
 
-app = ChampuBot()
+app = Champu()
 
 userbot = Userbot()
 
