@@ -2,7 +2,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from ChampuMusic import app
-from ChampuMusic.utils import extract_user, int_to_alpha
+from ChampuMusic.utils.functions import extract_user
+from ChampuMusic.utils import int_to_alpha
 from ChampuMusic.utils.database import (
     delete_authuser,
     get_authuser,
