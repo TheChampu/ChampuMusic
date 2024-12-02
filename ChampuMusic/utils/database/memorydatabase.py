@@ -583,3 +583,12 @@ async def maintenance_on():
         return
     return await onoffdb.insert_one({"on_off": 1})
 
+async def get_upvote_count(chat_id: int) -> int:
+    mode = count.get(chat_id)
+    if not mode:
+        mode = await countdb.find_one({"chat_id": chat_id})
+        if not mode:
+            return 5
+        count[chat_id] = mode["mode"]
+        return mode["mode"]
+    return mode
