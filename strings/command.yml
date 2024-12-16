@@ -1,0 +1,103 @@
+# Commands in Every Language
+
+# Bot Commands
+PING_COMMAND : ["ping", "alive"]
+START_COMMAND : ["start"]
+HELP_COMMAND : ["help"]
+SETTINGS_COMMAND : ["settings", "setting"]
+RELOAD_COMMAND : ["admincache", "reload"]
+GSTATS_COMMAND : ["gstats"]
+STATS_COMMAND : ["stats"]
+LANGUAGE_COMMAND : ["lang", "language", "langs"]
+
+# Play Commands
+PLAY_COMMAND : ["play", "vplay", "cplay", "cvplay", "playforce", "vplayforce", "cplayforce", "cvplayforce"]
+PLAYMODE_COMMAND : ["playmode"]
+CHANNELPLAY_COMMAND : ["channelplay"]
+STREAM_COMMAND : ["stream", "cstream", "streamforce"]
+
+#Playlists Command
+PLAYLIST_COMMAND : ["playlist"]
+DELETEPLAYLIST_COMMAND : ["deleteplaylist"]
+ADDPLAYLIST_COMMAND : ["addplaylist"]
+
+
+# Tools
+QUEUE_COMMAND : ["queue","cqueue", "songlist"]
+SONG_COMMAND : ["song"]
+LYRICS_COMMAND : ["lyrics"]
+
+
+# Admin Commands
+AUTH_COMMAND : ["auth"]
+UNAUTH_COMMAND : ["unauth"]
+AUTHUSERS_COMMAND : ["authusers"]
+PAUSE_COMMAND : ["pause", "cpause"]
+RESUME_COMMAND : ["resume", "cresume"]
+MUTE_COMMAND : ["mute", "cmute"]
+UNMUTE_COMMAND : ["unmute", "cunmute"]
+STOP_COMMAND : ["stop", "end", "cstop", "cend"]
+SKIP_COMMAND : ["skip", "cskip"]
+SHUFFLE_COMMAND : ["shuffle", "cshuffle"]
+LOOP_COMMAND : ["loop", "cloop"]
+SEEK_COMMAND : ["seek", "cseek", "seekback", "cseekback"]
+REBOOT_COMMAND : ["reboot", "end", "stop"]
+
+# Sudo Users Commaands
+
+# Sudo Command
+ADDSUDO_COMMAND : ["addsudo"]
+DELSUDO_COMMAND : ["delsudo", "rmsudo"]
+SUDOUSERS_COMMAND : ["sudolist", "sudo"]
+
+#Broadcast 
+BROADCAST_COMMAND : ["broadcast", "gcast"]
+
+#Blacklist chat
+BLACKLISTCHAT_COMMAND : ["blacklistchat", "addblacklistchat"]
+WHITELISTCHAT_COMMAND : ["whitelistchat", "unblacklistchat", "rmblacklistchat"]
+BLACKLISTEDCHAT_COMMAND : ["blacklistedchat", "blacklistchats"]
+
+# Video Calls Command
+VIDEOLIMIT_COMMAND : ["set_video_limit"]
+VIDEOMODE_COMMAND : ["videomode"]
+
+#Mantenance
+MAINTENANCE_COMMAND : ["maintenance", "maintain"]
+LOGGER_COMMAND : ["logger"]
+
+#Heroku
+GETLOG_COMMAND : ["get_log", "logs"]
+GETVAR_COMMAND : ["get_var", "getvar"]
+DELVAR_COMMAND : ["del_var", "delvar"]
+SETVAR_COMMAND : ["set_var", "setvar"]
+USAGE_COMMAND : ["usage"]
+VARS_COMMAND : ["vars", "config"]
+
+
+#Basic Bot Commands
+UPDATE_COMMAND : ["update", "gitpull", "up"]
+RESTART_COMMAND : ["restart"]
+AUTOEND_COMMAND : ["autoend"]
+
+#Private Bot Mode
+AUTHORIZE_COMMAND : ["authorize", "allowchat"]
+UNAUTHORIZE_COMMAND : ["unauthorize", "disallowchat"]
+AUTHORIZED_COMMAND : ["authorized", "allowedchats"]
+
+#Block Users Command
+BLOCK_COMMAND : ["block"]
+UNBLOCK_COMMAND : ["unblock"]
+BLOCKED_COMMAND : ["blockedusers"]
+
+#sPEEDTEST
+SPEEDTEST_COMMAND : ["speedtest", "spt"]
+
+#Voice chat commands
+ACTIVEVC_COMMAND : ["activevoice", "activevc"]
+ACTIVEVIDEO_COMMAND : ["activevideo", "activevd"]
+
+#Gban Commands
+GBAN_COMMAND : ["gban"]
+UNGBAN_COMMAND : ["ungban"]
+GBANNED_COMMAND : ["gbannedusers"]
