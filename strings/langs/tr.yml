@@ -75,6 +75,7 @@ start_4 : "{0} sudo kullanıcısı {1} sohbetinize katıldı."
 start_5 : "🦸 **SÜPERGRUP GEREKLİ** 🦸\n\nLütfen grubunuzu süpergrup'a dönüştürün ve ardından beni tekrar ekleyin.\n\n**Süpergrup nasıl yapılır?**\n🥱 Grubunuzun sohbet geçmişini bir kez görünür yapın."
 start_6 : "**KARA LİSTEDEKİ SOHBET**\n\nBu sohbet, botu kullanmak için kara listede. Sohbetinizi beyaz listeye almak için bir sudo kullanıcısına başvurun, sudo kullanıcıları [liste]({0})."
 start_7 : "{0} hayatta bebek.\n\n<b>✫ Çalışma Süresi :</b> {1}"
+start_8 : "<b>Beni grubunuza eklediğiniz için teşekkür ederim. 🎉</b>\n━━━━━━━━━━━━━━━\n\n🎉 <b>Sizin için neler yapabilirim:</b>\n\n🎵 Sesli sohbetlerde yüksek kaliteli müzik çalabilirim.\n🚀 Grubunuz için eğlenceli ve kullanışlı özellikler sunuyorum.\n⚙️ Kolay komutlarla deneyiminizi özelleştirin.\n💡 <b>Başlamak için yazın:</b> /help \n\n<b>Grubunuzu daha eğlenceli ve canlı hale getirelim! 🎶</b>\n\n<blockquote><b>❖ Tarafından desteklenmektedir ➥ <a href=https://t.me/itsMeShivanshu>Champu</a></b></blockquote>"
 
 # Yardım
 help_1 : "Daha fazla bilgi için aşağıdaki düğmelere tıklayın. Herhangi bir sorunla karşılaşıyorsanız, destek sohbetinde sorabilirsiniz.\n\nTüm komutlar şu şekilde kullanılabilir: /"
