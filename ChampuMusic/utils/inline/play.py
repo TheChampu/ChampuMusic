@@ -74,19 +74,19 @@ def stream_markup_timerr(_, videoid, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(
-                text="✚ ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
+                text="ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
             ),
             InlineKeyboardButton(
-                text="ᴄᴏɴᴛʀᴏʟs ♻",
+                text="ᴄᴏɴᴛʀᴏʟs",
                 callback_data=f"Pages Back|3|{videoid}|{chat_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
+                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
             ),
             InlineKeyboardButton(
-                text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
+                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
             ),
         ],
         [
@@ -153,19 +153,19 @@ def telegram_markup_timer(_, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(
-                text="✚ ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
+                text="ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
             ),
             InlineKeyboardButton(
-                text="ᴄᴏɴᴛʀᴏʟs ♻",
+                text="ᴄᴏɴᴛʀᴏʟs",
                 callback_data=f"Pages Back|3|{videoid}|{chat_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
+                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
             ),
             InlineKeyboardButton(
-                text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
+                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
             ),
         ],
         [
@@ -196,7 +196,7 @@ def telegram_markupp(_, chat_id):
 
 ## By Anon
 close_keyboard = InlineKeyboardMarkup(
-    [[InlineKeyboardButton(text="〆 ᴄʟᴏsᴇ 〆", callback_data="close")]]
+    [[InlineKeyboardButton(text=" ᴄʟᴏsᴇ ", callback_data="close")]]
 )
 
 ## Search Query Inline
@@ -423,19 +423,19 @@ def stream_markup(_, videoid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="✚ ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
+                text="ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
             ),
             InlineKeyboardButton(
-                text="ᴄᴏɴᴛʀᴏʟs ♻",
+                text="ᴄᴏɴᴛʀᴏʟs",
                 callback_data=f"Pages Back|3|{videoid}|{chat_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
+                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
             ),
             InlineKeyboardButton(
-                text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
+                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
             ),
         ],
         [
@@ -645,19 +645,19 @@ def stream_markup_timer2(_, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(
-                text="✚ ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
+                text="ᴘʟᴀʏʟɪsᴛ", callback_data=f"champu_playlist {videoid}"
             ),
             InlineKeyboardButton(
-                text="ᴄᴏɴᴛʀᴏʟs ♻",
+                text="ᴄᴏɴᴛʀᴏʟs",
                 callback_data=f"Pages Back|3|{videoid}|{chat_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
+                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {videoid}"
             ),
             InlineKeyboardButton(
-                text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
+                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {videoid}"
             ),
         ],
         [
@@ -909,10 +909,10 @@ def panel_markup_clone(_, vidid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="📥 ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {vidid}"
+                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {vidid}"
             ),
             InlineKeyboardButton(
-                text="📥 ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {vidid}"
+                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {vidid}"
             ),
         ],
         [
