@@ -323,7 +323,7 @@ async def welcome(client, message: Message):
                 out = start_pannel(_)
                 await message.reply_photo(
                     photo=chat_photo,
-                    caption=_["start_2"],
+                    caption=_["start_8"],
                     reply_markup=InlineKeyboardMarkup(out),
                 )
 
