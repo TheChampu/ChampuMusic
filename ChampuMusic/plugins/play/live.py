@@ -1,7 +1,7 @@
 from pyrogram import filters
 
 from config import BANNED_USERS
-from ChampuMusic import YouTube, app
+from ChampuMusic import YouTube, app, EMOJIS
 from ChampuMusic.utils.channelplay import get_channeplayCB
 from ChampuMusic.utils.decorators.language import languageCB
 from ChampuMusic.utils.stream.stream import stream
@@ -29,8 +29,9 @@ async def play_live_stream(client, CallbackQuery, _):
         await CallbackQuery.answer()
     except:
         pass
+    Emoji = random.choice(EMOJIS)
     mystic = await CallbackQuery.message.reply_text(
-        _["play_2"].format(channel) if channel else _["play_1"]
+        _["play_2"].format(channel) if channel else _[Emoji]
     )
     try:
         details, track_id = await YouTube.track(vidid, True)

@@ -1,6 +1,6 @@
 import os
 import re
-
+import random
 import yt_dlp
 from pykeyboard import InlineKeyboard
 from pyrogram import enums, filters
@@ -14,7 +14,7 @@ from pyrogram.types import (
 
 from config import BANNED_USERS, SONG_DOWNLOAD_DURATION, SONG_DOWNLOAD_DURATION_LIMIT
 from strings import get_command
-from ChampuMusic import YouTube, app
+from ChampuMusic import YouTube, app, EMOJIS
 from ChampuMusic.utils.decorators.language import language, languageCB
 from ChampuMusic.utils.formatters import convert_bytes
 from ChampuMusic.utils.inline.song import song_markup
@@ -59,7 +59,8 @@ async def song_commad_private(client, message: Message, _):
 
             return await message.reply_text(_["song_5"])
 
-        mystic = await message.reply_text(_["play_1"])
+        Emoji = random.choice(EMOJIS)
+        mystic = await message.reply_text(_[Emoji])
 
         (
             title,
@@ -95,7 +96,8 @@ async def song_commad_private(client, message: Message, _):
 
             return await message.reply_text(_["song_2"])
 
-    mystic = await message.reply_text(_["play_1"])
+    Emoji = random.choice(EMOJIS) 
+    mystic = await message.reply_text(_[Emoji])
 
     query = message.text.split(None, 1)[1]
 

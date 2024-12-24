@@ -120,6 +120,25 @@ gstats_9: "**Bot'un Küresel En İyi 10 İstatistiği**\n\nAşağıdaki düğmel
 gstats_10: "**{0} Küresel İstatistikleri**\n\nAşağıdaki düğmeleri seçin, hangi küresel istatistikleri görmek istediğinizi belirlemek için."
 gstats_11: "**{0} Genel İstatistikleri**\nAşağıdaki düğmeleri seçin, hangi küresel istatistikleri görmek istediğinizi belirlemek için.\n\nEn iyi parçaları, sohbetleri, kullanıcıları ve diğer birçok şeyi kontrol etmek için /gstats komutunu kullanın."
 
+#Random Emojis While Playing
+PPLAY_1 : "🦋"
+PPLAY_2 : "😄"
+PPLAY_3 : "😏"
+PPLAY_4 : "🩷"
+PPLAY_5 : "💘"
+PPLAY_6 : "😂"
+PPLAY_7 : "😘"
+PPLAY_8 : "🥸"
+PPLAY_9 : "🙊"
+PPLAY_10 : "⚡️"
+PPLAY_11 : "🌝"
+PPLAY_12 : "❄️"
+PPLAY_13 : "🌺"
+PPLAY_14 : "🥰"
+PPLAY_15 : "😱"
+PPLAY_16 : "🥺"
+PPLAY_17 : "😈"
+
 playcb_1: "Bu sizin için değil! Kendi aramanızı yapın."
 playcb_2: "Sonraki sonucu alınıyor..."
 
