@@ -144,7 +144,7 @@ async def start_comm(client, message: Message, _):
             await message.reply_photo(photo=thumbnail, caption=msg)
             return
         if name[0:3] == "sud":
-            await sudoers_list(client=client, message=message, _=_)
+            await sudoers_list(client=client, message=message)
             await asyncio.sleep(1)
             if await is_on_off(config.LOG):
                 sender_id = message.from_user.id
