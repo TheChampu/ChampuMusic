@@ -8,7 +8,7 @@ from ChampuMusic.utils.decorators.language import language
 from ChampuMusic.utils.functions import extract_user
 from ChampuMusic.utils.inline import close_markup
 from config import BANNED_USERS, OWNER_ID
-
+import logging
 
 
 @app.on_message(filters.command(["addsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
@@ -111,4 +111,4 @@ async def del_all_sudo(client, message: Message, _):
             if removed:
                 SUDOERS.remove(user_id)
                 count -= 1
-    await message.reply_text(f"Removed {count} users from the sudo list.")
+    await message.reply_text(f"ʀᴇᴍᴏᴠᴇᴅ {count} ᴜsᴇʀs ғʀᴏᴍ ᴛʜᴇ sᴜᴅᴏ ʟɪsᴛ.")

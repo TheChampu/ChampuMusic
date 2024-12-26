@@ -126,28 +126,46 @@ async def helper_private(
         keyboard = InlineKeyboardMarkup(
             paginate_modules(0, HELPABLE, "help", close=True)
         )
-        if START_IMG_URL:
+        try:
+            if update.chat.photo:
+                userss_photo = await app.download_media(
+                    update.chat.photo.big_file_id,
+                )
+            else:
+                userss_photo = "assets/nodp.jpg"
 
-            await update.reply_photo(
-                photo=START_IMG_URL,
-                caption=_["help_1"],
-                reply_markup=keyboard,
-            )
+            chat_photo = userss_photo if userss_photo else START_IMG_URL
+        except AttributeError:
+            chat_photo = "assets/nodp.jpg"
 
-        else:
-
-            await update.reply_text(
-                text=_["help_1"],
-                reply_markup=keyboard,
-            )
+        await update.reply_photo(
+            photo=chat_photo,
+            caption=_["help_1"].format(config.SUPPORT_GROUP),
+            reply_markup=keyboard,
+        )
 
 
 @app.on_message(filters.command(HELP_COMMAND) & filters.group & ~BANNED_USERS)
 @LanguageStart
 async def help_com_group(client, message: Message, _):
-    keyboard = private_help_panel(_)
-    await message.reply_text(_["help_2"], reply_markup=InlineKeyboardMarkup(keyboard))
+    try:
+        if message.chat.photo:
+            group_photo = await app.download_media(
+                message.chat.photo.big_file_id,
+            )
+        else:
+            group_photo = "assets/nodp.png"
 
+        chat_photo = group_photo if group_photo else "assets/nodp.png"
+    except AttributeError:
+        chat_photo = "assets/nodp.png"
+
+    keyboard = private_help_panel(_)
+    await message.reply_photo(
+        photo=chat_photo,
+        caption=_["help_2"],
+        reply_markup=InlineKeyboardMarkup(keyboard),
+    )
 
 async def help_parser(name, keyboard=None):
     if not keyboard:
