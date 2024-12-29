@@ -5,3 +5,5 @@ from .formatters import *
 from .inline import *
 from .pastebin import *
 from .sys import *
+from .admin_check import *
+from .champu_ban import *
