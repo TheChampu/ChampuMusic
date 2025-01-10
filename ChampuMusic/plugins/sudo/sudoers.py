@@ -7,25 +7,46 @@ from ChampuMusic.utils.database import add_sudo, remove_sudo
 from ChampuMusic.utils.decorators.language import language
 from ChampuMusic.utils.functions import extract_user
 from ChampuMusic.utils.inline import close_markup
-from config import BANNED_USERS, OWNER_ID
+from config import BANNED_USERS, MONGO_DB_URI, OWNER_ID
 import logging
 
 
 @app.on_message(filters.command(["addsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
 @language
 async def useradd(client, message: Message, _):
+    if MONGO_DB_URI is None:
+        return await message.reply_text(
+            "**Dᴜᴇ ᴛᴏ ʙᴏᴛ's ᴘʀɪᴠᴀᴄʏ ɪssᴜᴇs, Yᴏᴜ ᴄᴀɴ'ᴛ ᴍᴀɴᴀɢᴇ sᴜᴅᴏ ᴜsᴇʀs ᴡʜᴇɴ ʏᴏᴜ'ʀᴇ ᴜsɪɴɢ ᴄʜᴧᴍᴘᴜ's Dᴀᴛᴀʙᴀsᴇ.\n\n Pʟᴇᴀsᴇ ғɪʟʟ ʏᴏᴜʀ MONGO_DB_URI ɪɴ ʏᴏᴜʀ ᴠᴀʀs ᴛᴏ ᴜsᴇ ᴛʜɪs ғᴇᴀᴛᴜʀᴇ**"
+        )
     if not message.reply_to_message:
         if len(message.command) != 2:
             return await message.reply_text(_["general_1"])
-    user = await extract_user(message)
-    if user.id in SUDOERS:
-        return await message.reply_text(_["sudo_1"].format(user.mention))
-    added = await add_sudo(user.id)
+        user = message.text.split(None, 1)[1]
+        if "@" in user:
+            user = user.replace("@", "")
+        user = await app.get_users(user)
+        if user.id in SUDOERS:
+            return await message.reply_text(_["sudo_1"].format(user.mention))
+        added = await add_sudo(user.id)
+        if added:
+            SUDOERS.add(user.id)
+            await message.reply_text(_["sudo_2"].format(user.mention))
+        else:
+            await message.reply_text("ғᴀɪʟᴇᴅ")
+        return
+    if message.reply_to_message.from_user.id in SUDOERS:
+        return await message.reply_text(
+            _["sudo_1"].format(message.reply_to_message.from_user.mention)
+        )
+    added = await add_sudo(message.reply_to_message.from_user.id)
     if added:
-        SUDOERS.add(user.id)
-        await message.reply_text(_["sudo_2"].format(user.mention))
+        SUDOERS.add(message.reply_to_message.from_user.id)
+        await message.reply_text(
+            _["sudo_2"].format(message.reply_to_message.from_user.mention)
+        )
     else:
-        await message.reply_text(_["sudo_8"])
+        await message.reply_text("ғᴀɪʟᴇᴅ")
+    return
 
 
 @app.on_message(filters.command(["delsudo", "rmsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
