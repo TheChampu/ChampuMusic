@@ -232,10 +232,7 @@ async def brah(_, msg):
     except ChatWriteForbidden:
         print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")        
     except Exception as e:
-        if isinstance(e, ChatWriteForbidden):
-            print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
-        else:
-            return await msg.reply(f"**Error {e}**")
+        return await msg.reply(f"**Error {e}**")
 
 # vc off
 @app.on_message(filters.video_chat_ended & filters.group)
@@ -248,7 +245,4 @@ async def brah2(_, msg):
     except ChatWriteForbidden:
         print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
     except Exception as e:
-        if isinstance(e, ChatWriteForbidden):
-            print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
-        else:
-            return await msg.reply(f"**Error {e}**")
+        return await msg.reply(f"**Error {e}**")
