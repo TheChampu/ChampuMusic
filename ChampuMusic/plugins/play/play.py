@@ -27,7 +27,7 @@ from ChampuMusic.utils.inline.play import (
 )
 from ChampuMusic.utils.inline.playlist import botplaylist_markup
 from ChampuMusic.utils.logger import play_logs
-from ChampuMusic.utils.stream.stream import stream
+from ChampuMusic.utils.stream.stream import stream, is_streamable_url
 
 user_last_message_time = {}
 user_command_count = {}
