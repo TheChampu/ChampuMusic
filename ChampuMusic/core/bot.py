@@ -13,7 +13,7 @@ from pyrogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
 )
-
+from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 import config
 
 from ..logging import LOGGER

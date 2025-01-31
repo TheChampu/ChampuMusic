@@ -10,7 +10,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     Message,
 )
-
+from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 from config import BANNED_USERS, adminlist
 from strings import get_string
 from ChampuMusic import app
