@@ -229,6 +229,8 @@ async def brah(_, msg):
         await msg.reply("**😍ᴠɪᴅᴇᴏ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ🥳**")
         await Champu.st_stream(chat_id)
         await set_loop(chat_id, 0)
+    except ChatWriteForbidden:
+        print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")        
     except Exception as e:
         if isinstance(e, ChatWriteForbidden):
             print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
@@ -243,6 +245,8 @@ async def brah2(_, msg):
         await msg.reply("**😕ᴠɪᴅᴇᴏ ᴄʜᴀᴛ ᴇɴᴅᴇᴅ💔**")
         await Champu.st_stream(chat_id)
         await set_loop(chat_id, 0)
+    except ChatWriteForbidden:
+        print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
     except Exception as e:
         if isinstance(e, ChatWriteForbidden):
             print(f"Error: Bot cannot send messages in chat {chat_id}. Check permissions.")
