@@ -7,7 +7,7 @@ from pyrogram.types import Message
 
 from ChampuMusic import app
 from ChampuMusic.core.mongo import mongodb
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils import get_readable_time
 
 chatsdb = mongodb.chats
@@ -36,7 +36,7 @@ async def delete_served_user(user_id: int):
     await usersdb.delete_one({"user_id": user_id})
 
 
-@app.on_message(filters.command(["rstats", "allstats"]) & SUDOERS)
+@app.on_message(filters.command(["rstats", "allstats"]) & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def all_stats(client, message: Message):
     served_chats = []
     chats = await get_served_chats()
@@ -73,7 +73,7 @@ async def all_stats(client, message: Message):
     )
 
 
-@app.on_message(filters.command(["ustats", "userstats"]) & SUDOERS)
+@app.on_message(filters.command(["ustats", "userstats"]) & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def user_stats(client, message: Message):
     served_users = []
     users = await get_served_users()

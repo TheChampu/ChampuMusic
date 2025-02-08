@@ -3,9 +3,9 @@ import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import InviteRequestSent
-
+from config import OWNER_ID
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import get_assistant
 from ChampuMusic.utils.champu_ban import admin_filter
 
@@ -167,7 +167,7 @@ async def leave_one(client, message):
         print(e)
 
 
-@app.on_message(filters.command(["leaveall"]) & SUDOERS)
+@app.on_message(filters.command(["leaveall"]) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def leave_all(client, message):
     if message.from_user.id not in SUDOERS:
         return

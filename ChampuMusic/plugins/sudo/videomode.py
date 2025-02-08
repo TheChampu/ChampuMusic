@@ -4,7 +4,7 @@ from pyrogram.types import Message
 import config
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import add_off, add_on
 from ChampuMusic.utils.decorators.language import language
 
@@ -12,7 +12,7 @@ from ChampuMusic.utils.decorators.language import language
 VIDEOMODE_COMMAND = get_command("VIDEOMODE_COMMAND")
 
 
-@app.on_message(filters.command(VIDEOMODE_COMMAND) & SUDOERS)
+@app.on_message(filters.command(VIDEOMODE_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def videoloaymode(client, message: Message, _):
     usage = _["vidmode_1"]

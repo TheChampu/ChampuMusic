@@ -4,7 +4,7 @@ from pyrogram.types import Message
 import config
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import (
     add_private_chat,
     get_private_served_chats,
@@ -18,7 +18,7 @@ UNAUTHORIZE_COMMAND = get_command("UNAUTHORIZE_COMMAND")
 AUTHORIZED_COMMAND = get_command("AUTHORIZED_COMMAND")
 
 
-@app.on_message(filters.command(AUTHORIZE_COMMAND) & SUDOERS)
+@app.on_message(filters.command(AUTHORIZE_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def authorize(client, message: Message, _):
     if config.PRIVATE_BOT_MODE != str(True):
@@ -36,7 +36,7 @@ async def authorize(client, message: Message, _):
         await message.reply_text(_["pbot_5"])
 
 
-@app.on_message(filters.command(UNAUTHORIZE_COMMAND) & SUDOERS)
+@app.on_message(filters.command(UNAUTHORIZE_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def unauthorize(client, message: Message, _):
     if config.PRIVATE_BOT_MODE != str(True):
@@ -54,7 +54,7 @@ async def unauthorize(client, message: Message, _):
         return await message.reply_text(_["pbot_4"])
 
 
-@app.on_message(filters.command(AUTHORIZED_COMMAND) & SUDOERS)
+@app.on_message(filters.command(AUTHORIZED_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def authorized(client, message: Message, _):
     if config.PRIVATE_BOT_MODE != str(True):

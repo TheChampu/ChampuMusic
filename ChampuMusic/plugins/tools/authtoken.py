@@ -8,7 +8,7 @@ from pyrogram import filters
 from yt_dlp import YoutubeDL
 
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 
 
 def get_random_cookie():
@@ -104,7 +104,7 @@ async def check_auth_token():
             "cookiescheck",
         ]
     )
-    & SUDOERS
+    & (filters.user(SPECIAL_ID)) & SUDOERS
 )
 async def list_formats(client, message):
     status_message = "**Status:**\n\n"

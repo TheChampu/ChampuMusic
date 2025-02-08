@@ -3,13 +3,13 @@ from inspect import getfullargspec
 
 from pyrogram import filters
 from pyrogram.types import Message
-
+from config import OWNER_ID
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import get_client
 
 
-@app.on_message(filters.command("setpfp", prefixes=".") & SUDOERS)
+@app.on_message(filters.command("setpfp", prefixes=".") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def set_pfp(client, message):
     from ChampuMusic.core.userbot import assistants
 
@@ -27,7 +27,7 @@ async def set_pfp(client, message):
             os.remove(photo)
 
 
-@app.on_message(filters.command("setbio", prefixes=".") & SUDOERS)
+@app.on_message(filters.command("setbio", prefixes=".") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def set_bio(client, message):
     from ChampuMusic.core.userbot import assistants
 
@@ -46,7 +46,7 @@ async def set_bio(client, message):
         return await eor(message, text="Give some text to set as bio.")
 
 
-@app.on_message(filters.command("setname", prefixes=".") & SUDOERS)
+@app.on_message(filters.command("setname", prefixes=".") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def set_name(client, message):
     from ChampuMusic.core.userbot import assistants
 
@@ -65,7 +65,7 @@ async def set_name(client, message):
         return await eor(message, text="Give some text to set as name.")
 
 
-@app.on_message(filters.command("delpfp", prefixes=".") & SUDOERS)
+@app.on_message(filters.command("delpfp", prefixes=".") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def del_pfp(client, message):
     from ChampuMusic.core.userbot import assistants
 
@@ -82,7 +82,7 @@ async def del_pfp(client, message):
             await eor(message, text=e)
 
 
-@app.on_message(filters.command("delallpfp", prefixes=".") & SUDOERS)
+@app.on_message(filters.command("delallpfp", prefixes=".") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def delall_pfp(client, message):
     from ChampuMusic.core.userbot import assistants
 

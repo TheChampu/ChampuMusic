@@ -7,7 +7,7 @@ from pyrogram.types import Message
 from config import BANNED_USERS
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils import get_readable_time
 from ChampuMusic.utils.database import (
     add_banned_user,
@@ -25,7 +25,7 @@ UNGBAN_COMMAND = get_command("UNGBAN_COMMAND")
 GBANNED_COMMAND = get_command("GBANNED_COMMAND")
 
 
-@app.on_message(filters.command(GBAN_COMMAND) & SUDOERS)
+@app.on_message(filters.command(GBAN_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def gbanuser(client, message: Message, _):
     if not message.reply_to_message:
@@ -70,7 +70,7 @@ async def gbanuser(client, message: Message, _):
     await mystic.delete()
 
 
-@app.on_message(filters.command(UNGBAN_COMMAND) & SUDOERS)
+@app.on_message(filters.command(UNGBAN_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def gungabn(client, message: Message, _):
     if not message.reply_to_message:
@@ -109,7 +109,7 @@ async def gungabn(client, message: Message, _):
     await mystic.delete()
 
 
-@app.on_message(filters.command(GBANNED_COMMAND) & SUDOERS)
+@app.on_message(filters.command(GBANNED_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def gbanned_list(client, message: Message, _):
     counts = await get_banned_count()
@@ -160,7 +160,7 @@ async def extract_user(m: Message) -> User:
     )
 
 
-@app.on_message(filters.command("rgban") & SUDOERS)
+@app.on_message(filters.command("rgban") & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def sgban(client, message: Message):
     await message.delete()
     chat_id = message.chat.id
@@ -168,7 +168,7 @@ async def sgban(client, message: Message):
     await global_ban(client, message)
 
 
-@app.on_message(filters.command("rungban") & SUDOERS)
+@app.on_message(filters.command("rungban") & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def sungban(client, message: Message):
     await message.delete()
     chat_id = message.chat.id

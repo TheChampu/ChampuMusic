@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from config import BANNED_USERS
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
 from ChampuMusic.utils.decorators.language import language
 
@@ -15,7 +15,7 @@ WHITELISTCHAT_COMMAND = get_command("WHITELISTCHAT_COMMAND")
 BLACKLISTEDCHAT_COMMAND = get_command("BLACKLISTEDCHAT_COMMAND")
 
 
-@app.on_message(filters.command(BLACKLISTCHAT_COMMAND) & SUDOERS)
+@app.on_message(filters.command(BLACKLISTCHAT_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def blacklist_chat_func(client, message: Message, _):
     if len(message.command) != 2:
@@ -34,7 +34,7 @@ async def blacklist_chat_func(client, message: Message, _):
         pass
 
 
-@app.on_message(filters.command(WHITELISTCHAT_COMMAND) & SUDOERS)
+@app.on_message(filters.command(WHITELISTCHAT_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def white_funciton(client, message: Message, _):
     if len(message.command) != 2:

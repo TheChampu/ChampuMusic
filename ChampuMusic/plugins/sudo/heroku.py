@@ -4,7 +4,7 @@ import os
 import shutil
 import socket
 from datetime import datetime
-
+from config import OWNER_ID
 import dotenv
 import heroku3
 import requests
@@ -16,7 +16,7 @@ from pyrogram import filters
 import config
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import HAPP, SUDOERS, XCB
+from ChampuMusic.misc import HAPP, SUDOERS, XCB, SPECIAL_ID
 from ChampuMusic.utils.database import (
     get_active_chats,
     remove_active_chat,
@@ -47,7 +47,7 @@ async def paste_neko(code: str):
 
 @app.on_message(
     filters.command(["log", "logs", "get_log", "getlog", "get_logs", "getlogs"])
-    & SUDOERS
+    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
 )
 @language
 async def log_(client, message, _):
@@ -78,7 +78,7 @@ async def log_(client, message, _):
         await message.reply_text(_["heroku_2"])
 
 
-@app.on_message(filters.command(GETVAR_COMMAND) & SUDOERS)
+@app.on_message(filters.command(GETVAR_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def varget_(client, message, _):
     usage = _["heroku_3"]
@@ -106,7 +106,7 @@ async def varget_(client, message, _):
             return await message.reply_text(f"**{check_var}:** `{str(output)}`")
 
 
-@app.on_message(filters.command(DELVAR_COMMAND) & SUDOERS)
+@app.on_message(filters.command(DELVAR_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def vardel_(client, message, _):
     usage = _["heroku_6"]
@@ -134,7 +134,7 @@ async def vardel_(client, message, _):
             os.system(f"kill -9 {os.getpid()} && python3 -m ChampuMusic")
 
 
-@app.on_message(filters.command(SETVAR_COMMAND) & SUDOERS)
+@app.on_message(filters.command(SETVAR_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def set_var(client, message, _):
     usage = _["heroku_8"]
@@ -163,7 +163,7 @@ async def set_var(client, message, _):
         os.system(f"kill -9 {os.getpid()} && python3 -m ChampuMusic")
 
 
-@app.on_message(filters.command(USAGE_COMMAND) & SUDOERS)
+@app.on_message(filters.command(USAGE_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def usage_dynos(client, message, _):
     ### Credits CatUserbot
@@ -220,7 +220,7 @@ Tᴏᴛᴀʟ ʟᴇғᴛ: `{hours}`**ʜ**  `{minutes}`**ᴍ**  [`{percentage}`**%
     return await dyno.edit(text)
 
 
-@app.on_message(filters.command(["update", "gitpull", "up"]) & SUDOERS)
+@app.on_message(filters.command(["update", "gitpull", "up"]) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def update_(client, message, _):
     if await is_heroku():
@@ -307,7 +307,7 @@ async def update_(client, message, _):
         exit()
 
 
-@app.on_message(filters.command(["restart"]) & SUDOERS)
+@app.on_message(filters.command(["restart"]) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def restart_(_, message):
     response = await message.reply_text("ʀᴇsᴛᴀʀᴛɪɴɢ...")
     ac_chats = await get_active_chats()
@@ -353,7 +353,7 @@ HEROKU_HEADERS = {
 
 
 # Command to create a new Heroku app
-@app.on_message(filters.command("newapp") & SUDOERS)
+@app.on_message(filters.command("newapp") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def create_heroku_app(client, message):
     try:
         # Extract the app name from the command

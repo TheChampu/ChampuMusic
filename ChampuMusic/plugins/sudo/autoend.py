@@ -2,14 +2,14 @@ from pyrogram import filters
 
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import autoend_off, autoend_on
 
 # Commands
 AUTOEND_COMMAND = get_command("AUTOEND_COMMAND")
 
 
-@app.on_message(filters.command(AUTOEND_COMMAND) & SUDOERS)
+@app.on_message(filters.command(AUTOEND_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def auto_end_stream(client, message):
     usage = "**ᴜsᴀɢᴇ:**\n\n/autoend [enable|disable]"
     if len(message.command) != 2:

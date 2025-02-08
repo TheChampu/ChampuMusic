@@ -3,7 +3,7 @@ from pyrogram import filters
 import config
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import add_off, add_on
 from ChampuMusic.utils.decorators.language import language
 
@@ -11,7 +11,7 @@ from ChampuMusic.utils.decorators.language import language
 LOGGER_COMMAND = get_command("LOGGER_COMMAND")
 
 
-@app.on_message(filters.command(LOGGER_COMMAND) & SUDOERS)
+@app.on_message(filters.command(LOGGER_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def logger(client, message, _):
     usage = _["log_1"]

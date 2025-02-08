@@ -6,6 +6,7 @@ from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import FloodWait
 from pyrogram.raw import types
 
+from ChampuMusic.misc import SPECIAL_ID, SUDOERS
 import config
 from config import OWNER_ID, adminlist, chatstats, clean, userstats
 from strings import get_command
@@ -63,7 +64,7 @@ async def clean_mode(client, update, users, chats):
     await set_queries(1)
 
 
-@app.on_message(filters.command(BROADCAST_COMMAND) & filters.user(OWNER_ID))
+@app.on_message(filters.command(BROADCAST_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 @language
 async def braodcast_message(client, message, _):
     global IS_BROADCASTING

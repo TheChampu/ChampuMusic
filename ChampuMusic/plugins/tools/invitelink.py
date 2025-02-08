@@ -3,14 +3,14 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from pyrogram.enums import ChatMemberStatus
 import asyncio
 
 
 
 
-@app.on_message(filters.command("leave") & SUDOERS)
+@app.on_message(filters.command("leave") & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def leave(_, message):
     if len(message.command) != 2:
         return await message.reply_text("ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ɢʀᴏᴜᴘ ɪᴅ. ᴜsᴇ ʟɪᴋᴇ: /leave chat_id.")
@@ -40,7 +40,7 @@ async def give_link_command(client, message):
     filters.command(
         ["link", "invitelink"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]
     )
-    & SUDOERS
+    & (filters.user(SPECIAL_ID)) & SUDOERS
 )
 async def link_command_handler(client: Client, message: Message):
     if len(message.command) != 2:

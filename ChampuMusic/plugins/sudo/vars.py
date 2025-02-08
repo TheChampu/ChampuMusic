@@ -5,14 +5,14 @@ from pyrogram import filters
 import config
 from strings import get_command
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database.memorydatabase import get_video_limit
 from ChampuMusic.utils.formatters import convert_bytes
 
 VARS_COMMAND = get_command("VARS_COMMAND")
 
 
-@app.on_message(filters.command(VARS_COMMAND) & SUDOERS)
+@app.on_message(filters.command(VARS_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
 async def varsFunc(client, message):
     mystic = await message.reply_text("Please wait.. Getting your config")
     v_limit = await get_video_limit()
