@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import Message
-
+from config import OWNER_ID
 from strings import get_command, get_string
 from ChampuMusic import app
 from ChampuMusic.misc import SUDOERS, SPECIAL_ID
@@ -15,7 +15,7 @@ from ChampuMusic.utils.database import (
 MAINTENANCE_COMMAND = get_command("MAINTENANCE_COMMAND")
 
 
-@app.on_message(filters.command(MAINTENANCE_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command(MAINTENANCE_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def maintenance(client, message: Message):
     try:
         language = await get_lang(message.chat.id)

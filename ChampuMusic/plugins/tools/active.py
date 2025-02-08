@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from unidecode import unidecode
-
+from config import OWNER_ID
 from ChampuMusic import app
 from ChampuMusic.core.call import _st_ as clean
 from ChampuMusic.misc import SUDOERS, SPECIAL_ID
@@ -31,7 +31,7 @@ def ordinal(n):
     filters.command(
         ["activevc", "activevoice"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]
     )
-    & (filters.user(SPECIAL_ID)) & SUDOERS
+    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
 )
 async def activevc(_, message: Message):
     mystic = await message.reply_text("» ɢᴇᴛᴛɪɴɢ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛs ʟɪsᴛ...")
@@ -82,7 +82,7 @@ async def activevc(_, message: Message):
     filters.command(
         ["activev", "activevideo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]
     )
-    & (filters.user(SPECIAL_ID)) & SUDOERS
+    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
 )
 async def activevi_(_, message: Message):
     mystic = await message.reply_text("» ɢᴇᴛᴛɪɴɢ ᴀᴄᴛɪᴠᴇ ᴠɪᴅᴇᴏ ᴄʜᴀᴛs ʟɪsᴛ...")
@@ -129,7 +129,7 @@ async def activevi_(_, message: Message):
         )
 
 
-@app.on_message(filters.command(["ac"]) & (filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command(["ac"]) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def start(client: Client, message: Message):
     active_chats = await get_active_chats()
     active_video_chats = await get_active_video_chats()

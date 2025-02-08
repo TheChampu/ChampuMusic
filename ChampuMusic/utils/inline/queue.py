@@ -1,5 +1,5 @@
 from typing import Union
-
+from ChampuMusic import app
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
@@ -80,7 +80,7 @@ def aq_markup(_, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="๏ ᴍᴏʀᴇ ๏",
+                text=" ˹ᴄʜᴧᴍᴘᴜ˼ ",
                 url="https://t.me/akaChampu",
             ),
         ],
@@ -115,7 +115,7 @@ def queuemarkup(_, vidid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="๏ ᴍᴏʀᴇ ๏",
+                text=" ˹ᴄʜᴧᴍᴘᴜ˼ ",
                 url="https://t.me/akaChampu",
             ),
         ],

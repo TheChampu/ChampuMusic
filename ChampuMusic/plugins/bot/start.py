@@ -15,7 +15,7 @@ import config
 from config import BANNED_USERS, START_IMG_URL
 from strings import get_string
 from ChampuMusic import HELPABLE, Telegram, YouTube, app
-from ChampuMusic.misc import SUDOERS, _boot_
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID, _boot_
 from ChampuMusic.plugins.play.playlist import del_plist_msg
 from ChampuMusic.plugins.sudo.sudoers import sudoers_list
 from ChampuMusic.utils.database import (
@@ -59,7 +59,6 @@ async def ban_new(client, message):
 async def start_comm(client, message: Message, _):
     chat_id = message.chat.id
     await add_served_user(message.from_user.id)
-    await message.react("😈")
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
         if name[0:4] == "help":

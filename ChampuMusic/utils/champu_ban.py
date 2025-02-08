@@ -1,5 +1,5 @@
 from pyrogram import filters
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.admin_check import admin_check
 
 USE_AS_BOT = True

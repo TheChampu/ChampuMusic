@@ -2,7 +2,7 @@ import asyncio
 
 import speedtest
 from pyrogram import filters
-
+from config import OWNER_ID
 from strings import get_command
 from ChampuMusic import app
 from ChampuMusic.misc import SUDOERS, SPECIAL_ID
@@ -27,7 +27,7 @@ def testspeed(m):
     return result
 
 
-@app.on_message(filters.command(SPEEDTEST_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command(SPEEDTEST_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def speedtest_function(client, message):
     m = await message.reply_text("ʀᴜɴɴɪɴɢ sᴘᴇᴇᴅᴛᴇsᴛ")
     loop = asyncio.get_event_loop_policy().get_event_loop()

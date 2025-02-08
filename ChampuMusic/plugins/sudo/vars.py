@@ -1,7 +1,7 @@
 import asyncio
 
 from pyrogram import filters
-
+from config import OWNER_ID
 import config
 from strings import get_command
 from ChampuMusic import app
@@ -12,7 +12,7 @@ from ChampuMusic.utils.formatters import convert_bytes
 VARS_COMMAND = get_command("VARS_COMMAND")
 
 
-@app.on_message(filters.command(VARS_COMMAND) & (filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command(VARS_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
 async def varsFunc(client, message):
     mystic = await message.reply_text("Please wait.. Getting your config")
     v_limit = await get_video_limit()

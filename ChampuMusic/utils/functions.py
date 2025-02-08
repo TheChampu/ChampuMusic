@@ -1,10 +1,17 @@
 from datetime import datetime, timedelta
+import json
+import logging
 from re import findall
 from re import sub as re_sub
+from pyrogram.types import Message, User
+import requests
 
+from ChampuMusic import app
 from pyrogram import errors
 from pyrogram.enums import MessageEntityType
-from pyrogram.types import Message
+
+from ChampuMusic.plugins.bot import settings
+
 
 MARKDOWN = """
 ʀᴇᴀᴅ ᴛʜᴇ ʙᴇʟᴏᴡ ᴛᴇxᴛ ᴄᴀʀᴇғᴜʟʟʏ ᴛᴏ ғɪɴᴅ ᴏᴜᴛ ʜᴏᴡ ғᴏʀᴍᴀᴛᴛɪɴɢ ᴡᴏʀᴋs!
@@ -169,6 +176,22 @@ async def get_data_and_name(replied_message, message):
                     data = None
     return data, name
 
+def fetch_channel_videos(self, channel_id, target_page=1):
+    logging.debug(" ***> ~FBFetching YouTube channel: ~SB%s" % channel_id)
+    channel_json = requests.get(
+        "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=%s&key=%s"
+        % (channel_id, settings.YOUTUBE_API_KEY)
+    )
+    channel = json.decode(channel_json.content)
+    try:
+        title = channel["items"][0]["snippet"]["title"]
+        description = channel["items"][0]["snippet"]["description"]
+        uploads_list_id = channel["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+    except (IndexError, KeyError) as e:
+        logging.debug(" ***> ~FRYoutube channel returned an error: ~FM~SB%s: %s" % (channel, e))
+        return None, None, None
+
+    return self.fetch_playlist_videos(uploads_list_id, title, description, target_page=target_page)
 
 async def extract_userid(message, text: str):
     """
@@ -243,8 +266,17 @@ async def extract_user_and_reason(message, sender_chat=False):
         return "", ""
 
 
-async def extract_user(message):
-    return (await extract_user_and_reason(message))[0]
+async def extract_user(m: Message) -> User:
+    if m.reply_to_message:
+        return m.reply_to_message.from_user
+    msg_entities = m.entities[1] if m.text.startswith("/") else m.entities[0]
+    return await app.get_users(
+        msg_entities.user.id
+        if msg_entities.type == MessageEntityType.TEXT_MENTION
+        else int(m.command[1])
+        if m.command[1].isdecimal()
+        else m.command[1]
+    )
 
 
 def get_file_id_from_message(

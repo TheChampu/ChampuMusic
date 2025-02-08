@@ -15,7 +15,7 @@ from config import BANNED_USERS, adminlist
 from strings import get_string
 from ChampuMusic import app
 from ChampuMusic.core.call import Champu
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.plugins import extra_plugins_enabled
 from ChampuMusic.utils.database import (
     delete_filter,

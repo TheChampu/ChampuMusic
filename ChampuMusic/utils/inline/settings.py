@@ -23,6 +23,32 @@ def setting_markup(_):
     ]
     return buttons
 
+def vote_mode_markup(_, current, mode: Union[bool, str] = None):
+    buttons = [
+        [
+            InlineKeyboardButton(text="Vᴏᴛɪɴɢ ᴍᴏᴅᴇ ➜", callback_data="VOTEANSWER"),
+            InlineKeyboardButton(
+                text=_["V_B_1"] if mode == True else _["V_B_2"],
+                callback_data="VOMODECHANGE",
+            ),
+        ],
+        [
+            InlineKeyboardButton(text="-2", callback_data="FERRARIUDTI M"),
+            InlineKeyboardButton(
+                text=f"ᴄᴜʀʀᴇɴᴛ : {current}",
+                callback_data="ANSWERVOMODE",
+            ),
+            InlineKeyboardButton(text="+2", callback_data="FERRARIUDTI A"),
+        ],
+        [
+            InlineKeyboardButton(
+                text=_["BACK_BUTTON"],
+                callback_data="settings_helper",
+            ),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+        ],
+    ]
+    return buttons
 
 def audio_quality_markup(
     _,

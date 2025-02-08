@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from config import BANNED_USERS, adminlist
 from ChampuMusic import app
 from ChampuMusic.core.call import Champu
-from ChampuMusic.misc import SUDOERS, db
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID, db
 from ChampuMusic.utils import AdminRightsCheck
 from ChampuMusic.utils.database import is_active_chat, is_nonadmin_chat
 from ChampuMusic.utils.decorators.language import languageCB

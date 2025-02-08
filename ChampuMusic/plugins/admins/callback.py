@@ -1,4 +1,7 @@
+import asyncio
 import random
+from ChampuMusic.utils.database.assistantdatabase import get_assistant
+from ChampuMusic.utils.database.memorydatabase import get_active_chats, get_lang, get_upvote_count
 import config
 from pyrogram import filters
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
@@ -10,10 +13,12 @@ from config import (
     TELEGRAM_AUDIO_URL,
     TELEGRAM_VIDEO_URL,
     adminlist,
+    votemode,
+    confirmer,
 )
 from ChampuMusic import YouTube, app
 from ChampuMusic.core.call import Champu
-from ChampuMusic.misc import SUDOERS, db
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID, db
 from ChampuMusic.utils.database import (
     is_active_chat,
     is_music_playing,
@@ -37,16 +42,18 @@ from ChampuMusic.utils.inline import (
     stream_markup,
     stream_markup2,
 )
-from ChampuMusic.utils.inline.play import stream_markup
+from ChampuMusic.utils.inline.play import stream_markup, stream_markup_timer, stream_markup_timer2
 from ChampuMusic.utils.stream.autoclear import auto_clean
 from ChampuMusic.utils.thumbnails import get_thumb
+from strings import get_string
 
 wrong = {}
+upvoters = {}
+upvote = {}
 downvote = {}
 downvoters = {}
 
 # =============================FUNCTIONS==============================#
-
 
 @app.on_callback_query(filters.regex("PanelMarkup") & ~BANNED_USERS)
 @languageCB
@@ -156,7 +163,7 @@ async def del_back_playlist(client, CallbackQuery, _):
         if pages == 0:
             buttons = panel_markup_3(_, videoid, chat_id)
         if pages == 4:
-            buttons = panel_markup_
+            buttons = panel_markup_2
         if pages == 3:
             buttons = panel_markup_4(
                 _,
@@ -623,7 +630,7 @@ async def del_back_playlist(client, CallbackQuery, _):
         await mystic.edit_text(f"{string}\n\nᴄʜᴀɴɢᴇs ᴅᴏɴᴇ ʙʏ : {mention} !")
 
 
-"""async def markup_timers():
+async def markup_timers():
     while not await asyncio.sleep(5):
         active_chats = await get_active_chats()
         for chat_id in active_chats:
@@ -641,7 +648,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 except:
                     continue
                 try:
-                    check = checker[chat_id][mystic.id]
+                    check = check[chat_id][mystic.id]
                     if check is False:
                         continue
                 except:
@@ -713,7 +720,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 continue
 
 
-asyncio.create_task(markup_timers())"""
+asyncio.create_task(markup_timers())
 
 __MODULE__ = "Adᴍɪɴ"
 __HELP__ = """

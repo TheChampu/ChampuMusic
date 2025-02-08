@@ -118,7 +118,7 @@ def stream_markupp(_, videoid, chat_id):
     return buttons
 
 
-def telegram_markup_timer(_, chat_id, played, dur):
+def telegram_markup_timer(_, chat_id, played, dur, videoid):
     played_sec = time_to_seconds(played)
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
@@ -317,7 +317,7 @@ from ChampuMusic import app
 from ChampuMusic.utils.formatters import time_to_seconds
 
 
-def track_markup(_, videoid, user_id, channel, fplay):
+def track_markup(_, videoid, user_id, channel, fplay, chat_id):
     buttons = [
         [
             InlineKeyboardButton(
@@ -611,7 +611,7 @@ def stream_markup2(_, chat_id):
     return buttons
 
 
-def stream_markup_timer2(_, chat_id, played, dur):
+def stream_markup_timer2(_, chat_id, played, dur, videoid):
     played_sec = time_to_seconds(played)
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
@@ -895,12 +895,6 @@ def panel_markup_4(_, vidid, chat_id, played, dur):
 def panel_markup_clone(_, vidid, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(
-                text=_["S_B_5"],
-                url=f"https://t.me/{app.username}?startgroup=true",
-            ),
-        ],
-        [
             InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
             InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
             InlineKeyboardButton(text="↻", callback_data=f"ADMIN Replay|{chat_id}"),
@@ -909,20 +903,19 @@ def panel_markup_clone(_, vidid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="ᴠɪᴅᴇᴏ", callback_data=f"downloadvideo {vidid}"
-            ),
-            InlineKeyboardButton(
-                text="ᴀᴜᴅɪᴏ", callback_data=f"downloadaudio {vidid}"
+                text="˹ᴄʜᴧᴍᴘᴜ˼", url=f"https://t.me/TheChampu"
             ),
         ],
         [
             InlineKeyboardButton(
-                text="✚ ᴘʟᴀʏʟɪsᴛ ✚", callback_data=f"champu_playlist {vidid}"
-            ),
-        ],
+                text=_["CLOSE_BUTTON"],
+                callback_data="close",
+            )
+        ]
     ]
 
     return buttons
+
 
 
 def close_markup(_):

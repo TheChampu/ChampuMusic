@@ -4,7 +4,7 @@ import os
 import shutil
 import socket
 from datetime import datetime
-from config import OWNER_ID
+
 import dotenv
 import heroku3
 import requests
@@ -12,7 +12,7 @@ import urllib3
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 from pyrogram import filters
-
+from config import OWNER_ID
 import config
 from strings import get_command
 from ChampuMusic import app
@@ -339,7 +339,7 @@ from pyrogram import filters
 
 import config
 from ChampuMusic import app
-from ChampuMusic.misc import SUDOERS
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 
 # Heroku API base URL
 HEROKU_API_URL = "https://api.heroku.com/apps"

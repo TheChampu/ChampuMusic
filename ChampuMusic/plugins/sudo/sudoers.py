@@ -94,7 +94,7 @@ async def back_to_main_menu(client, callback_query: CallbackQuery):
     reply_markupes = InlineKeyboardMarkup(keyboard)
     await callback_query.message.edit_caption(caption="**» ᴄʜᴇᴄᴋ sᴜᴅᴏ ʟɪsᴛ ʙʏ ɢɪᴠᴇɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ.**\n\n**» ɴᴏᴛᴇ:**  ᴏɴʟʏ sᴜᴅᴏ ᴜsᴇʀs ᴄᴀɴ ᴠɪᴇᴡ. ", reply_markup=reply_markupes)
 
-@app.on_message(filters.command(["delallsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)))
+@app.on_message(filters.command(["delallsudo"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]) & filters.user(OWNER_ID))
 @language
 async def del_all_sudo(client, message: Message, _):
     removed_users = []  # List to store removed users' information

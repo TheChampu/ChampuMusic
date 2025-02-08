@@ -3,7 +3,7 @@ import glob
 import os
 import random
 from typing import Union
-
+from config import OWNER_ID
 from pyrogram import filters
 from yt_dlp import YoutubeDL
 
@@ -104,7 +104,7 @@ async def check_auth_token():
             "cookiescheck",
         ]
     )
-    & (filters.user(SPECIAL_ID)) & SUDOERS
+    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
 )
 async def list_formats(client, message):
     status_message = "**Status:**\n\n"

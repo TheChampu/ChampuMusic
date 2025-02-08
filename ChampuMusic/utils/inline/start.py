@@ -49,6 +49,18 @@ def alive_panel(_):
     ]
     return buttons
 
+# Start panel for inline buttons
+def start_panel(_):
+    buttons = [
+        [
+            InlineKeyboardButton(
+                text=_["SO_B_1"], url=f"https://t.me/{app.username}?startgroup=true"
+            ),
+            InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_GROUP),
+        ],
+    ]
+    return buttons
+
 def music_start_panel(_):
     buttons = [
         [
