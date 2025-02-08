@@ -159,6 +159,8 @@ TEMP_DB_FOLDER = "tempdb"
 adminlist = {}
 lyrical = {}
 chatstats = {}
+votemode = {}
+confirmer = {}
 userstats = {}
 clean = {}
 
