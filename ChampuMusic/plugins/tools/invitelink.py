@@ -10,7 +10,7 @@ from config import OWNER_ID
 
 
 
-@app.on_message(filters.command("leave") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command("leave") & SUDOERS)
 async def leave(_, message):
     if len(message.command) != 2:
         return await message.reply_text("ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ɢʀᴏᴜᴘ ɪᴅ. ᴜsᴇ ʟɪᴋᴇ: /leave chat_id.")
@@ -40,7 +40,7 @@ async def give_link_command(client, message):
     filters.command(
         ["link", "invitelink"], prefixes=["/", "!", "%", ",", "", ".", "@", "#"]
     )
-    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
+    & SUDOERS
 )
 async def link_command_handler(client: Client, message: Message):
     if len(message.command) != 2:

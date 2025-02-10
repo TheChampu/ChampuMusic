@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from ChampuMusic import app
 from pyrogram.types import InputMediaVideo
-from ChampuMusic.misc import SUDOERS, SPECIAL_ID, SPECIAL_ID
+from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 from ChampuMusic.utils.database import add_sudo, remove_sudo
 from ChampuMusic.utils.decorators.language import language
 from ChampuMusic.utils.functions import extract_user

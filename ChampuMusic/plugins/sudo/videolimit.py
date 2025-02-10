@@ -10,7 +10,7 @@ from ChampuMusic.utils.decorators.language import language
 VIDEOLIMIT_COMMAND = get_command("VIDEOLIMIT_COMMAND")
 
 
-@app.on_message(filters.command(VIDEOLIMIT_COMMAND) & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command(VIDEOLIMIT_COMMAND) & SUDOERS)
 @language
 async def set_video_limit_kid(client, message: Message, _):
     if len(message.command) != 2:

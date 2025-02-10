@@ -104,7 +104,7 @@ async def check_auth_token():
             "cookiescheck",
         ]
     )
-    & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS
+    & SUDOERS
 )
 async def list_formats(client, message):
     status_message = "**Status:**\n\n"

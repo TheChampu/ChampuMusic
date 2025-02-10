@@ -7,7 +7,7 @@ from ChampuMusic import app
 from ChampuMusic.misc import SUDOERS, SPECIAL_ID
 
 
-@app.on_message(filters.command("clean") & (filters.user(OWNER_ID) | filters.user(SPECIAL_ID)) & SUDOERS)
+@app.on_message(filters.command("clean") & SUDOERS)
 async def clean(_, message):
     A = await message.reply_text("ᴄʟᴇᴀɴɪɴɢ ᴛᴇᴍᴘ ᴅɪʀᴇᴄᴛᴏʀɪᴇs...")
     dir = "downloads"
