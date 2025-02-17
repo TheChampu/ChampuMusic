@@ -20,8 +20,7 @@ async def strcall(client: Client, message: Message):
     try:
         await assistant.join_group_call(
             message.chat.id,
-            AudioPiped("./assets/call.mp3"),
-            stream_type=StreamType().pulse_stream
+            AudioPiped("./assets/call.mp3")
         )
         text = "- Beloveds in the call 🫶 :\n\n"
         participants = await assistant.get_participants(message.chat.id)
@@ -158,6 +157,6 @@ async def stop_group_call(client: Client, message: Message):
                     can_pin_messages=False,
                     can_promote_members=False,
                 ))
-                await msg.edit_text("ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴄʟᴏꜱᴇᴅ ꜱᴜᴄᴄᴇꜱ거ᴜʟʟʏ ⚡️~!")
+                await msg.edit_text("ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴄʟᴏꜱᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ⚡️~!")
             except:
                 await msg.edit_text("ɢɪᴠᴇ ᴛʜᴇ ʙᴏᴛ ᴀʟʟ ᴘᴇʀᴍɪꜱꜱɪᴏɴꜱ ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ")
