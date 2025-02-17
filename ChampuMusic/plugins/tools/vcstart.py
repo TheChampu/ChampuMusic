@@ -11,7 +11,7 @@ from ChampuMusic import app
 from ChampuMusic.core.call import Champu
 from pytgcalls import StreamType
 from pytgcalls.types import AudioPiped
-from pytgcalls.exceptions import NoActiveGroupCall, TelegramServerError, AlreadyJoinedError
+from pytgcalls.exceptions import NoActiveGroupCall, AlreadyJoinedError
 from ChampuMusic.utils.database import get_assistant, group_assistant
 
 @app.on_message(filters.command(["vcinfo"], ["/", "!"]))
@@ -20,7 +20,7 @@ async def strcall(client: Client, message: Message):
     try:
         await assistant.join_group_call(
             message.chat.id,
-            AudioPiped(".assets/call.mp3"),
+            AudioPiped("./assets/call.mp3"),
             stream_type=StreamType().pulse_stream
         )
         text = "- Beloveds in the call 🫶 :\n\n"
@@ -35,8 +35,11 @@ async def strcall(client: Client, message: Message):
         await assistant.leave_group_call(message.chat.id)
     except NoActiveGroupCall:
         await message.reply("ᴛʜᴇ ᴄᴀʟʟ ɪꜱ ɴᴏᴛ ᴏᴘᴇɴ ᴀᴛ ᴀʟʟ")
-    except TelegramServerError:
-        await message.reply("ꜱᴇɴᴅ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ ᴀɢᴀɪɴ, ᴛʜᴇʀᴇ ɪꜱ ᴀ ᴘʀᴏʙʟᴇᴍ ᴡɪᴛʜ ᴛʜᴇ ᴛᴇʟᴇɢʀᴀᴍ ꜱᴇʀᴠᴇʀ ❌")
+    except Exception as e:
+        if "TelegramServerError" in str(e):
+            await message.reply("ꜱᴇɴᴅ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ ᴀɢᴀɪɴ, ᴛʜᴇʀᴇ ɪꜱ ᴀ ᴘʀᴏʙʟᴇᴍ ᴡɪᴛʜ ᴛʜᴇ ᴛᴇʟᴇɢʀᴀᴍ ꜱᴇʀᴠᴇʀ ❌")
+        else:
+            raise e
     except AlreadyJoinedError:
         text = "ʙᴇʟᴏᴠᴇᴅꜱ ɪɴ ᴛʜᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ 🫶 :\n\n"
         participants = await assistant.get_participants(message.chat.id)
@@ -155,6 +158,6 @@ async def stop_group_call(client: Client, message: Message):
                     can_pin_messages=False,
                     can_promote_members=False,
                 ))
-                await msg.edit_text("ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴄʟᴏꜱᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ⚡️~!")
+                await msg.edit_text("ᴠᴏɪᴄᴇ ᴄʜᴀᴛ ᴄʟᴏꜱᴇᴅ ꜱᴜᴄᴄᴇꜱ거ᴜʟʟʏ ⚡️~!")
             except:
                 await msg.edit_text("ɢɪᴠᴇ ᴛʜᴇ ʙᴏᴛ ᴀʟʟ ᴘᴇʀᴍɪꜱꜱɪᴏɴꜱ ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ")
