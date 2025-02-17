@@ -6,7 +6,7 @@ from pyrogram.raw.functions.channels import GetFullChannel
 from pyrogram.raw.functions.messages import GetFullChat
 from pyrogram.raw.types import InputGroupCall, InputPeerChannel, InputPeerChat
 from pyrogram.raw.functions.phone import CreateGroupCall, DiscardGroupCall
-from pyrogram.errors import UserAlreadyParticipant, ChatAdminRequired
+from pyrogram.errors import UserAlreadyParticipant, ChatAdminRequired, PeerIdInvalid
 from ChampuMusic import app
 from ChampuMusic.core.call import Champu
 from pytgcalls import StreamType
@@ -25,9 +25,12 @@ async def strcall(client: Client, message: Message):
         text = "- Beloveds in the call 🫶 :\n\n"
         participants = await assistant.get_participants(message.chat.id)
         for k, participant in enumerate(participants, start=1):
-            user = await client.get_users(participant.user_id)
-            mut = "ꜱᴘᴇᴀᴋɪɴɢ 🗣 " if not participant.muted else "ᴍᴜᴛᴇᴅ 🔕 "
-            text += f"{k} ➤ {user.mention} ➤ {mut}\n"
+            try:
+                user = await client.get_users(participant.user_id)
+                mut = "ꜱᴘᴇᴀᴋɪɴɢ 🗣 " if not participant.muted else "ᴍᴜᴛᴇᴅ 🔕 "
+                text += f"{k} ➤ {user.mention} ➤ {mut}\n"
+            except PeerIdInvalid:
+                text += f"{k} ➤ Unknown User ➤ {mut}\n"
         text += f"\nɴᴜᴍʙᴇʀ ᴏꜰ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛꜱ : {len(participants)}"
         await message.reply(text)
         await asyncio.sleep(7)
@@ -43,9 +46,12 @@ async def strcall(client: Client, message: Message):
         text = "ʙᴇʟᴏᴠᴇᴅꜱ ɪɴ ᴛʜᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ 🫶 :\n\n"
         participants = await assistant.get_participants(message.chat.id)
         for k, participant in enumerate(participants, start=1):
-            user = await client.get_users(participant.user_id)
-            mut = "ꜱᴘᴇᴀᴋɪɴɢ 🗣 " if not participant.muted else "ᴍᴜᴛᴇᴅ 🔕 "
-            text += f"{k} ➤ {user.mention} ➤ {mut}\n"
+            try:
+                user = await client.get_users(participant.user_id)
+                mut = "ꜱᴘᴇᴀᴋɪɴɢ 🗣 " if not participant.muted else "ᴍᴜᴛᴇᴅ 🔕 "
+                text += f"{k} ➤ {user.mention} ➤ {mut}\n"
+            except PeerIdInvalid:
+                text += f"{k} ➤ Unknown User ➤ {mut}\n"
         text += f"\nɴᴜᴍʙᴇʀ ᴏꜰ ᴘᴀʀᴛɪᴄɪᴘᴀɴᴛꜱ : {len(participants)}"
         await message.reply(text)
 
