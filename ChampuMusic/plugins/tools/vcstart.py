@@ -10,7 +10,7 @@ from pyrogram.errors import UserAlreadyParticipant, ChatAdminRequired
 from ChampuMusic import app
 from ChampuMusic.core.call import Champu
 from pytgcalls import StreamType
-from pytgcalls.types.input_stream import AudioPiped
+from pytgcalls.types import AudioPiped
 from pytgcalls.exceptions import NoActiveGroupCall, TelegramServerError, AlreadyJoinedError
 from ChampuMusic.utils.database import get_assistant, group_assistant
 
