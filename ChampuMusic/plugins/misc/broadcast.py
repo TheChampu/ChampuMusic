@@ -23,9 +23,11 @@ from ChampuMusic.utils.database import (
     set_queries,
     update_particular_top,
     update_user_top,
+    get_client,
 )
 from ChampuMusic.utils.decorators.language import language
 from ChampuMusic.utils.formatters import alpha_to_int
+
 
 BROADCAST_COMMAND = get_command("BROADCAST_COMMAND")
 AUTO_DELETE = config.CLEANMODE_DELETE_MINS
