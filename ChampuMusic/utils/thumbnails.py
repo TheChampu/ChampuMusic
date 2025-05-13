@@ -1,156 +1,160 @@
 import os
-from pathlib import Path
-from typing import Dict, Optional, Tuple
+import logging
+import aiohttp
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 from pkg_resources import ensure_directory
+from typing import Dict, Tuple, Optional
+from config import YOUTUBE_IMG_URL
+from youtubesearchpython import VideosSearch
+
+async def get_video_info(videoid: str) -> Optional[Dict]:
+    """Fetch video information using YouTubeSearchPython."""
+    try:
+        query = f"https://www.youtube.com/watch?v={videoid}"
+        results = VideosSearch(query, limit=1)
+        search_results = await results.next()
+
+        if "result" in search_results and len(search_results["result"]) > 0:
+            result = search_results["result"][0]
+            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
+            return {
+                "title": result["title"],
+                "channel": result["channel"]["name"],
+                "thumbnail": thumbnail
+            }
+        else:
+            logging.error(f"No results found for video ID: {videoid}")
+            return None
+    except Exception as e:
+        logging.error(f"Error in get_video_info: {e}")
+        return None
+    
+
+async def download_thumbnail(url: str, save_path: str) -> bool:
+    """Download a thumbnail image from a URL and save it to a file."""
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    with open(save_path, 'wb') as f:
+                        f.write(await response.read())
+                    return True
+                else:
+                    logging.error(f"Failed to download thumbnail: {response.status}")
+                    return False
+    except Exception as e:
+        logging.error(f"Error in download_thumbnail: {e}")
+        return False
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Constants
 CACHE_DIR = "cache"
-ASSETS_DIR = "ChampuMusic/assets"
+ASSETS_DIR = os.path.join("ChampuMusic", "assets")
 THUMBNAIL_SIZE = (1280, 720)
 CARD_WIDTH, CARD_HEIGHT = 900, 240
 THUMB_SIZE = 180
 CARD_CORNER_RADIUS = 40
 THUMB_CORNER_RADIUS = 24
 PROGRESS_BAR_RADIUS = 4
-DEFAULT_THUMBNAIL_URL = "https://i.ytimg.com/vi/{videoid}/hqdefault.jpg"
 
-# Color scheme - Translucent grey theme
+
 COLORS = {
     "background_darken": 0.6,
     "card_bg": (50, 50, 50, 180),
     "label_text": (220, 220, 220, 255),
-    "title_text": (255, 255, 255, 255),
+    "title_text": "white",
     "subtitle_text": (200, 200, 200, 255),
     "progress_bg": (80, 80, 80, 150),
     "progress_fg": (255, 255, 255, 255),
     "drop_shadow": (0, 0, 0, 100)
 }
 
-# Font sizes
-FONT_SIZES = {
-    "title": 36,
-    "subtitle": 24,
-    "label": 18
-}
+# Font cache
+FONT_CACHE = {}
 
-class ThumbnailGenerator:
-    def __init__(self):
-        self._fonts_loaded = False
-        self._fonts = {}
-
-    def _load_fonts(self) -> None:
-        """Load all required fonts."""
-        if self._fonts_loaded:
-            return
-
-        try:
-            self._fonts = {
-                "title": self._load_font("font3.ttf", FONT_SIZES["title"]),
-                "subtitle": self._load_font("font2.ttf", FONT_SIZES["subtitle"]),
-                "label": self._load_font("font.ttf", FONT_SIZES["label"])
-            }
-            self._fonts_loaded = True
-        except Exception as e:
-            print(f"Error loading fonts: {e}")
-            self._load_fallback_fonts()
-
-    def _load_fallback_fonts(self) -> None:
-        """Load fallback fonts if primary fonts fail."""
-        default_font = ImageFont.load_default()
-        self._fonts = {
-            "title": default_font,
-            "subtitle": default_font,
-            "label": default_font
-        }
-        self._fonts_loaded = True
-
-    def _load_font(self, font_name: str, size: int) -> ImageFont.FreeTypeFont:
-        """Load a specific font with error handling."""
-        font_path = Path(ASSETS_DIR) / font_name
-        if font_path.exists():
-            try:
-                return ImageFont.truetype(str(font_path), size)
-            except Exception as e:
-                print(f"Error loading font {font_name}: {e}")
+def load_font(font_path: str, size: int) -> ImageFont.FreeTypeFont:
+    """Load a font or return the default font."""
+    try:
+        if font_path in FONT_CACHE:
+            return FONT_CACHE[font_path]
+        if os.path.exists(font_path):
+            font = ImageFont.truetype(font_path, size)
+            FONT_CACHE[font_path] = font
+            return font
+        return ImageFont.load_default()
+    except Exception as e:
+        logging.error(f"Font loading error: {e}")
         return ImageFont.load_default()
 
-    @staticmethod
-    def add_rounded_corners(image: Image.Image, radius: int) -> Image.Image:
-        """Add rounded corners to an image with transparency."""
-        mask = Image.new("L", image.size, 0)
-        draw = ImageDraw.Draw(mask)
-        draw.rounded_rectangle((0, 0, *image.size), radius, fill=255)
-        image.putalpha(mask)
-        return image
+def add_rounded_corners(image: Image.Image, radius: int) -> Image.Image:
+    """Add rounded corners to an image with transparency."""
+    mask = Image.new("L", image.size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle((0, 0, *image.size), radius, fill=255)
+    image.putalpha(mask)
+    return image
 
-    @staticmethod
-    def truncate_text(draw: ImageDraw.Draw, text: str, font: ImageFont.FreeTypeFont, 
-                     max_width: int, ellipsis: str = "...") -> str:
-        """Truncate text with ellipsis if it exceeds max width using binary search."""
-        if draw.textlength(text, font=font) <= max_width:
-            return text
+def truncate_text(draw: ImageDraw.Draw, text: str, font: ImageFont.FreeTypeFont, max_width: int) -> str:
+    """Truncate text with ellipsis if it exceeds max width."""
+    ellipsis = "..."
+    if draw.textlength(text, font=font) <= max_width:
+        return text
 
-        low, high = 0, len(text)
-        while low <= high:
-            mid = (low + high) // 2
-            truncated = text[:mid] + ellipsis
-            text_width = draw.textlength(truncated, font=font)
-            
-            if text_width <= max_width:
-                low = mid + 1
-            else:
-                high = mid - 1
+    low, high = 1, len(text)
+    best = ""
+    while low <= high:
+        mid = (low + high) // 2
+        truncated = text[:mid] + ellipsis
+        width = draw.textlength(truncated, font=font)
+        if width <= max_width:
+            best = truncated
+            low = mid + 1
+        else:
+            high = mid - 1
+    return best or ellipsis
 
-        return text[:high] + ellipsis if high > 0 else ellipsis
-
-    @staticmethod
-    def create_progress_bar(draw: ImageDraw.Draw, position: Tuple[int, int], 
-                           size: Tuple[int, int], progress: float) -> None:
-        """Draw a progress bar with rounded corners."""
-        x, y = position
-        width, height = size
-        
-        # Draw background
+def create_progress_bar(draw: ImageDraw.Draw, position: Tuple[int, int], size: Tuple[int, int], progress: float):
+    """Draw a progress bar with rounded corners."""
+    x, y = position
+    width, height = size
+    draw.rounded_rectangle(
+        (x, y, x + width, y + height),
+        radius=PROGRESS_BAR_RADIUS,
+        fill=COLORS["progress_bg"]
+    )
+    progress_width = int(width * progress)
+    if progress_width > 0:
         draw.rounded_rectangle(
-            (x, y, x + width, y + height),
+            (x, y, x + progress_width, y + height),
             radius=PROGRESS_BAR_RADIUS,
-            fill=COLORS["progress_bg"]
+            fill=COLORS["progress_fg"]
         )
-        
-        # Draw progress
-        progress_width = max(0, min(width, int(width * progress)))
-        if progress_width > 0:
-            draw.rounded_rectangle(
-                (x, y, x + progress_width, y + height),
-                radius=PROGRESS_BAR_RADIUS,
-                fill=COLORS["progress_fg"]
-            )
 
-    async def create_modern_thumbnail(self, videoid: str, video_info: Dict) -> Optional[str]:
-        """Create a modern translucent player card thumbnail."""
-        try:
-            cache_path = Path(CACHE_DIR)
-            cache_path.mkdir(exist_ok=True)
-            cache_file = cache_path / f"{videoid}_v5.png"
+async def create_modern_thumbnail(videoid: str, video_info: Dict) -> Optional[str]:
+    """Create a modern translucent player card thumbnail."""
+    try:
+        fonts = {
+            "title": load_font(os.path.join(ASSETS_DIR, "font3.ttf"), 36),
+            "subtitle": load_font(os.path.join(ASSETS_DIR, "font2.ttf"), 24),
+            "label": load_font(os.path.join(ASSETS_DIR, "font.ttf"), 18)
+        }
 
-            if cache_file.exists():
-                return str(cache_file)
-
-            temp_path = cache_path / f"thumb{videoid}.png"
-            if not await self.download_thumbnail(video_info.get("thumbnail"), temp_path):
+        cache_file = os.path.join(CACHE_DIR, f"{videoid}_v5.png")
+        if not os.path.exists(cache_file):
+            temp_path = os.path.join(CACHE_DIR, f"thumb{videoid}.png")
+            if not await download_thumbnail(video_info["thumbnail"], temp_path):
                 return None
 
             with Image.open(temp_path) as thumb:
-                # Create blurred background
                 bg = thumb.resize(THUMBNAIL_SIZE).filter(ImageFilter.GaussianBlur(radius=18))
-                bg = ImageEnhance.Brightness(bg).enhance(COLORS["background_darken"])
+                enhancer = ImageEnhance.Brightness(bg)
+                bg = enhancer.enhance(COLORS["background_darken"])
 
-                # Create player card
                 card = Image.new("RGBA", (CARD_WIDTH, CARD_HEIGHT), (0, 0, 0, 0))
                 card_draw = ImageDraw.Draw(card)
 
-                # Draw shadow and card
                 card_draw.rounded_rectangle(
                     (5, 5, CARD_WIDTH - 5, CARD_HEIGHT - 5),
                     radius=CARD_CORNER_RADIUS,
@@ -162,127 +166,65 @@ class ThumbnailGenerator:
                     fill=COLORS["card_bg"]
                 )
 
-                # Add album thumbnail
                 album_thumb = thumb.copy().resize((THUMB_SIZE, THUMB_SIZE))
-                album_thumb = self.add_rounded_corners(album_thumb, THUMB_CORNER_RADIUS)
+                album_thumb = add_rounded_corners(album_thumb, THUMB_CORNER_RADIUS)
                 card.paste(album_thumb, (30, 30), album_thumb)
 
-                # Load fonts if not already loaded
-                self._load_fonts()
+                title_parts = [truncate_text(card_draw, video_info["title"], fonts["title"], 620), None]
+                card_draw.text((230, 30), video_info["channel"], font=fonts["label"], fill=COLORS["label_text"])
+                card_draw.text((230, 70), title_parts[0], font=fonts["title"], fill=COLORS["title_text"])
+                if title_parts[1]:
+                    card_draw.text((230, 110), title_parts[1], font=fonts["title"], fill=COLORS["title_text"])
 
-                # Draw text elements with proper spacing
-                text_x = 230
-                channel = video_info.get("channel", "Unknown Channel")
-                title = video_info.get("title", "Unknown Title")
-                artist = video_info.get("artist", "Unknown Artist")
+                create_progress_bar(card_draw, (230, 190), (620, 8), 0.24)
 
-                # Channel name (top)
-                card_draw.text(
-                    (text_x, 30), 
-                    channel, 
-                    font=self._fonts["label"], 
-                    fill=COLORS["label_text"]
-                )
-
-                # Title (middle)
-                truncated_title = self.truncate_text(
-                    card_draw, title, self._fonts["title"], CARD_WIDTH - 260
-                )
-                card_draw.text(
-                    (text_x, 70), 
-                    truncated_title, 
-                    font=self._fonts["title"], 
-                    fill=COLORS["title_text"]
-                )
-
-                # Artist (bottom)
-                card_draw.text(
-                    (text_x, 130), 
-                    artist, 
-                    font=self._fonts["subtitle"], 
-                    fill=COLORS["subtitle_text"]
-                )
-
-                # Progress bar
-                self.create_progress_bar(
-                    card_draw,
-                    (text_x, 190),
-                    (620, 8),
-                    0.24  # Default progress
-                )
-
-                # Combine everything
                 final_img = bg.copy()
-                card_position = (
-                    (THUMBNAIL_SIZE[0] - CARD_WIDTH) // 2,
-                    (THUMBNAIL_SIZE[1] - CARD_HEIGHT) // 2
-                )
+                card_position = ((THUMBNAIL_SIZE[0] - CARD_WIDTH) // 2, (THUMBNAIL_SIZE[1] - CARD_HEIGHT) // 2)
                 final_img.paste(card, card_position, card)
-                final_img.save(cache_file, quality=95, optimize=True)
-
-            # Cleanup
-            try:
-                temp_path.unlink()
-            except Exception as e:
-                print(f"Error cleaning up temp file: {e}")
-
-            return str(cache_file)
-
-        except Exception as e:
-            print(f"Error in create_modern_thumbnail: {e}")
-            return None
-
-    async def get_thumb(self, videoid: str, modern_style: bool = False) -> str:
-        """Main function to get or generate thumbnail."""
-        try:
-            cache_path = Path(CACHE_DIR)
-            cache_path.mkdir(exist_ok=True)
-            
-            version = "v5" if modern_style else "v4"
-            cache_file = cache_path / f"{videoid}_{version}.png"
-
-            if cache_file.exists():
-                return str(cache_file)
-
-            video_info = await self.get_video_info(videoid)
-            if not video_info:
-                return DEFAULT_THUMBNAIL_URL.format(videoid=videoid)
-
-            if modern_style:
-                result = await self.create_modern_thumbnail(videoid, video_info)
-                return result or DEFAULT_THUMBNAIL_URL.format(videoid=videoid)
-            
-            # Original thumbnail generation
-            temp_path = cache_path / f"thumb{videoid}.png"
-            if not await self.download_thumbnail(video_info.get("thumbnail"), temp_path):
-                return DEFAULT_THUMBNAIL_URL.format(videoid=videoid)
-
-            if not await self.generate_thumbnail_image(video_info, temp_path, cache_file):
-                return DEFAULT_THUMBNAIL_URL.format(videoid=videoid)
+                final_img.save(cache_file, quality=95)
 
             try:
-                temp_path.unlink()
+                os.remove(temp_path)
             except Exception as e:
-                print(f"Error cleaning up temp file: {e}")
+                logging.warning(f"Failed to delete temp file: {e}")
 
-            return str(cache_file)
+        return cache_file
 
-        except Exception as e:
-            print(f"Error in get_thumb: {e}")
-            return DEFAULT_THUMBNAIL_URL.format(videoid=videoid)
+    except Exception as e:
+        logging.error(f"Error in create_modern_thumbnail: {e}")
+        return None
 
-    async def download_thumbnail(self, url: str, save_path: Path) -> bool:
-        """Download thumbnail from URL."""
-        # Implementation would go here
-        pass
+async def get_thumb(videoid: str, modern_style: bool = False) -> Optional[str]:
+    """Main function to get or generate thumbnail."""
+    try:
+        ensure_directory(CACHE_DIR)
+        cache_file = os.path.join(CACHE_DIR, f"{videoid}_v5.png" if modern_style else f"{videoid}_v4.png")
 
-    async def get_video_info(self, videoid: str) -> Dict:
-        """Get video information."""
-        # Implementation would go here
-        pass
+        if os.path.exists(cache_file):
+            return cache_file
 
-    async def generate_thumbnail_image(self, video_info: Dict, 
-                                     temp_path: Path, cache_file: Path) -> bool:
-        """Generate original style thumbnail."""
-        # Implementation would go here
-        pass
+        video_info = await get_video_info(videoid)
+        if not video_info:
+            return YOUTUBE_IMG_URL
+
+        if modern_style:
+            result = await create_modern_thumbnail(videoid, video_info)
+            return result or YOUTUBE_IMG_URL
+        else:
+            temp_path = os.path.join(CACHE_DIR, f"thumb{videoid}.png")
+            if not await download_thumbnail(video_info["thumbnail"], temp_path):
+                return YOUTUBE_IMG_URL
+
+            if not await create_modern_thumbnail(videoid, video_info):
+                return YOUTUBE_IMG_URL
+
+            try:
+                os.remove(temp_path)
+            except Exception as e:
+                logging.warning(f"Failed to delete temp file: {e}")
+
+            return cache_file
+
+    except Exception as e:
+        logging.error(f"Error in get_thumb: {e}")
+        return YOUTUBE_IMG_URL
