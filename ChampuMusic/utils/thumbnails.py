@@ -228,3 +228,15 @@ async def get_thumb(videoid: str, modern_style: bool = False) -> Optional[str]:
     except Exception as e:
         logging.error(f"Error in get_thumb: {e}")
         return YOUTUBE_IMG_URL
+    
+
+
+async def gen_qthumb(vidid):
+    try:
+        query = f"https://www.youtube.com/watch?v={vidid}"
+        results = VideosSearch(query, limit=1)
+        for result in (await results.next())["result"]:
+            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
+        return thumbnail
+    except Exception as e:
+        return YOUTUBE_IMG_URL
