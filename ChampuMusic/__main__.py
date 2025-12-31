@@ -1,4 +1,10 @@
 import asyncio
+
+# Ensure an event loop exists for main thread (fixes RuntimeError with uvloop/pyrogram)
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
 import importlib
 
 from pyrogram import idle
