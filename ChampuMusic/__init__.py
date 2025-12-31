@@ -1,9 +1,4 @@
 import asyncio
-# Ensure an event loop exists for main thread (fixes RuntimeError with uvloop/pyrogram)
-try:
-    asyncio.get_running_loop()
-except RuntimeError:
-    asyncio.set_event_loop(asyncio.new_event_loop())
 
 from ChampuMusic.core.bot import ChampuBot
 from ChampuMusic.core.dir import dirr
