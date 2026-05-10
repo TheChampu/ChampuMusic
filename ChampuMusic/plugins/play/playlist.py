@@ -21,6 +21,7 @@ from ChampuMusic.utils.inline.playlist import (
     warning_markup,
 )
 from ChampuMusic.utils.stream.stream import stream
+from ChampuMusic.utils.pastebin import Champubin
 
 # Define a dictionary to track the last message timestamp for each user
 user_last_message_time = {}
