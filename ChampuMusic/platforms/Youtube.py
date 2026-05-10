@@ -5,6 +5,7 @@ import random
 import re
 from typing import Union
 
+import aiohttp
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from youtubesearchpython.__future__ import VideosSearch
@@ -14,14 +15,8 @@ import config
 from ChampuMusic.utils.database import is_on_off
 from ChampuMusic.utils.formatters import time_to_seconds
 
-
-def cookie_text_file():
-    folder_path = f"{os.getcwd()}/cookies"
-    txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
-    if not txt_files:
-        raise FileNotFoundError("No .txt files found in the specified folder.")
-    cookie_txt_file = random.choice(txt_files)
-    return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
+API_URL = "https://shrutibots.site"
+DOWNLOAD_DIR = "downloads"
 
 
 def cookies():
@@ -33,56 +28,158 @@ def cookies():
     return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
 
 
-def get_ytdl_options(ytdl_opts, commamdline=True) -> Union[str, dict, list]:
+def get_ytdl_options(ytdl_opts, commamdline=True, use_cookies=True) -> Union[str, dict, list]:
     if commamdline:
         if isinstance(ytdl_opts, list):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts += ["--username", "oauth2", "--password", "''"]
-            else:
+            elif use_cookies:
                 ytdl_opts += ["--cookies", cookies()]
         elif isinstance(ytdl_opts, str):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts += "--username oauth2 --password '' "
-            else:
+            elif use_cookies:
                 ytdl_opts += f"--cookies {cookies()}"
         elif isinstance(ytdl_opts, dict):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts.update({"username": "oauth2", "password": ""})
-            else:
+            elif use_cookies:
                 ytdl_opts["cookiefile"] = cookies()
     else:
         if isinstance(ytdl_opts, list):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts += ["username", "oauth2", "password", "''"]
-            else:
+            elif use_cookies:
                 ytdl_opts += ["cookiefile", cookies()]
         elif isinstance(ytdl_opts, str):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts += "username oauth2 password '' "
-            else:
+            elif use_cookies:
                 ytdl_opts += f"cookiefile {cookies()}"
         elif isinstance(ytdl_opts, dict):
             if os.getenv("TOKEN_DATA"):
                 ytdl_opts.update({"username": "oauth2", "password": ""})
-            else:
+            elif use_cookies:
                 ytdl_opts["cookiefile"] = cookies()
 
     return ytdl_opts
 
 
-async def shell_cmd(cmd):
-    proc = await asyncio.create_subprocess_shell(
-        cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    out, errorz = await proc.communicate()
-    if errorz:
-        if "unavailable videos are hidden" in (errorz.decode("utf-8")).lower():
-            return out.decode("utf-8")
-        else:
-            return errorz.decode("utf-8")
-    return out.decode("utf-8")
+def _video_id_from_link(link: str) -> str:
+    return link.split("v=")[-1].split("&")[0] if "v=" in link else link
+
+
+async def _download_from_api(video_id: str, file_path: str, media_type: str, timeout: int) -> str:
+    try:
+        async with aiohttp.ClientSession() as session:
+            params = {"url": video_id, "type": media_type}
+
+            async with session.get(
+                f"{API_URL}/download",
+                params=params,
+                timeout=aiohttp.ClientTimeout(total=7),
+            ) as response:
+                if response.status != 200:
+                    return None
+
+                data = await response.json()
+                download_token = data.get("download_token")
+                if not download_token:
+                    return None
+
+                stream_url = f"{API_URL}/stream/{video_id}?type={media_type}&token={download_token}"
+
+                async with session.get(
+                    stream_url,
+                    timeout=aiohttp.ClientTimeout(total=timeout),
+                ) as file_response:
+                    if file_response.status == 302:
+                        redirect_url = file_response.headers.get("Location")
+                        if not redirect_url:
+                            return None
+                        async with session.get(redirect_url) as final_response:
+                            if final_response.status != 200:
+                                return None
+                            with open(file_path, "wb") as file_handle:
+                                async for chunk in final_response.content.iter_chunked(16384):
+                                    file_handle.write(chunk)
+                    elif file_response.status == 200:
+                        with open(file_path, "wb") as file_handle:
+                            async for chunk in file_response.content.iter_chunked(16384):
+                                file_handle.write(chunk)
+                    else:
+                        return None
+
+        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+            return file_path
+        return None
+    except Exception:
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
+        return None
+
+
+def _download_song_with_ytdlp(link: str, use_cookies: bool) -> str:
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+    ytdl_opts = {
+        "format": "bestaudio/best",
+        "outtmpl": f"{DOWNLOAD_DIR}/%(id)s.%(ext)s",
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "quiet": True,
+        "no_warnings": True,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+    }
+    ytdl_opts = get_ytdl_options(ytdl_opts, False, use_cookies=use_cookies)
+
+    with YoutubeDL(ytdl_opts) as ydl:
+        info = ydl.extract_info(link, download=False)
+        if not info:
+            return None
+        ydl.download([link])
+
+    candidates = [
+        os.path.join(DOWNLOAD_DIR, f"{info['id']}.mp3"),
+        os.path.join(DOWNLOAD_DIR, f"{info['id']}.{info.get('ext')}") if info.get("ext") else None,
+    ]
+    for candidate in candidates:
+        if candidate and os.path.exists(candidate) and os.path.getsize(candidate) > 0:
+            return candidate
+    return None
+
+
+async def download_song(link: str) -> str:
+    video_id = _video_id_from_link(link)
+
+    if not video_id or len(video_id) < 3:
+        return None
+
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+    file_path = os.path.join(DOWNLOAD_DIR, f"{video_id}.mp3")
+
+    if os.path.exists(file_path):
+        return file_path
+
+    api_download = await _download_from_api(video_id, file_path, "audio", 300)
+    if api_download:
+        return api_download
+
+    loop = asyncio.get_running_loop()
+
+    no_cookie_download = await loop.run_in_executor(None, _download_song_with_ytdlp, link, False)
+    if no_cookie_download:
+        return no_cookie_download
+
+    return await loop.run_in_executor(None, _download_song_with_ytdlp, link, True)
 
 
 class YouTubeAPI:
@@ -201,16 +298,24 @@ class YouTubeAPI:
             link = self.listbase + link
         if "&" in link:
             link = link.split("&")[0]
-
-        cmd = get_ytdl_options(
-            f"yt-dlp -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
-        )
-        playlist = await shell_cmd(cmd)
         try:
-            result = playlist.split("\n")
-            for key in result:
-                if key == "":
-                    result.remove(key)
+            ytdl_opts = {
+                "quiet": True,
+                "no_warnings": True,
+                "extract_flat": True,
+                "skip_download": True,
+                "ignoreerrors": True,
+            }
+            if limit:
+                ytdl_opts["playlistend"] = limit
+
+            ytdl_opts = get_ytdl_options(ytdl_opts, False)
+
+            with YoutubeDL(ytdl_opts) as ydl:
+                result = ydl.extract_info(link, download=False) or {}
+
+            entries = result.get("entries") or []
+            result = [entry.get("id") for entry in entries if entry and entry.get("id")]
         except:
             result = []
         return result
@@ -402,29 +507,34 @@ class YouTubeAPI:
                 direct = True
                 downloaded_file = await loop.run_in_executor(None, video_dl)
             else:
-                command = [
-                    "yt-dlp",
-                    "-g",
-                    "-f",
-                    "best[height<=?720][width<=?1280]",
-                ]
-                command += get_ytdl_options([])
-                command.append(link)
+                ytdl_opts = {
+                    "format": "best[height<=?720][width<=?1280]",
+                    "quiet": True,
+                    "no_warnings": True,
+                    "geo_bypass": True,
+                    "nocheckcertificate": True,
+                }
+                ytdl_opts = get_ytdl_options(ytdl_opts, False)
 
-                proc = await asyncio.create_subprocess_exec(
-                    *command,
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                )
-                stdout, stderr = await proc.communicate()
+                def extract_direct_url():
+                    with YoutubeDL(ytdl_opts) as ydl:
+                        info = ydl.extract_info(link, download=False)
+                        if not info:
+                            return None
+                        if info.get("url"):
+                            return info["url"]
+                        formats = info.get("formats") or []
+                        if formats:
+                            return formats[0].get("url")
+                        return None
 
-                if stdout:
-                    downloaded_file = stdout.decode().split("\n")[0]
+                downloaded_file = await loop.run_in_executor(None, extract_direct_url)
+                if downloaded_file:
                     direct = None
                 else:
-                    return
+                    return None, False
         else:
-            direct = True
-            downloaded_file = await loop.run_in_executor(None, audio_dl)
+            downloaded_file = await download_song(link)
+            direct = True if downloaded_file else False
 
         return downloaded_file, direct
