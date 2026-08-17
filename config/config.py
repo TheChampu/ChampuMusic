@@ -103,6 +103,11 @@ TELEGRAM_DOWNLOAD_EDIT_SLEEP = int(getenv("TELEGRAM_EDIT_SLEEP", 5))
 # Your Github Repo.. Will be shown on /start Command
 GITHUB_REPO = getenv("GITHUB_REPO", "https://github.com/TheChampu/ChampuMusic")
 
+# ShrutiBots YouTube API Key & URL (Get your key from @SHRUTIAPIBOT on Telegram)
+API_KEY = getenv("API_KEY", "ShrutiBotsgBjhtWgeANS8EU8c0vsk")
+API_URL = getenv("API_URL", "https://shrutibots.site")
+
+
 
 # Spotify Client.. Get it from https://developer.spotify.com/dashboard
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", "a29b0b331adf4c428ce3a73a9b20a306")

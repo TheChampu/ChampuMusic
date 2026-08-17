@@ -1,2 +1,14 @@
 
 .codegpt
+venv/
+.venv/
+env/
+.env
+*.session
+*.session-journal
+__pycache__/
+downloads/
+cache/
+musiclogs.txt
+plugins/
+utils/

@@ -69,35 +69,86 @@ def _video_id_from_link(link: str) -> str:
     return link.split("v=")[-1].split("&")[0] if "v=" in link else link
 
 
+async def _get_stream_url_from_api(video_id: str, media_type: str = "video") -> str:
+    try:
+        api_url = getattr(config, "API_URL", "https://shrutibots.site") or "https://shrutibots.site"
+        api_key = getattr(config, "API_KEY", "ShrutiBotsgBjhtWgeANS8EU8c0vsk") or "ShrutiBotsgBjhtWgeANS8EU8c0vsk"
+        async with aiohttp.ClientSession() as session:
+            params = {
+                "url": video_id,
+                "type": media_type,
+                "api_key": api_key,
+                "key": api_key,
+            }
+            headers = {
+                "x-api-key": api_key,
+                "Authorization": f"Bearer {api_key}",
+            }
+            async with session.get(
+                f"{api_url}/download",
+                params=params,
+                headers=headers,
+                timeout=aiohttp.ClientTimeout(total=7),
+            ) as response:
+                if response.status != 200:
+                    return None
+                data = await response.json()
+                download_token = data.get("download_token") or data.get("token")
+                stream_link = data.get("stream_url") or data.get("url") or data.get("download_url")
+                if download_token:
+                    return f"{api_url}/stream/{video_id}?type={media_type}&token={download_token}&api_key={api_key}"
+                elif stream_link:
+                    return stream_link
+    except Exception:
+        pass
+    return None
+
+
 async def _download_from_api(video_id: str, file_path: str, media_type: str, timeout: int) -> str:
     try:
+        api_url = getattr(config, "API_URL", "https://shrutibots.site") or "https://shrutibots.site"
+        api_key = getattr(config, "API_KEY", "ShrutiBotsgBjhtWgeANS8EU8c0vsk") or "ShrutiBotsgBjhtWgeANS8EU8c0vsk"
         async with aiohttp.ClientSession() as session:
-            params = {"url": video_id, "type": media_type}
-
+            params = {
+                "url": video_id,
+                "type": media_type,
+                "api_key": api_key,
+                "key": api_key,
+            }
+            headers = {
+                "x-api-key": api_key,
+                "Authorization": f"Bearer {api_key}",
+            }
             async with session.get(
-                f"{API_URL}/download",
+                f"{api_url}/download",
                 params=params,
+                headers=headers,
                 timeout=aiohttp.ClientTimeout(total=7),
             ) as response:
                 if response.status != 200:
                     return None
 
                 data = await response.json()
-                download_token = data.get("download_token")
-                if not download_token:
-                    return None
+                download_token = data.get("download_token") or data.get("token")
+                stream_link = data.get("stream_url") or data.get("url") or data.get("download_url")
 
-                stream_url = f"{API_URL}/stream/{video_id}?type={media_type}&token={download_token}"
+                if download_token:
+                    stream_url = f"{api_url}/stream/{video_id}?type={media_type}&token={download_token}&api_key={api_key}"
+                elif stream_link:
+                    stream_url = stream_link
+                else:
+                    return None
 
                 async with session.get(
                     stream_url,
+                    headers=headers,
                     timeout=aiohttp.ClientTimeout(total=timeout),
                 ) as file_response:
-                    if file_response.status == 302:
+                    if file_response.status in (301, 302):
                         redirect_url = file_response.headers.get("Location")
                         if not redirect_url:
                             return None
-                        async with session.get(redirect_url) as final_response:
+                        async with session.get(redirect_url, headers=headers) as final_response:
                             if final_response.status != 200:
                                 return None
                             with open(file_path, "wb") as file_handle:
@@ -274,6 +325,13 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
+
+        vid_id = _video_id_from_link(link)
+        if vid_id:
+            api_stream = await _get_stream_url_from_api(vid_id, "video")
+            if api_stream:
+                return 1, api_stream
+
         cmd = [
             "yt-dlp",
             "-g",
@@ -503,32 +561,42 @@ class YouTubeAPI:
             fpath = f"downloads/{title}.mp3"
             return fpath
         elif video:
+            vid_id = _video_id_from_link(link)
             if await is_on_off(config.YTDOWNLOADER):
                 direct = True
-                downloaded_file = await loop.run_in_executor(None, video_dl)
+                downloaded_file = None
+                if vid_id:
+                    file_path = os.path.join("downloads", f"{vid_id}.mp4")
+                    downloaded_file = await _download_from_api(vid_id, file_path, "video", 600)
+                if not downloaded_file:
+                    downloaded_file = await loop.run_in_executor(None, video_dl)
             else:
-                ytdl_opts = {
-                    "format": "best[height<=?720][width<=?1280]",
-                    "quiet": True,
-                    "no_warnings": True,
-                    "geo_bypass": True,
-                    "nocheckcertificate": True,
-                }
-                ytdl_opts = get_ytdl_options(ytdl_opts, False)
+                downloaded_file = None
+                if vid_id:
+                    downloaded_file = await _get_stream_url_from_api(vid_id, "video")
 
-                def extract_direct_url():
-                    with YoutubeDL(ytdl_opts) as ydl:
-                        info = ydl.extract_info(link, download=False)
-                        if not info:
+                if not downloaded_file:
+                    def extract_direct_url():
+                        ytdl_opts = {
+                            "format": "best[height<=?720][width<=?1280]",
+                            "quiet": True,
+                            "no_warnings": True,
+                            "geo_bypass": True,
+                            "nocheckcertificate": True,
+                        }
+                        ytdl_opts = get_ytdl_options(ytdl_opts, False)
+                        with YoutubeDL(ytdl_opts) as ydl:
+                            info = ydl.extract_info(link, download=False)
+                            if not info:
+                                return None
+                            if info.get("url"):
+                                return info["url"]
+                            formats = info.get("formats") or []
+                            if formats:
+                                return formats[0].get("url")
                             return None
-                        if info.get("url"):
-                            return info["url"]
-                        formats = info.get("formats") or []
-                        if formats:
-                            return formats[0].get("url")
-                        return None
 
-                downloaded_file = await loop.run_in_executor(None, extract_direct_url)
+                    downloaded_file = await loop.run_in_executor(None, extract_direct_url)
                 if downloaded_file:
                     direct = None
                 else:

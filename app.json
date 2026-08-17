@@ -73,6 +73,16 @@
         "description": "ᴡʀɪᴛᴇ ʏᴏᴜʀ ᴜᴘsᴛʀᴇᴀᴍ ʀᴇᴘᴏ ʙʀᴀɴᴄʜ ɴᴀᴍᴇ",
         "value": "main",
         "required": true
+      },
+      "API_KEY": {
+        "description": "Your API_KEY for ShrutiBots YouTube API. Get your API_KEY from @SHRUTIAPIBOT on Telegram",
+        "value": "ShrutiBotsgBjhtWgeANS8EU8c0vsk",
+        "required": false
+      },
+      "API_URL": {
+        "description": "API URL for ShrutiBots YouTube Downloader & Stream API",
+        "value": "https://shrutibots.site",
+        "required": false
       }
     },
     "buildpacks": [

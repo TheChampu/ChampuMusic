@@ -26,7 +26,10 @@ def dirr():
             or file.endswith(".session")
             or file.endswith(".session-journal")
         ):
-            os.remove(file)
+            try:
+                os.remove(file)
+            except Exception:
+                pass
 
     if downloads_folder not in listdir():
         mkdir(downloads_folder)

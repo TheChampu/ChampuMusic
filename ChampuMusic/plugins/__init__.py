@@ -13,17 +13,23 @@ from ChampuMusic import LOGGER
 logger = LOGGER(__name__)
 
 
+def _remove_readonly(func, path, _):
+    import stat
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
 if EXTRA_PLUGINS_FOLDER in os.listdir():
-    shutil.rmtree(EXTRA_PLUGINS_FOLDER)
+    shutil.rmtree(EXTRA_PLUGINS_FOLDER, onerror=_remove_readonly)
 
 if "utils" in os.listdir():
-    shutil.rmtree("utils")
+    shutil.rmtree("utils", onerror=_remove_readonly)
 
 ROOT_DIR = abspath(join(dirname(__file__), "..", ".."))
 
 EXTERNAL_REPO_PATH = join(ROOT_DIR, EXTRA_PLUGINS_FOLDER)
 
-extra_plugins_enabled = EXTRA_PLUGINS.lower() == "true"
+extra_plugins_enabled = str(EXTRA_PLUGINS).lower() == "true"
 
 if extra_plugins_enabled:
     if not os.path.exists(EXTERNAL_REPO_PATH):
@@ -61,7 +67,7 @@ if extra_plugins_enabled:
     if os.path.isfile(requirements_path):
         with open(os.devnull, "w") as devnull:
             install_result = subprocess.run(
-                ["pip", "install", "-r", requirements_path],
+                [sys.executable, "-m", "pip", "install", "-r", requirements_path],
                 stdout=devnull,
                 stderr=subprocess.PIPE,
             )
